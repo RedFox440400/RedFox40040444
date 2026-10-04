@@ -190,8 +190,11 @@ input.sw2:checked::after{transform:translate(-50%,-50%) rotate(45deg) scale(1)}
 <div id="login">
 <div class="card">
 <h2>RedFox</h2>
-<div id="fN"><div><label data-i="dname"></label><input class="fld" id="dn" maxlength="20" data-p="dnp"></div>
-<div><label data-i="uname"></label><input class="fld" id="un" maxlength="10" data-p="unp"></div></div>
+<div id="fN">
+<div><label data-i="dname"></label><input class="fld" id="dn" maxlength="20" data-p="dnp"></div>
+<div><label data-i="uname"></label><input class="fld" id="un" maxlength="10" data-p="unp"></div>
+<div><label>Password</label><input class="fld" id="pw" type="password" maxlength="50" autocomplete="current-password"></div>
+</div>
 <div id="fK" class="hide"><label data-i="keyL"></label><input class="fld" id="kk" maxlength="5" autocomplete="off" data-p="keyP"></div>
 <div class="h-captcha" data-sitekey="e71a81dc-0eb2-449e-b61e-0e006eb48e74" data-theme="dark" data-callback="onCap"></div>
 <div class="err" id="lerr"></div>
@@ -244,7 +247,16 @@ firebase.initializeApp({apiKey:"AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",authDom
 const auth=firebase.auth();
 const db=firebase.database(),$=id=>document.getElementById(id);
 
-auth.signInAnonymously().catch(e=>{console.error('Auth error:',e.code,e.message);const el=document.getElementById('lerr');if(el)el.textContent='Auth error: '+e.code});
+const AUTH_DOMAIN='@redfox.app';
+async function authUser(username,password){
+ const email=username+AUTH_DOMAIN;
+ try{const cred=await auth.signInWithEmailAndPassword(email,password);return cred.user}
+ catch(e){
+  if(e.code==='auth/user-not-found'){const cred=await auth.createUserWithEmailAndPassword(email,password);return cred.user}
+  throw e;
+ }
+}
+async function bindUid(username,uid){await db.ref('users/'+username+'/uid').set(uid);await db.ref('uids/'+uid).set(username)}
 
 const L={
 en:{dname:'Display name',dnp:'Your name',uname:'Username',unp:'a-z, 0-9, _ - !',signin:'Sign in',search:'Search',message:'Message',youBlocked:'You blocked this user',unblock:'Unblock',
@@ -274,6 +286,8 @@ matWarning:'Profanity and insults are prohibited in the global chat. You have be
 matMuted:'You have been muted for {n}',
 seconds:'seconds',minute:'minute',minutes:'minutes',zeroSeconds:'0 seconds',
 saved:'Saved messages',savedShort:'S',
+groupFull:'Group is full ({n} members max)',
+groupFullVerified:'Group is full ({n} members max)',
 sysAdded:'{by} added you to the group «{title}»',
 sysAddedOther:'{by} added {who} to the group «{title}»',
 sysJoined:'You joined the group «{title}»',
@@ -308,6 +322,8 @@ matWarning:'В общем чате запрещены оскорбления и 
 matMuted:'Вы заглушены на {n}',
 seconds:'секунд',minute:'минуту',minutes:'минут',zeroSeconds:'0 секунд',
 saved:'Сохранённые сообщения',savedShort:'И',
+groupFull:'Группа заполнена (макс. {n} участников)',
+groupFullVerified:'Группа заполнена (макс. {n} участников)',
 sysAdded:'{by} добавил(а) вас в группу «{title}»',
 sysAddedOther:'{by} добавил(а) {who} в группу «{title}»',
 sysJoined:'Вы присоединились к группе «{title}»',
@@ -357,16 +373,25 @@ const badge=u=>{const b=badges[u];if(!b)return'';if(b==='admin')return RED_BADGE
 const MAX=35;
 let colors={},banners={},lsInfo={},keyMode=false,bans={},banEl=null,me=null,chat='global',C={global:[]},names=new Map(),lastNames=new Map(),online=new Map(),blocked=new Set(),badges={},lastRead={},cleared={},idx=new Set(),locl=new Set(),att={},refs=[],reply=null,editing=null,seen=new Set(),pin=null,typing=false,typRef=null,lastT=0,autoDel=0,capTok=null,mineNew=false,writtenTo=new Set();
 let globalDisabled=false,addToGroupsPolicy='nobody',mutedUntil=0;
-let AV={},GR={},MB={},LK={},ST={},CT={},grpKnown=new Set(),leaving=new Set();
+let AV={},GR={},MB={},LK={},CT={},grpKnown=new Set(),leaving=new Set();
 const IMG=/^https:\/\/[^\s'"()<>\\]+$/;
 const isG=p=>typeof p==='string'&&p.startsWith('g:'),gid_=p=>p.slice(2);
 const RK={owner:3,admin:2,mod:1,member:0};
 const RN={owner:'Owner',admin:'Admin',mod:'Moderator',member:'Member'};
-const TN={group:'Group',channel:'Channel',super:'Supergroup'};
+const TN={group:'Group',channel:'Channel'};
 const myRole=g=>(MB[g]||{})[me.u]||null;
 const canPost=p=>{const g=gid_(p),G=GR[g],r=myRole(g);return !!(G&&r&&(G.type!=='channel'||RK[r]>=2))};
-const canDel=p=>{const g=gid_(p),G=GR[g],r=myRole(g);return !!(G&&r&&RK[r]>=(G.type==='super'?1:2))};
+const canDel=p=>{const g=gid_(p),G=GR[g],r=myRole(g);return !!(G&&r&&RK[r]>=2)};
 const logEv=(g,type,target,extra)=>db.ref('groupLog/'+g).push({type,by:me.u,target:target||null,extra:extra||null,at:Date.now()});
+
+function groupLimit(g){
+ const G=GR[g];if(!G)return 35;
+ const owner=G.owner;
+ const ownerVerified=owner&&(badges[owner]==='checked'||badges[owner]==='admin'||owner==='admin11');
+ const admins=Object.keys(MB[g]||{}).filter(u=>{const r=MB[g][u];return r==='owner'||r==='admin'});
+ const anyAdminVerified=admins.some(u=>badges[u]==='checked'||badges[u]==='admin'||u==='admin11');
+ return (ownerVerified||anyAdminVerified)?50:35;
+}
 
 const MAT_WORDS=['блять','блядь','блядина','хуй','хуё','хер','пизда','пиздец','ебать','ебал','ёб','мудак','мудила','сука','сучка','гандон','долбоёб','пидор','пидар','fuck','shit','bitch','asshole','dick','pussy','cunt','nigger','faggot'];
 const containsMat=s=>{const l=s.toLowerCase().replace(/[^a-zа-яё0-9]/gi,'');return MAT_WORDS.some(w=>l.includes(w))};
@@ -395,37 +420,57 @@ document.addEventListener('click',e=>{const b=e.target.closest('.vb');if(!b)retu
 
 window.onCap=x=>{capTok=x};
 const lerr=x=>{$('lerr').textContent=x};
-function askPass(){return new Promise(r=>{const o=modal(`<h3>${t('password')}</h3><p>${t('protectedT')}</p><input class="fld" id="pw" type="password" maxlength="50"><div class="row"><button class="b g" id="n">${t('cancel')}</button><button class="b" id="y">${t('signin')}</button></div>`);const i=o.querySelector('#pw');i.focus();const ok=()=>{o.remove();r(i.value)};o.querySelector('#y').onclick=ok;i.onkeydown=e=>{if(e.key==='Enter')ok()};o.querySelector('#n').onclick=()=>{o.remove();r(null)}})}
+
 async function loginKey(){
  const k=$('kk').value.trim();
  if(!k)return lerr(t('e7'));
+ const saved=localStorage.getItem('mg_key_'+k);
+ if(!saved)return lerr(t('e7'));
+ let obj;try{obj=JSON.parse(saved)}catch(e){return lerr(t('e7'))}
+ if(!obj||!obj.u||!obj.p)return lerr(t('e7'));
  lerr('');$('lbtn').disabled=true;
  try{
-  const r=(await db.ref('keys/'+await kh(k)).once('value')).val();
-  const x=r&&r.u?(await db.ref('users/'+r.u).once('value')).val():null;
+  const user=await authUser(obj.u,obj.p);
+  const x=(await db.ref('users/'+obj.u).once('value')).val();
   if(!x)return lerr(t('e7'));
-  start(x.displayName,r.u);
- }catch(e){console.error(e);lerr(t('e6'))}finally{$('lbtn').disabled=false}
+  await bindUid(obj.u,user.uid);
+  start(x.displayName,obj.u,user.uid);
+ }catch(e){console.error(e);lerr(t('e7'))}finally{$('lbtn').disabled=false}
 }
+
 async function login(){
  if(keyMode)return loginKey();
- const dn=$('dn').value.trim(),u=$('un').value.trim().toLowerCase().replace(/^@/,'');
+ const dn=$('dn').value.trim(),u=$('un').value.trim().toLowerCase().replace(/^@/,''),pw=$('pw').value;
  if(!dn||dn.length>20)return lerr(t('e1'));
  if(!/^[a-z0-9_\-!]{1,9}$/.test(u))return lerr(t('e2'));
+ if(!pw||pw.length<6)return lerr('Password must be at least 6 characters');
  if(!capTok&&document.querySelector('.h-captcha iframe'))return lerr(t('e3'));
  lerr('');$('lbtn').disabled=true;
  try{
   const x=(await db.ref('users/'+u).once('value')).val();
-  if(x){
-   if(x.displayName!==dn)return lerr(t('e4'));
-   if(x.passHash){const p=await askPass();if(p===null)return;if(await sha(p)!==x.passHash)return lerr(t('e5'))}
-  }else await db.ref('users/'+u).set({displayName:dn,username:u,createdAt:Date.now()});
-  start(dn,u);
+  if(x&&x.displayName!==dn)return lerr(t('e4'));
+  let user;
+  try{user=await authUser(u,pw)}
+  catch(e){
+   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-password')return lerr('Wrong password');
+   if(e.code==='auth/email-already-in-use')return lerr('This username is already taken (wrong password)');
+   if(e.code==='auth/weak-password')return lerr('Password too weak (min. 6 characters)');
+   if(e.code==='auth/too-many-requests')return lerr('Too many attempts, try again later');
+   console.error(e);return lerr(t('e6'));
+  }
+  if(x&&x.uid&&x.uid!==user.uid)return lerr('This username is bound to another account');
+  if(!x)await db.ref('users/'+u).set({displayName:dn,username:u,createdAt:Date.now()});
+  await bindUid(u,user.uid);
+  const oldPass=await db.ref('users/'+u+'/passHash').once('value');
+  if(oldPass.exists())await db.ref('users/'+u+'/passHash').remove();
+  localStorage.setItem('mg_pass_'+u,pw);
+  sessionStorage.setItem('mg_pass_'+u,pw);
+  start(dn,u,user.uid);
  }catch(e){console.error(e);lerr(t('e6'))}finally{$('lbtn').disabled=false}
 }
 
-function start(dn,u,auto){
- me={n:dn,u};names.set(u,dn);
+function start(dn,u,uid,auto){
+ me={n:dn,u,uid:uid||(auth.currentUser&&auth.currentUser.uid)};names.set(u,dn);
  if(!auto){localStorage.setItem('mg_last',JSON.stringify({dn,u}))}
  try{lastRead=JSON.parse(localStorage.getItem(K('lr'))||'{}');cleared=JSON.parse(localStorage.getItem(K('cl'))||'{}')}catch(e){}
  autoDel=+localStorage.getItem(K('ad'))||0;
@@ -491,7 +536,7 @@ function open(p,fromList){
  if(p!=='global'&&fromList&&!idx.has(p))locl.add(p);
  chat=p;seen=new Set();cancelReply();pin=null;typing=false;
  if(typRef){typRef.off();typRef=null}
- if(p!=='global'&&!isG(p)){listen(p);markRead(p);db.ref('users/'+p).once('value').then(s=>{const v=s.val()||{};lsInfo[p]={ts:v.lastSeen,show:v.showLastSeen};if(chat===p)hdr()});typRef=db.ref('typing/'+room(p));typRef.on('value',s=>{const v=s.val()||{};typing=!!v[p]&&Date.now()-v[p]<5000;hdr();if(typing)setTimeout(hdr,5200)});
+ if(p!=='global'&&!isG(p)&&p!==me.u){listen(p);markRead(p);db.ref('users/'+p).once('value').then(s=>{const v=s.val()||{};lsInfo[p]={ts:v.lastSeen,show:v.showLastSeen};if(chat===p)hdr()});typRef=db.ref('typing/'+room(p));typRef.on('value',s=>{const v=s.val()||{};typing=!!v[p]&&Date.now()-v[p]<5000;hdr();if(typing)setTimeout(hdr,5200)});
   db.ref('privatePins/'+room(p)).off();db.ref('privatePins/'+room(p)).on('value',s=>{if(chat===p){pin=(s.val()||{}).messageId||null;renderPin()}})}
  closeSide();hdr();comp();render(true);renderPin();side();showWarn();
  if(window.innerWidth>768)$('inp').focus();
@@ -509,8 +554,8 @@ function showWarn(){
 function hdr(){
  if(!me)return;
  $('ht').innerHTML=chat==='global'?t('global'):chat===me.u?t('saved'):E(nm(chat))+badge(chat);
- $('hs').textContent=chat==='global'?online.size+' '+t('online'):chat===me.u?t('saved'):isG(chat)?(GR[gid_(chat)]?TN[GR[gid_(chat)].type]+' · '+Object.keys(MB[gid_(chat)]||{}).length+' members':''):typing?t('typing'):online.has(chat)?t('online'):(()=>{const i=lsInfo[chat];return i&&i.show!==false&&i.ts?lastSeenText(i.ts):t('lastSeen')})();
- $('mb').classList.toggle('hide',chat==='global'&&!isG(chat));
+ $('hs').textContent=chat==='global'?online.size+' '+t('online'):chat===me.u?t('saved'):isG(chat)?(GR[gid_(chat)]?TN[GR[gid_(chat)].type]+' · '+Object.keys(MB[gid_(chat)]||{}).length+'/'+groupLimit(gid_(chat))+' members':''):typing?t('typing'):online.has(chat)?t('online'):(()=>{const i=lsInfo[chat];return i&&i.show!==false&&i.ts?lastSeenText(i.ts):t('lastSeen')})();
+ $('mb').classList.toggle('hide',chat==='global'||chat===me.u);
 }
 function comp(){
  if(isG(chat)){const ok=canPost(chat);$('pill').classList.toggle('hide',!ok);$('blk').classList.toggle('hide',ok);$('unb').classList.add('hide');$('blk').querySelector('span').textContent=myRole(gid_(chat))?'Only admins can post':'You are not a member';return}
@@ -559,7 +604,7 @@ $('msgs').onclick=e=>{
  const m=(C[chat]||[]).find(x=>x.id===el.dataset.id);if(m)ctx(e,m);
 };
 function bannedInfo(u){
- modal(`<div class="pb" style="padding:0"><div class="info" style="border-radius:18px"><div class="ir">${ico('info','#6b7280')}<div><b>${t('accountUnavailable')}</b><small>${esc(u)}</small></div></div><div class="ir">${ico('info','#6b7280')}<div>${t('accountUnavailableInfo')}<small>${t('unavailableDesc')}</small></div></div></div></div>`);
+ modal(`<div class="pb" style="padding:0"><div class="info" style="border-radius:18px"><div class="ir">${ico('info','#6b7280')}<div><b>${t('accountUnavailable')}</b><small>@${esc(u)}</small></div></div><div class="ir">${ico('info','#6b7280')}<div>${t('accountUnavailableInfo')}<small>${t('unavailableDesc')}</small></div></div></div></div>`);
 }
 function ctx(e,m){
  document.querySelectorAll('.ctx').forEach(x=>x.remove());
@@ -569,7 +614,7 @@ function ctx(e,m){
  menu.innerHTML=`<div class="tm">${new Date(m.time).toLocaleString(loc(),{hour12:h12()})}</div>`;
  add(t('reply'),()=>setBar('reply',m));
  add(t('copy'),()=>{navigator.clipboard&&navigator.clipboard.writeText(m.text).then(()=>toast(t('copied')))});
- if(chat!=='global')add(pin===m.id?t('unpin'):t('pin'),()=>pin===m.id?unpin():pinMsg(m));
+ if(chat!=='global'&&chat!==me.u)add(pin===m.id?t('unpin'):t('pin'),()=>pin===m.id?unpin():pinMsg(m));
  add('Forward',()=>fwd(m));
  if(isG(chat)&&canDel(chat)&&m.username!==me.u)add('Delete for all',async()=>{if(await ask('Delete message?','It will disappear for everyone.','Delete',1)){await db.ref(pathFor(chat)+m.id).remove();logEv(gid_(chat),'del',m.username)}},'dd');
  if(mine){add(t('edit'),()=>setBar('edit',m));add(t('del'),async()=>{if(await ask(t('delQ'),t('noUndo'),t('del'),1))db.ref(pathFor(chat)+m.id).remove().then(()=>toast(t('deleted')))},'dd')}
@@ -739,6 +784,8 @@ async function keyDialog(done){
    const old=(await db.ref('users/'+me.u+'/keyHash').once('value')).val();
    if(old&&old!==h)await db.ref('keys/'+old).remove();
    await db.ref('users/'+me.u+'/keyHash').set(h);
+   const storedPass=localStorage.getItem('mg_pass_'+me.u)||sessionStorage.getItem('mg_pass_'+me.u)||'';
+   if(storedPass)localStorage.setItem('mg_key_'+k,JSON.stringify({u:me.u,p:storedPass}));
    o.querySelector('.md').innerHTML=`<h3>${t('keySaved')}</h3><div class="kbox">${esc(k)}</div><div class="row"><button class="b g" id="cp">${t('keyCopy')}</button><button class="b" id="dn2">${t('done')}</button></div>`;
    o.querySelector('#cp').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(k).then(()=>toast(t('copied')));
    o.querySelector('#dn2').onclick=()=>o.remove();
@@ -867,7 +914,6 @@ async function settings(pg){
    const agPolicy=X.addToGroups||'nobody';
    B.innerHTML=`
 <div class="sh">${t('loginKey')}</div><div class="grp"><div class="bl"><span>${X.keyHash?t('keyOn'):t('keyNone')}</span><button class="b${X.keyHash?' g':''}" id="kc">${X.keyHash?t('keyRemove'):t('keyCreate')}</button></div></div>
-<div class="sh">${t('password')}</div><div class="grp"><div class="bl"><span>${X.passHash?t('keyOn'):t('keyNone')}</span><button class="b${X.passHash?' g':''}" id="pwb">${X.passHash?t('passwordRemove'):t('passwordSet')}</button></div></div>
 <div class="sh">${t('blacklist')}</div>${bl.length?`<div class="grp">${bl.map(u=>`<div class="bl"><span>${esc(nm(u))} <span class="hint">@${esc(u)}</span></span><button class="b g" data-ub="${esc(u)}">${t('unblock')}</button></div>`).join('')}</div>`:`<div class="hint" style="margin:6px 4px">${t('noBlocked')}</div>`}
 <div class="sh">${t('privacy')}</div>
 <div class="grp">
@@ -884,15 +930,6 @@ async function settings(pg){
     if(!X.keyHash)return keyDialog(async()=>{X=(await db.ref('users/'+me.u).once('value')).val()||{};show('sec')});
     if(!isAdm()){const k=await promptKey();if(k===null)return;if(await kh(k)!==X.keyHash)return toast(t('wrongKey'))}
     await db.ref('keys/'+X.keyHash).remove();await db.ref('users/'+me.u+'/keyHash').remove();X.keyHash=null;toast(t('keyRemoved'));show('sec');
-   };
-   B.querySelector('#pwb').onclick=async()=>{
-    if(!X.passHash){
-     const o2=modal(`<h3>${t('password')}</h3><input class="fld" id="pw1" type="password" maxlength="50" placeholder="${t('password')}"><button class="b" id="pws">${t('save')}</button>`);
-     o2.querySelector('#pws').onclick=async()=>{const p=o2.querySelector('#pw1').value;if(p.length<4)return toast(t('pwMin'));await db.ref('users/'+me.u+'/passHash').set(await sha(p));o2.remove();toast(t('saved'));X.passHash=1;show('sec')};
-     return;
-    }
-    if(!isAdm()){const p=await promptPass();if(p===null)return;if(await sha(p)!==(await db.ref('users/'+me.u+'/passHash').once('value')).val())return toast(t('wrongPass'))}
-    await db.ref('users/'+me.u+'/passHash').remove();X.passHash=null;toast(t('pwRemoved'));show('sec');
    };
    B.querySelectorAll('[data-ub]').forEach(b=>b.onclick=()=>{db.ref('blocks/'+me.u+'/'+b.dataset.ub).remove();show('sec')});
    B.querySelector('#np').onchange=e=>db.ref('users/'+me.u+'/noPin').set(e.target.checked);
@@ -1036,14 +1073,14 @@ $('scrim').onclick=closeSide;
 applyScale();applyLang();
 $('ht').parentElement.style.cursor='pointer';$('ht').parentElement.onclick=()=>{if(chat!=='global'&&chat!==me.u)profile(chat)};
 $('lbtn').onclick=login;
-['dn','un','kk'].forEach(i=>$(i).onkeydown=e=>{if(e.key==='Enter')login()});
+['dn','un','pw','kk'].forEach(i=>$(i).onkeydown=e=>{if(e.key==='Enter')login()});
 $('un').oninput=e=>{e.target.value=e.target.value.replace(/^@/,'').toLowerCase()};
 try{const l=JSON.parse(localStorage.getItem('mg_last')||'null');if(l){$('dn').value=l.dn;$('un').value=l.u}}catch(e){}
 $('kbtn').onclick=()=>{keyMode=!keyMode;$('fN').classList.toggle('hide',keyMode);$('fK').classList.toggle('hide',!keyMode);$('login').classList.toggle('cap-off',keyMode);$('kbtn').dataset.i=keyMode?'back':'byKey';applyLang();lerr('')};
 
 /* ---------- кнопки меню ---------- */
 (()=>{const b=document.createElement('button');b.className='ib';b.id='plusb';b.title='Menu';b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';$('setb').before(b);
-b.onclick=e=>{e.stopPropagation();menuAt(b,[['New group or channel',newGroup],['Saved messages',()=>open(me.u,true)],['Contacts',contacts],['New story',newStory],['Avatar and link',profLink],['Accounts',accounts]])}})();
+b.onclick=e=>{e.stopPropagation();menuAt(b,[['New group or channel',newGroup],['Saved messages',()=>open(me.u,true)],['Contacts',contacts],['Avatar and link',profLink],['Accounts',accounts]])}})();
 function menuAt(el,items){document.querySelectorAll('.ctx').forEach(x=>x.remove());const m=document.createElement('div');m.className='ctx';
 items.forEach(([x,f])=>{const d=document.createElement('div');d.textContent=x;d.onclick=()=>{m.remove();f()};m.appendChild(d)});
 document.body.appendChild(m);const r=el.getBoundingClientRect();m.style.top=r.bottom+6+'px';m.style.left=Math.max(8,Math.min(r.left,innerWidth-m.offsetWidth-8))+'px';
@@ -1058,7 +1095,7 @@ on(db.ref('members/'+g),s=>{const had=MB[g]&&MB[g][me.u];MB[g]=s.val()||{};
  if(had&&!MB[g][me.u]){idx.delete(p);db.ref('userChats/'+me.u+'/'+p).remove();if(chat===p)open(globalDisabled?me.u:'global');if(!leaving.has(g)&&GR[g])toast('You were removed from "'+GR[g].title+'"')}
  side();hdr();comp()})}
 function newGroup(){
-const o=modal(`<h3>New chat</h3>${dd('gt',[['group','Group'],['super','Supergroup'],['channel','Channel']],'group')}<input class="fld" id="gti" maxlength="30" placeholder="Title"><input class="fld" id="gn" maxlength="16" placeholder="name (a-z, 0-9, _ - !)"><div class="hint" id="gh">@name_${esc(me.u)}</div><textarea class="fld" id="gb" rows="2" maxlength="140" placeholder="Description"></textarea><button class="b" id="gc">Create</button>`);
+const o=modal(`<h3>New chat</h3>${dd('gt',[['group','Group'],['channel','Channel']],'group')}<input class="fld" id="gti" maxlength="30" placeholder="Title"><input class="fld" id="gn" maxlength="16" placeholder="name (a-z, 0-9, _ - !)"><div class="hint" id="gh">@name_${esc(me.u)}</div><textarea class="fld" id="gb" rows="2" maxlength="140" placeholder="Description"></textarea><button class="b" id="gc">Create</button>`);
 const n=o.querySelector('#gn');n.oninput=()=>{n.value=n.value.toLowerCase();o.querySelector('#gh').textContent='@'+(n.value||'name')+'_'+me.u};
 o.querySelector('#gc').onclick=async e=>{const b=e.currentTarget,ti=o.querySelector('#gti').value.trim(),nn=n.value.trim();
  if(!ti)return toast('Enter a title');if(!/^[a-z0-9_\-!]{1,16}$/.test(nn))return toast('Name: a-z, 0-9, _ - !');
@@ -1075,7 +1112,8 @@ async function groupInfo(g){
 const G=GR[g];if(!G)return toast('Unavailable');
 const mem=MB[g]||{},r=myRole(g),adm=r&&RK[r]>=2,p='g:'+g,us=Object.keys(mem).sort((a,b)=>RK[mem[b]]-RK[mem[a]]);
 await Promise.all(us.filter(u=>!names.has(u)).map(async u=>{const v=(await db.ref('users/'+u+'/displayName').once('value')).val();if(v)names.set(u,v)}));
-const o=modal(`<div style="display:flex;flex-direction:column;align-items:center;gap:4px">${avatar(p,0,1)}<b style="margin-top:10px;font-size:18px">${E(G.title)}</b><span class="hint">${TN[G.type]} · @${esc(G.username)}</span></div>${G.bio?`<div style="white-space:pre-wrap">${E(G.bio)}</div>`:''}<div class="grp">${us.map(u=>`<div class="bl" data-m="${esc(u)}" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">${avatar(u)}<span>${E(nm(u))}</span></span><span class="hint">${RN[mem[u]]}</span></div>`).join('')}</div>${adm?'<button class="b" id="iv">Invite link</button><button class="b g" id="ed">Edit</button>':''}<button class="b g" id="lg">Event log</button>${r==='owner'?'<button class="b d" id="dl">Delete</button>':r?'<button class="b d" id="lv">Leave</button>':''}`),q=s=>o.querySelector(s);
+const limit=groupLimit(g);
+const o=modal(`<div style="display:flex;flex-direction:column;align-items:center;gap:4px">${avatar(p,0,1)}<b style="margin-top:10px;font-size:18px">${E(G.title)}</b><span class="hint">${TN[G.type]} · @${esc(G.username)} · ${us.length}/${limit}</span></div>${G.bio?`<div style="white-space:pre-wrap">${E(G.bio)}</div>`:''}<div class="grp">${us.map(u=>`<div class="bl" data-m="${esc(u)}" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">${avatar(u)}<span>${E(nm(u))}</span></span><span class="hint">${RN[mem[u]]}</span></div>`).join('')}</div>${adm?'<button class="b" id="iv">Invite link</button><button class="b g" id="ed">Edit</button>':''}<button class="b g" id="lg">Event log</button>${r==='owner'?'<button class="b d" id="dl">Delete</button>':r?'<button class="b d" id="lv">Leave</button>':''}`),q=s=>o.querySelector(s);
 o.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{const u=x.dataset.m;if(u===me.u)return;o.remove();if(r&&RK[r]>=2&&RK[mem[u]]<RK[r])manage(g,u);else profile(u)});
 if(q('#iv'))q('#iv').onclick=()=>{o.remove();invite(g)};
 if(q('#ed'))q('#ed').onclick=()=>{o.remove();editG(g)};
@@ -1092,7 +1130,12 @@ const o=modal(`<h3>Invitation</h3><input class="fld" id="u" readonly value="${es
 o.querySelector('#c').onclick=()=>navigator.clipboard&&navigator.clipboard.writeText(url).then(()=>{toast('Copied');o.remove()})}
 async function joinTok(tk){const v=(await db.ref('invites/'+tk).once('value')).val();if(!v)return toast('Invalid link');
 const g=v.g;if(!(await db.ref('groups/'+g).once('value')).exists())return toast('Group not found');
-if(!(await db.ref('members/'+g+'/'+me.u).once('value')).exists()){await db.ref('members/'+g+'/'+me.u).set('member');await db.ref('groupLog/'+g).push({type:'join',by:me.u,target:null,extra:null,at:Date.now()})}
+if(!(await db.ref('members/'+g+'/'+me.u).once('value')).exists()){
+ const mem=(await db.ref('members/'+g).once('value')).val()||{};
+ const limit=groupLimit(g);
+ if(Object.keys(mem).length>=limit)return toast(t('groupFull').replace('{n}',limit));
+ await db.ref('members/'+g+'/'+me.u).set('member');await db.ref('groupLog/'+g).push({type:'join',by:me.u,target:null,extra:null,at:Date.now()})
+}
 await db.ref('userChats/'+me.u+'/g:'+g).set(true);history.replaceState(null,'',location.pathname);watchG('g:'+g);open('g:'+g,true)}
 function editG(g){const G=GR[g],o=modal(`<h3>Edit</h3><input class="fld" id="a" maxlength="30" value="${esc(G.title)}"><textarea class="fld" id="b" rows="3" maxlength="140" placeholder="Description">${esc(G.bio||'')}</textarea><input class="fld" id="c" placeholder="Avatar URL (https)" value="${esc(G.avatar||'')}"><button class="b" id="s">Save</button>`),q=s=>o.querySelector(s);
 q('#s').onclick=async()=>{const ti=q('#a').value.trim(),av=q('#c').value.trim();if(!ti)return toast('Enter a title');if(av&&!IMG.test(av))return toast('Invalid link');
@@ -1110,17 +1153,6 @@ o.onclick=async e=>{const n=e.target.closest('[data-p]');if(!n)return;const p=n.
  if(!isG(p)&&p!==me.u){if(blocked.has(p))return toast('Unblock this user first');if((await db.ref('blocks/'+p+'/'+me.u).once('value')).val())return toast('User has restricted messages')}
  o.remove();await db.ref(pathFor(p)).push({username:me.u,displayName:me.n,text:'↪ '+(m.displayName||m.username)+'\n'+m.text,time:Date.now()});
  if(!isG(p)&&p!==me.u){db.ref('userChats/'+me.u+'/'+p).set(true);db.ref('userChats/'+p+'/'+me.u).set(true);locl.delete(p)}toast('Forwarded')}}
-
-/* ---------- истории ---------- */
-function storiesActive(){const lim=Date.now()-864e5,r={};for(const u in ST){const a=Object.entries(ST[u]||{}).filter(([k,v])=>v&&v.at>lim).map(([k,v])=>({id:k,...v})).sort((x,y)=>x.at-y.at);if(a.length)r[u]=a}return r}
-function newStory(){const o=modal(`<h3>New story</h3><textarea class="fld" id="t" rows="3" maxlength="200" placeholder="Text"></textarea><input class="fld" id="i" placeholder="Image URL (https)"><div class="hint">Story lives for 24 hours</div><button class="b" id="s">Publish</button>`);
-o.querySelector('#s').onclick=async()=>{const tx=o.querySelector('#t').value.trim(),im=o.querySelector('#i').value.trim();
- if(!tx&&!im)return toast('Add text or image');if(im&&!IMG.test(im))return toast('Invalid link');
- try{await db.ref('stories/'+me.u).push({text:tx,img:im||null,at:Date.now()});o.remove();toast('Published')}catch(e){toast('Failed')}}}
-function viewStory(u){const a=storiesActive()[u];if(!a)return;let i=0;const o=modal('<div id="sv" style="display:flex;flex-direction:column;gap:12px"></div>'),d=o.querySelector('#sv');
-const paint=()=>{const s=a[i];d.innerHTML=`<div class="bl"><b>${E(nm(u))}</b><span class="hint">${i+1}/${a.length} · ${hm(s.at)}</span></div>${s.img&&IMG.test(s.img)?`<img src="${esc(s.img)}" referrerpolicy="no-referrer" style="width:100%;max-height:50vh;object-fit:contain;border-radius:14px">`:''}${s.text?`<div style="white-space:pre-wrap;word-break:break-word">${E(s.text)}</div>`:''}<div class="row">${u===me.u?'<button class="b g" id="sd">Delete</button>':''}<button class="b" id="snx">${i<a.length-1?'Next':'Close'}</button></div>`;
- d.querySelector('#snx').onclick=()=>{if(i<a.length-1){i++;paint()}else o.remove()};
- const sd=d.querySelector('#sd');if(sd)sd.onclick=async()=>{await db.ref('stories/'+u+'/'+s.id).remove();o.remove()}};paint()}
 
 /* ---------- аватарка и ссылка ---------- */
 function paintMe(){const m=$('meav');if(AV[me.u]){m.style.cssText="background:center/cover url('"+AV[me.u]+"')";m.textContent=''}else{m.textContent=ini(me.u);m.style.cssText=avStyle(me.u)}}
@@ -1148,8 +1180,6 @@ o.onclick=async e=>{const s=e.target.closest('[data-s]'),d=e.target.closest('[da
  if(d){localStorage.setItem('mg_accs',JSON.stringify(accs().filter(x=>x.u!==d.dataset.d)));o.remove();return accounts()}
  if(e.target.closest('#ad')){o.remove();return $('exitb').click()}
  if(s){const x=accs().find(y=>y.u===s.dataset.s);if(!x||x.u===me.u)return;
-  const h=(await db.ref('users/'+x.u+'/passHash').once('value')).val();
-  if(h){const p=await promptPass();if(p===null)return;if(await sha(p)!==h)return toast('Wrong password')}
   try{await db.ref('onlineUsers/'+me.u).remove()}catch(er){}refs.forEach(r=>r.off());
   sessionStorage.setItem('mg_auto',JSON.stringify({dn:x.dn,u:x.u}));location.reload()}}}
 
@@ -1161,8 +1191,6 @@ on(db.ref('userAvatars'),s=>{const v=s.val()||{};AV={};for(const k in v)if(IMG.t
 on(db.ref('userColors'),paintMe);
 on(db.ref('userLinks'),s=>{LK=s.val()||{}});
 on(db.ref('contacts/'+u),s=>{CT=s.val()||{}});
-on(db.ref('stories'),s=>{ST=s.val()||{};const lim=Date.now()-864e5;
- for(const k in (ST[u]||{}))if(ST[u][k].at<=lim)db.ref('stories/'+u+'/'+k).remove().catch(()=>{});side()});
 on(db.ref('userChats/'+u),s=>Object.keys(s.val()||{}).filter(isG).forEach(watchG));
 const m=location.hash.match(/^#join=(\S+)$/);if(m)setTimeout(()=>joinTok(m[1]),600)}
 
@@ -1180,8 +1208,14 @@ const rows=pubRes.filter(x=>!idx.has('g:'+x.g));
 if(rows.length)$('list').insertAdjacentHTML('beforeend','<div class="sec">Public groups</div>'+rows.map(x=>`<div class="nav" data-pg="${esc(x.g)}"><div class="av">#</div><span><b style="display:block">${E(x.G.title)}</b><small class="hint">${TN[x.G.type]} · @${esc(x.un)}</small></span></div>`).join(''))};
 $('q').oninput=side;
 $('list').addEventListener('click',async e=>{const n=e.target.closest('[data-pg]');if(!n)return;const g=n.dataset.pg;
-try{if(!(await db.ref('members/'+g+'/'+me.u).once('value')).exists()){await db.ref('members/'+g+'/'+me.u).set('member');await db.ref('groupLog/'+g).push({type:'join',by:me.u,target:null,extra:null,at:Date.now()})}
-await db.ref('userChats/'+me.u+'/g:'+g).set(true);$('q').value='';watchG('g:'+g);open('g:'+g,true)}catch(x){toast('Failed to join')}});
+try{
+ if(!(await db.ref('members/'+g+'/'+me.u).once('value')).exists()){
+  const mem=(await db.ref('members/'+g).once('value')).val()||{};
+  const limit=groupLimit(g);
+  if(Object.keys(mem).length>=limit)return toast(t('groupFull').replace('{n}',limit));
+  await db.ref('members/'+g+'/'+me.u).set('member');await db.ref('groupLog/'+g).push({type:'join',by:me.u,target:null,extra:null,at:Date.now()})
+ }
+ await db.ref('userChats/'+me.u+'/g:'+g).set(true);$('q').value='';watchG('g:'+g);open('g:'+g,true)}catch(x){toast('Failed to join')}});
 const _gi=groupInfo;
 groupInfo=async function(g){await _gi(g);const G=GR[g],r=myRole(g);if(!G||!r||RK[r]<2)return;
 const md=[...document.querySelectorAll('.ov .md')].pop();if(!md)return;
@@ -1191,7 +1225,7 @@ try{await db.ref().update(up);md.parentElement.remove();toast(G.pub?'Hidden from
 md.insertBefore(b,md.querySelector('#lg'))};
 
 /* ---------- авто-вход ---------- */
-try{const a=JSON.parse(sessionStorage.getItem('mg_auto')||'null');if(a){sessionStorage.removeItem('mg_auto');start(a.dn,a.u,1)}}catch(e){console.error(e)}
+try{const a=JSON.parse(sessionStorage.getItem('mg_auto')||'null');if(a){sessionStorage.removeItem('mg_auto');start(a.dn,a.u,null,1)}}catch(e){console.error(e)}
 </script>
 </body>
 </html>
