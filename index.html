@@ -193,7 +193,6 @@ input.sw2:checked::after{transform:translate(-50%,-50%) rotate(45deg) scale(1)}
 <div id="fN">
 <div><label data-i="dname"></label><input class="fld" id="dn" maxlength="20" data-p="dnp"></div>
 <div><label data-i="uname"></label><input class="fld" id="un" maxlength="10" data-p="unp"></div>
-<div><label>Password</label><input class="fld" id="pw" type="password" maxlength="50" autocomplete="current-password"></div>
 </div>
 <div id="fK" class="hide"><label data-i="keyL"></label><input class="fld" id="kk" maxlength="5" autocomplete="off" data-p="keyP"></div>
 <div class="h-captcha" data-sitekey="e71a81dc-0eb2-449e-b61e-0e006eb48e74" data-theme="dark" data-callback="onCap"></div>
@@ -287,7 +286,11 @@ matMuted:'You have been muted for {n}',
 seconds:'seconds',minute:'minute',minutes:'minutes',zeroSeconds:'0 seconds',
 saved:'Saved messages',savedShort:'S',
 groupFull:'Group is full ({n} members max)',
-groupFullVerified:'Group is full ({n} members max)',
+pwdTitle:'Password',
+pwdCreate:'Create a password for this account',
+pwdEnter:'Enter your password',
+pwdMin:'Password: min. 6 characters',
+pwdWrong:'Wrong password',
 sysAdded:'{by} added you to the group «{title}»',
 sysAddedOther:'{by} added {who} to the group «{title}»',
 sysJoined:'You joined the group «{title}»',
@@ -323,7 +326,11 @@ matMuted:'Вы заглушены на {n}',
 seconds:'секунд',minute:'минуту',minutes:'минут',zeroSeconds:'0 секунд',
 saved:'Сохранённые сообщения',savedShort:'И',
 groupFull:'Группа заполнена (макс. {n} участников)',
-groupFullVerified:'Группа заполнена (макс. {n} участников)',
+pwdTitle:'Пароль',
+pwdCreate:'Придумайте пароль для этого аккаунта',
+pwdEnter:'Введите пароль',
+pwdMin:'Пароль: минимум 6 символов',
+pwdWrong:'Неверный пароль',
 sysAdded:'{by} добавил(а) вас в группу «{title}»',
 sysAddedOther:'{by} добавил(а) {who} в группу «{title}»',
 sysJoined:'Вы присоединились к группе «{title}»',
@@ -383,7 +390,6 @@ const myRole=g=>(MB[g]||{})[me.u]||null;
 const canPost=p=>{const g=gid_(p),G=GR[g],r=myRole(g);return !!(G&&r&&(G.type!=='channel'||RK[r]>=2))};
 const canDel=p=>{const g=gid_(p),G=GR[g],r=myRole(g);return !!(G&&r&&RK[r]>=2)};
 const logEv=(g,type,target,extra)=>db.ref('groupLog/'+g).push({type,by:me.u,target:target||null,extra:extra||null,at:Date.now()});
-
 function groupLimit(g){
  const G=GR[g];if(!G)return 35;
  const owner=G.owner;
@@ -421,6 +427,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('.vb');if(!b)retu
 window.onCap=x=>{capTok=x};
 const lerr=x=>{$('lerr').textContent=x};
 
+function askPass(){return new Promise(r=>{const o=modal(`<h3>${t('password')}</h3><p>${t('protectedT')}</p><input class="fld" id="pw" type="password" maxlength="50"><div class="row"><button class="b g" id="n">${t('cancel')}</button><button class="b" id="y">${t('signin')}</button></div>`);const i=o.querySelector('#pw');i.focus();const ok=()=>{o.remove();r(i.value)};o.querySelector('#y').onclick=ok;i.onkeydown=e=>{if(e.key==='Enter')ok()};o.querySelector('#n').onclick=()=>{o.remove();r(null)}})}
+
 async function loginKey(){
  const k=$('kk').value.trim();
  if(!k)return lerr(t('e7'));
@@ -440,24 +448,35 @@ async function loginKey(){
 
 async function login(){
  if(keyMode)return loginKey();
- const dn=$('dn').value.trim(),u=$('un').value.trim().toLowerCase().replace(/^@/,''),pw=$('pw').value;
+ const dn=$('dn').value.trim(),u=$('un').value.trim().toLowerCase().replace(/^@/,'');
  if(!dn||dn.length>20)return lerr(t('e1'));
  if(!/^[a-z0-9_\-!]{1,9}$/.test(u))return lerr(t('e2'));
- if(!pw||pw.length<6)return lerr('Password must be at least 6 characters');
  if(!capTok&&document.querySelector('.h-captcha iframe'))return lerr(t('e3'));
  lerr('');$('lbtn').disabled=true;
  try{
-  const x=(await db.ref('users/'+u).once('value')).val();
-  if(x&&x.displayName!==dn)return lerr(t('e4'));
+  // 1. Проверяем, существует ли запись в базе (но база закрыта правилами — только для проверки admin),
+  // поэтому определяем: есть аккаунт в Firebase Auth или нет — попыткой signIn.
+  let pw=null;
+  // Пытаемся войти с пустым паролем (быстрая проверка существования) — нет, так нельзя.
+  // Спросим пароль у пользователя через модалку.
+  pw=await askPass();
+  if(pw===null){$('lbtn').disabled=false;return;}
+  if(pw.length<6)return lerr(t('pwdMin'));
+
+  // 2. СНАЧАЛА Firebase Auth
   let user;
   try{user=await authUser(u,pw)}
   catch(e){
-   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-password')return lerr('Wrong password');
-   if(e.code==='auth/email-already-in-use')return lerr('This username is already taken (wrong password)');
-   if(e.code==='auth/weak-password')return lerr('Password too weak (min. 6 characters)');
+   if(e.code==='auth/wrong-password'||e.code==='auth/invalid-password')return lerr(t('pwdWrong'));
+   if(e.code==='auth/email-already-in-use')return lerr(t('pwdWrong'));
+   if(e.code==='auth/weak-password')return lerr(t('pwdMin'));
    if(e.code==='auth/too-many-requests')return lerr('Too many attempts, try again later');
    console.error(e);return lerr(t('e6'));
   }
+
+  // 3. ТЕПЕРЬ читаем базу (auth уже есть — правила пропустят)
+  const x=(await db.ref('users/'+u).once('value')).val();
+  if(x&&x.displayName!==dn)return lerr(t('e4'));
   if(x&&x.uid&&x.uid!==user.uid)return lerr('This username is bound to another account');
   if(!x)await db.ref('users/'+u).set({displayName:dn,username:u,createdAt:Date.now()});
   await bindUid(u,user.uid);
@@ -1073,7 +1092,7 @@ $('scrim').onclick=closeSide;
 applyScale();applyLang();
 $('ht').parentElement.style.cursor='pointer';$('ht').parentElement.onclick=()=>{if(chat!=='global'&&chat!==me.u)profile(chat)};
 $('lbtn').onclick=login;
-['dn','un','pw','kk'].forEach(i=>$(i).onkeydown=e=>{if(e.key==='Enter')login()});
+['dn','un','kk'].forEach(i=>$(i).onkeydown=e=>{if(e.key==='Enter')login()});
 $('un').oninput=e=>{e.target.value=e.target.value.replace(/^@/,'').toLowerCase()};
 try{const l=JSON.parse(localStorage.getItem('mg_last')||'null');if(l){$('dn').value=l.dn;$('un').value=l.u}}catch(e){}
 $('kbtn').onclick=()=>{keyMode=!keyMode;$('fN').classList.toggle('hide',keyMode);$('fK').classList.toggle('hide',!keyMode);$('login').classList.toggle('cap-off',keyMode);$('kbtn').dataset.i=keyMode?'back':'byKey';applyLang();lerr('')};
