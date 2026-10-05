@@ -12,7 +12,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
 ::-webkit-scrollbar { display: none; }
 
-/* ЦВЕТОВЫЕ СХЕМЫ. По умолчанию Monochrome */
+/* Тёмная тема по умолчанию */
 :root { 
     --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #555; --oth: #1d1d1d; 
     --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d; 
@@ -21,16 +21,18 @@
     --ovl: #000000b0; --r: 18px; --rt: 4px; --check-on: #5a5a5a; --gl: rgba(20, 20, 20, .55); 
     --gl2: rgba(20, 20, 20, .85); --gb: rgba(255, 255, 255, .08); --soft: rgba(255, 255, 255, .04); 
     --hv2: rgba(255, 255, 255, .08); --hv3: rgba(255, 255, 255, .12); --blur: 22px; --sideblur: 22px; 
+    --send-bg: #e6e6e6; --send-fg: #111;
 }
 :root[data-theme=light] { 
-    --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #555; --oth: #fff; 
+    --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #23272d; --oth: #fff; 
     --d: #d9453d; --btn: #1c1e22; --btnt: #fff; --g: #eceef1; --hv: #0000000d; --fld: #f6f7f8; 
     --fb: #9aa0a8; --side: #fff; --h1: #0000000a; --h2: #00000012; --av: #e3e6ea; --avt: #4a5058; 
     --day: #e4e6ea; --sn: #555; --rp: #777; --rpl: #999; --rpb: #333; --fl: #d5d8dd; --ctx: #fff; 
     --ovl: #1a1c1f66; --check-on: #8b9099; --gl: rgba(255, 255, 255, .65); --gl2: rgba(255, 255, 255, .9); 
     --gb: rgba(0, 0, 0, .06); --soft: rgba(0, 0, 0, .02); --hv2: rgba(0, 0, 0, .05); --hv3: rgba(0, 0, 0, .08); 
+    --send-bg: #1c1e22; --send-fg: #fff;
 }
-/* НОВЫЕ ТЕМЫ */
+/* Цветовые темы */
 :root[data-color-theme="redfox"] { --mine: #e5534b; --btnt: #fff; }
 :root[data-color-theme="ocean"] { --mine: #2b7fff; --btnt: #fff; --av: #2b7fff; }
 :root[data-color-theme="forest"] { --mine: #2e7d32; --btnt: #fff; --av: #2e7d32; }
@@ -59,11 +61,12 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .fld { width: 100%; padding: 13px 15px; background: var(--fld); border: 1px solid var(--l); border-radius: 14px; transition: border-color .15s; }
 .fld:focus { border-color: var(--fb); }
 textarea.fld { resize: none; display: block; line-height: 1.4; }
-#login { height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: auto; }
+#login { height: 100%; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: auto; position: relative; }
 .card { width: 100%; max-width: 380px; background: var(--p); border: 1px solid var(--l); border-radius: 24px; padding: 22px 30px 30px; display: flex; flex-direction: column; gap: 14px; animation: up .3s ease; box-shadow: 0 12px 40px #0000001a; }
 .card h2 { font-size: 24px; font-weight: 600; text-align: center; margin-bottom: 2px; }
 .card label { font-size: 13px; color: var(--m); display: block; margin-bottom: 6px; }
 .err { color: var(--d); font-size: 13px; min-height: 16px; }
+.version { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--m); opacity: .35; user-select: none; }
 #app { height: 100%; display: flex; }
 #side { width: 300px; background: var(--side); border-right: 1px solid var(--l); display: flex; flex-direction: column; padding: 12px; gap: 10px; flex-shrink: 0; transition: transform .25s ease; }
 .me-row { display: flex; align-items: center; gap: 10px; padding: 2px; }
@@ -123,13 +126,16 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .sn:hover { text-decoration: underline; }
 .rp { font-size: 12px; color: var(--rp); border-left: 2px solid var(--rpl); padding: 1px 0 1px 8px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-radius: var(--rt); }
 .rp b { display: block; color: var(--rpb); }
+.m img.att { display: block; max-width: 100%; max-height: 300px; border-radius: 12px; margin: 4px 0; cursor: pointer; }
 #comp { position: absolute; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; display: flex; flex-direction: column; gap: 6px; }
 #rbar { border-radius: 16px; padding: 7px 6px 7px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--sn); animation: down .15s ease; }
 #rbar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pill { display: flex; align-items: flex-end; gap: 6px; border-radius: 26px; padding: 6px 6px 6px 18px; min-height: 52px; box-shadow: 0 4px 18px #00000014; }
 .pill textarea { flex: 1; background: none; border: 0; min-width: 0; resize: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; }
-#send { background: var(--btn); color: var(--btnt); }
+#send { background: var(--send-bg); color: var(--send-fg); }
 #send:hover { opacity: .85; }
+#attach { background: none; color: var(--m); }
+#attach:hover { background: var(--hv); color: var(--t); }
 .ctx { position: fixed; z-index: 9000; min-width: 190px; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); animation: pop .14s ease; max-height: 60vh; overflow-y: auto; }
 .ctx div { padding: 11px 16px; cursor: pointer; font-size: 14px; transition: background .12s; }
 .ctx div:hover { background: var(--hv2); }
@@ -220,6 +226,11 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 #login .row #kbtn { flex: 0 0 auto; padding: 10px 12px; font-size: 12px; }
 #login .row #lbtn { flex: 1; }
 #login.cap-off .h-captcha { display: none; }
+/* ЗАГРУЗКА */
+#loader { position: fixed; inset: 0; background: var(--bg); z-index: 100000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: opacity .3s; }
+#loader.hide { opacity: 0; pointer-events: none; }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--l); border-top-color: var(--t); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 @keyframes up { from { opacity: 0; transform: translateY(10px); } }
 @keyframes down { from { opacity: 0; transform: translateY(-6px); } }
 @keyframes pop { from { opacity: 0; transform: scale(.96) translateY(6px); } }
@@ -242,6 +253,8 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </head>
 <body>
 
+<div id="loader"><div class="spinner"></div></div>
+
 <div id="login">
   <div class="card">
     <h2>RedFox</h2>
@@ -257,6 +270,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
       <button class="b" id="lbtn" data-i="signin"></button>
     </div>
   </div>
+  <div class="version" id="ver"></div>
 </div>
 
 <div id="app" class="hide">
@@ -288,6 +302,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
     <div id="comp">
       <div id="rbar" class="hide"><span></span><button class="ib" style="width:30px;height:30px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="pill" id="pill">
+        <button class="ib" id="attach" title="Attach"><svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 01-7-7L14 5.5a3.5 3.5 0 015 5L10.5 19a2 2 0 01-3-3l8-8"/></svg></button>
         <textarea id="inp" rows="1" maxlength="2000" data-p="message"></textarea>
         <button class="ib" id="send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
@@ -297,6 +312,8 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
+const APP_VERSION = '1.0';
+
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
   authDomain: "masanger-6f991.firebaseapp.com",
@@ -453,7 +470,10 @@ const L = {
     deleteForAllP: 'It will disappear for all participants.', limitReached: 'You can create only {n} group/channel',
     limitReachedPlural: 'You can create only {n} groups/channels',
     myChannels: 'My channels', noChannels: 'No channels', avatarUrl: 'Avatar URL',
-    orUpload: 'or upload', backgroundUrl: 'Background URL'
+    orUpload: 'or upload', backgroundUrl: 'Background URL',
+    attach: 'Attach photo', photoOnlyAdmin: 'Only admins can send photos to global chat',
+    photoNotAllowed: 'Photos are not allowed in this chat', uploadFailed: 'Upload failed',
+    loading: 'Loading...'
   },
   ru: {
     dname: 'Отображаемое имя', dnp: 'Ваше имя', uname: 'Имя пользователя', unp: 'a-z, 0-9, _ - !',
@@ -569,10 +589,14 @@ const L = {
     deleteForAllP: 'Оно исчезнет у всех участников.', limitReached: 'Вы можете создать только {n} группу/канал',
     limitReachedPlural: 'Вы можете создать только {n} групп/каналов',
     myChannels: 'Мои каналы', noChannels: 'Нет каналов', avatarUrl: 'Ссылка на аватарку',
-    orUpload: 'или загрузите', backgroundUrl: 'Ссылка на фон'
+    orUpload: 'или загрузите', backgroundUrl: 'Ссылка на фон',
+    attach: 'Прикрепить фото', photoOnlyAdmin: 'Только админы могут отправлять фото в общий чат',
+    photoNotAllowed: 'Фото запрещены в этом чате', uploadFailed: 'Не удалось загрузить',
+    loading: 'Загрузка...'
   }
 };
 
+// Язык по умолчанию — английский
 const lang = () => localStorage.getItem('mg_lang') || 'en';
 const loc = () => lang() === 'ru' ? 'ru-RU' : 'en-US';
 const t = k => (L[lang()] && L[lang()][k]) || L.en[k] || k;
@@ -583,6 +607,8 @@ function applyLang() {
   document.querySelectorAll('[data-p]').forEach(e => e.placeholder = t(e.dataset.p));
   $('setb').title = t('settings');
   $('admb').title = t('admin');
+  $('attach').title = t('attach');
+  $('ver').textContent = APP_VERSION;
 }
 
 const scale = () => localStorage.getItem('mg_scale') || '100';
@@ -597,6 +623,7 @@ const applyScale = () => {
     e.style.transform = k === 1 ? 'none' : 'scale(' + k + ')';
   });
 };
+// Тема по умолчанию — тёмная
 const theme = () => localStorage.getItem('mg_theme') || 'dark';
 const h12 = () => (localStorage.getItem('mg_h') || '12') === '12';
 const sendMode = () => localStorage.getItem('mg_send') || 'enter';
@@ -623,11 +650,11 @@ function applyRadius() {
 }
 function applyTheme() {
   let v = theme();
-  if (v === 'auto') v = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  // Всегда тёмная, без автоопределения
   document.documentElement.dataset.theme = v;
   document.documentElement.dataset.colorTheme = colorTheme();
   const c = document.querySelector('.h-captcha');
-  if (c) c.dataset.theme = v;
+  if (c) c.dataset.theme = 'dark';
 }
 const animOn = () => localStorage.getItem('mg_anim') !== '0';
 function applyAnim() { document.documentElement.dataset.anim = animOn() ? 'on' : 'off'; }
@@ -635,7 +662,6 @@ applyTheme();
 applyRadius();
 applyBlur();
 applyAnim();
-matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => theme() === 'auto' && applyTheme());
 
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const EMO = /(?:\p{Regional_Indicator}{2}|[#*0-9]\uFE0F?\u20E3|\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})*(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\p{Emoji_Modifier})*)*)/gu;
@@ -683,7 +709,7 @@ const containsMat = s => { const l = s.toLowerCase().replace(/[^a-zа-яё0-9]/g
 function toast(x) {
   const e = document.createElement('div');
   e.className = 'toast';
-  e.textContent = x;
+  e.innerHTML = E(x);
   document.body.appendChild(e);
   setTimeout(() => e.remove(), 2200);
 }
@@ -749,6 +775,9 @@ document.addEventListener('click', e => { const b = e.target.closest('.vb'); if 
 window.onCap = x => { capTok = x; };
 const lerr = x => { $('lerr').textContent = x; };
 
+function showLoader() { $('loader').classList.remove('hide'); }
+function hideLoader() { $('loader').classList.add('hide'); }
+
 function askPass() {
   return new Promise(r => {
     const o = modal(
@@ -779,15 +808,17 @@ async function loginKey() {
   if (!obj || !obj.u || !obj.p) return lerr(t('e7'));
   lerr('');
   $('lbtn').disabled = true;
+  showLoader();
   try {
     const user = await authUser(obj.u, obj.p);
     const x = (await db.ref('users/' + obj.u).once('value')).val();
-    if (!x) return lerr(t('e7'));
+    if (!x) { lerr(t('e7')); hideLoader(); return; }
     await bindUid(obj.u, user.uid);
     start(x.displayName, obj.u, user.uid);
   } catch (e) {
     console.error(e);
     lerr(t('e7'));
+    hideLoader();
   } finally {
     $('lbtn').disabled = false;
   }
@@ -806,11 +837,12 @@ async function login() {
     const pw = await askPass();
     if (pw === null) { $('lbtn').disabled = false; return; }
     if (pw.length < 6) { lerr(t('pwdMin')); $('lbtn').disabled = false; return; }
-
+    showLoader();
     let user;
     try {
       user = await authUser(u, pw);
     } catch (e) {
+      hideLoader();
       if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-password') return lerr(t('pwdWrong'));
       if (e.code === 'auth/email-already-in-use') return lerr(t('pwdWrong'));
       if (e.code === 'auth/weak-password') return lerr(t('pwdMin'));
@@ -820,8 +852,8 @@ async function login() {
     }
 
     const x = (await db.ref('users/' + u).once('value')).val();
-    if (x && x.displayName !== dn) return lerr(t('e4'));
-    if (x && x.uid && x.uid !== user.uid) return lerr('This username is bound to another account');
+    if (x && x.displayName !== dn) { hideLoader(); return lerr(t('e4')); }
+    if (x && x.uid && x.uid !== user.uid) { hideLoader(); return lerr('This username is bound to another account'); }
     if (!x) await db.ref('users/' + u).set({ displayName: dn, username: u, createdAt: Date.now() });
     await bindUid(u, user.uid);
 
@@ -833,6 +865,7 @@ async function login() {
     start(dn, u, user.uid);
   } catch (e) {
     console.error(e);
+    hideLoader();
     lerr(t('e6'));
   } finally {
     $('lbtn').disabled = false;
@@ -869,7 +902,7 @@ function start(dn, u, uid, auto) {
   on(db.ref('userBanners'), s => { banners = s.val() || {}; });
   on(db.ref('userColors'), s => { colors = s.val() || {}; $('meav').style.cssText = avStyle(me.u); side(); });
   on(db.ref('userBadges'), s => { badges = {}; const v = s.val() || {}; for (const k in v) badges[k] = v[k].type; updAdmin(); side(); render(); hdr(); });
-  on(db.ref('messages').orderByChild('time').limitToLast(MAX), s => { const a = []; s.forEach(c => { const m = { id: c.key, ...c.val() }; a.push(m); if (m.username && m.displayName) names.set(m.username, m.displayName); }); C.global = a; if (chat === 'global' && !globalDisabled) render(); side(); });
+  on(db.ref('messages').orderByChild('time').limitToLast(MAX), s => { const a = []; s.forEach(c => { const m = { id: c.key, ...c.val() }; a.push(m); if (m.username && m.displayName) names.set(m.username, m.displayName); }); C.global = a; if (chat === 'global' && !globalDisabled) render(); side(); hideLoader(); });
   on(db.ref('userChats/' + u), s => { idx = new Set(Object.keys(s.val() || {})); idx.forEach(listen); side(); });
   on(db.ref('users/' + u), s => { const v = s.val() || {}; addToGroupsPolicy = v.addToGroups || 'nobody'; });
   on(db.ref('userSettings/' + u), s => { const v = s.val() || {}; if (v.globalDisabled !== undefined) { globalDisabled = v.globalDisabled === '1'; side(); if (globalDisabled && chat === 'global') open(me.u, true); } });
@@ -879,6 +912,8 @@ function start(dn, u, uid, auto) {
   setInterval(expire, 5000);
   open(globalDisabled ? me.u : 'global');
   boot(dn, u);
+  // Скрываем загрузчик через 800мс после старта (чтобы не мелькал)
+  setTimeout(hideLoader, 800);
 }
 
 function on(ref, fn) { ref.on('value', fn); refs.push(ref); }
@@ -926,18 +961,18 @@ function side() {
     : [...ps];
   c.sort((a, b) => lastT_(b) - lastT_(a));
   let h = '';
-  const savedRow = '<div class="it ' + (chat === me.u ? 'on' : '') + '" data-u="' + esc(me.u) + '"><div class="av" style="background:#5b6bff;color:#fff">' + esc(t('savedShort')) + '</div><div><b>' + t('saved') + '</b><small>' + t('empty') + '</small></div></div>';
+  const savedRow = '<div class="it ' + (chat === me.u ? 'on' : '') + '" data-u="' + esc(me.u) + '"><div class="av" style="background:#5b6bff;color:#fff">' + esc(t('savedShort')) + '</div><div><b>' + E(t('saved')) + '</b><small>' + E(t('empty')) + '</small></div></div>';
   if (!q) h += savedRow;
-  if (!globalDisabled && !q) h += '<div class="it ' + (chat === 'global' ? 'on' : '') + '" data-u="global"><div class="av">#</div><div><b>' + t('global') + '</b><small>' + online.size + ' ' + t('online') + '</small></div></div>';
+  if (!globalDisabled && !q) h += '<div class="it ' + (chat === 'global' ? 'on' : '') + '" data-u="global"><div class="av">#</div><div><b>' + E(t('global')) + '</b><small>' + online.size + ' ' + E(t('online')) + '</small></div></div>';
   const row = u => {
     const n = unread(u);
-    return '<div class="it ' + (chat === u ? 'on' : '') + '" data-u="' + esc(u) + '">' + avatar(u, 1) + '<div><b>' + E(nm(u)) + badge(u) + '</b><small>@' + esc(u) + (blocked.has(u) ? ' · ' + t('blockedTag') : '') + '</small></div>' + (n ? '<span class="cnt">' + n + '</span>' : '') + '</div>';
+    return '<div class="it ' + (chat === u ? 'on' : '') + '" data-u="' + esc(u) + '">' + avatar(u, 1) + '<div><b>' + E(nm(u)) + badge(u) + '</b><small>@' + esc(u) + (blocked.has(u) ? ' · ' + E(t('blockedTag')) : '') + '</small></div>' + (n ? '<span class="cnt">' + n + '</span>' : '') + '</div>';
   };
-  if (c.length) h += '<div class="sec">' + (q ? t('results') : t('chats')) + '</div>' + c.map(row).join('');
-  else if (q) h += '<div class="sec">' + t('nobody') + '</div>';
+  if (c.length) h += '<div class="sec">' + E(q ? t('results') : t('chats')) + '</div>' + c.map(row).join('');
+  else if (q) h += '<div class="sec">' + E(t('nobody')) + '</div>';
   if (!q) {
     const o = [...online.keys()].filter(u => u !== me.u && !ps.has(u) && !blocked.has(u));
-    if (o.length) h += '<div class="sec">' + t('onlineSec') + '</div>' + o.map(row).join('');
+    if (o.length) h += '<div class="sec">' + E(t('onlineSec')) + '</div>' + o.map(row).join('');
   }
   $('list').innerHTML = h;
 }
@@ -978,18 +1013,18 @@ function showWarn() {
   const isGroup = isG(chat);
   if (!isGlobal && !isGroup) { w.classList.add('hide'); $('msgs').classList.remove('pp'); return; }
   w.classList.remove('hide');
-  $('warnText').textContent = t('warn');
+  $('warnText').innerHTML = E(t('warn'));
   $('msgs').classList.add('pp');
   acts.innerHTML = '';
   const ig = document.createElement('button');
   ig.className = 'b g';
-  ig.textContent = t('ignore');
+  ig.innerHTML = E(t('ignore'));
   ig.onclick = () => { w.classList.add('hide'); $('msgs').classList.remove('pp'); };
   acts.appendChild(ig);
   if (isGroup) {
     const lv = document.createElement('button');
     lv.className = 'b g';
-    lv.textContent = t('leaveGroup');
+    lv.innerHTML = E(t('leaveGroup'));
     lv.onclick = async () => {
       const g = gid_(chat);
       if (await ask(t('leaveGroup') + '?', '', t('leaveGroup'), 1)) {
@@ -1008,18 +1043,18 @@ function showWarn() {
 
 function hdr() {
   if (!me) return;
-  $('ht').innerHTML = chat === 'global' ? t('global') : chat === me.u ? t('saved') : E(nm(chat)) + badge(chat);
-  $('hs').textContent = chat === 'global'
-    ? online.size + ' ' + t('online')
+  $('ht').innerHTML = chat === 'global' ? E(t('global')) : chat === me.u ? E(t('saved')) : E(nm(chat)) + badge(chat);
+  $('hs').innerHTML = chat === 'global'
+    ? online.size + ' ' + E(t('online'))
     : chat === me.u
-      ? t('saved')
+      ? E(t('saved'))
       : isG(chat)
         ? (GR[gid_(chat)] ? TN[GR[gid_(chat)].type] + ' · ' + Object.keys(MB[gid_(chat)] || {}).length + '/' + groupLimit(gid_(chat)) + ' ' + (lang()==='ru'?'участников':'members') : '')
         : typing
-          ? t('typing')
+          ? E(t('typing'))
           : online.has(chat)
-            ? t('online')
-            : (() => { const i = lsInfo[chat]; return i && i.show !== false && i.ts ? lastSeenText(i.ts) : t('lastSeen'); })();
+            ? E(t('online'))
+            : (() => { const i = lsInfo[chat]; return i && i.show !== false && i.ts ? E(lastSeenText(i.ts)) : E(t('lastSeen')); })();
   $('mb').classList.toggle('hide', chat === 'global' || chat === me.u);
 }
 
@@ -1029,14 +1064,14 @@ function comp() {
     $('pill').classList.toggle('hide', !ok);
     $('blk').classList.toggle('hide', ok);
     $('unb').classList.add('hide');
-    $('blk').querySelector('span').textContent = myRole(gid_(chat)) ? t('onlyAdminsCanPost') : t('youAreNotMember');
+    $('blk').querySelector('span').innerHTML = E(myRole(gid_(chat)) ? t('onlyAdminsCanPost') : t('youAreNotMember'));
     return;
   }
   const b = chat !== 'global' && chat !== me.u && blocked.has(chat);
   $('pill').classList.toggle('hide', b);
   $('blk').classList.toggle('hide', !b);
   $('unb').classList.remove('hide');
-  $('blk').querySelector('span').textContent = t('youBlocked');
+  $('blk').querySelector('span').innerHTML = E(t('youBlocked'));
 }
 
 function render(init) {
@@ -1051,7 +1086,7 @@ function render(init) {
     const tail = !g(m, list[i + 1]);
     const first = !g(list[i - 1], m);
     const d = dayLabel(m.time);
-    if (d !== day) { day = d; h += '<div class="day"><span>' + d + '</span></div>'; }
+    if (d !== day) { day = d; h += '<div class="day"><span>' + E(d) + '</span></div>'; }
     const mine = m.username === me.u;
     const isNew = !init && !seen.has(m.id);
     seen.add(m.id);
@@ -1065,18 +1100,22 @@ function render(init) {
     if (banned) {
       h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + ' banned-msg" data-id="' + m.id + '" data-banned="1">' +
         (!mine && first && chat === 'global' ? '<div class="sn">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
-        '<span>' + t('bannedMsg') + ' <span class="banned-link" data-banned-info="' + esc(m.username) + '">' + t('moreDetails') + '</span></span>' +
+        '<span>' + E(t('bannedMsg')) + ' <span class="banned-link" data-banned-info="' + esc(m.username) + '">' + E(t('moreDetails')) + '</span></span>' +
         '<small>' + hm(m.time) + '</small></div>';
       return;
     }
+    let attHtml = '';
+    if (m.att) {
+      attHtml = '<img class="att" src="' + esc(m.att) + '" data-full="' + esc(m.att) + '" alt="">';
+    }
     h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '">' +
       (!mine && first && chat === 'global' ? '<div class="sn" data-u="' + esc(m.username) + '">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
-      rp +
-      '<span>' + E(m.text) + '</span>' +
+      rp + attHtml +
+      (m.text ? '<span>' + E(m.text) + '</span>' : '') +
       (m.isButton && okLink(m.buttonLink) ? '<div class="bt" data-link="' + esc(m.buttonLink) + '">' + esc(m.buttonText) + '</div>' : '') +
       '<small>' + (m.edited ? '✎ ' : '') + hm(m.time) + '</small></div>';
   });
-  box.innerHTML = h || '<div class="empty">' + t('empty') + '</div>';
+  box.innerHTML = h || '<div class="empty">' + E(t('empty')) + '</div>';
   box.scrollTop = scroll ? box.scrollHeight : top;
   if (chat !== 'global') renderPin();
 }
@@ -1109,6 +1148,8 @@ async function pinMsg(m) {
 $('msgs').onclick = e => {
   const bi = e.target.closest('[data-banned-info]');
   if (bi) return bannedInfo(bi.dataset.bannedInfo);
+  const att = e.target.closest('.att');
+  if (att) return window.open(att.dataset.full, '_blank', 'noopener');
   const bt = e.target.closest('.bt');
   if (bt) return linkAsk(bt.dataset.link);
   const n = e.target.closest('.sn');
@@ -1122,7 +1163,7 @@ $('msgs').onclick = e => {
 };
 
 function bannedInfo(u) {
-  modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px"><div class="ir">' + ico('info', '#6b7280') + '<div><b>' + t('accountUnavailable') + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + t('accountUnavailableInfo') + '<small>' + t('unavailableDesc') + '</small></div></div></div></div>');
+  modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px"><div class="ir">' + ico('info', '#6b7280') + '<div><b>' + E(t('accountUnavailable')) + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailableInfo')) + '<small>' + E(t('unavailableDesc')) + '</small></div></div></div></div>');
 }
 
 function ctx(e, m) {
@@ -1131,7 +1172,7 @@ function ctx(e, m) {
   const mine = m.username === me.u;
   const menu = document.createElement('div');
   menu.className = 'ctx';
-  const add = (x, f, c) => { const d = document.createElement('div'); d.textContent = x; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
+  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = E(x); if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
   menu.innerHTML = '<div class="tm">' + new Date(m.time).toLocaleString(loc(), { hour12: h12() }) + '</div>';
   add(t('reply'), () => setBar('reply', m));
   add(t('copy'), () => { navigator.clipboard && navigator.clipboard.writeText(m.text).then(() => toast(t('copied'))); });
@@ -1170,9 +1211,55 @@ function parseBtn(x) {
   return btn && msg && okLink(link) ? { btn, msg, link } : null;
 }
 function linkAsk(l) {
-  const o = modal('<h3>' + t('openLink') + '</h3><p style="word-break:break-all">' + esc(l) + '</p><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b" id="y">' + t('open') + '</button></div>');
+  const o = modal('<h3>' + E(t('openLink')) + '</h3><p style="word-break:break-all">' + esc(l) + '</p><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('open')) + '</button></div>');
   o.querySelector('#n').onclick = () => o.remove();
   o.querySelector('#y').onclick = () => { o.remove(); window.open(l, '_blank', 'noopener'); };
+}
+
+function canSendPhoto() {
+  if (chat === 'global') return badges[me.u] === 'admin' || me.u === 'admin11';
+  if (chat === me.u) return false;
+  return true;
+}
+
+async function sendPhoto() {
+  if (!canSendPhoto()) {
+    if (chat === 'global') return toast(t('photoOnlyAdmin'));
+    return toast(t('photoNotAllowed'));
+  }
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.onchange = () => {
+    const f = inp.files[0];
+    if (!f) return;
+    if (f.size > 5 * 1024 * 1024) return toast('Max 5MB');
+    const r = new FileReader();
+    r.onload = async () => {
+      const data = r.result;
+      try {
+        showLoader();
+        const m = { username: me.u, displayName: me.n, text: '', att: data, time: Date.now() };
+        if (reply) { m.replyTo = reply.id; m.replyToSender = reply.name; cancelReply(); }
+        mineNew = true;
+        if (chat === 'global') { await db.ref('messages').push(m); trim(); }
+        else {
+          await db.ref(pathFor(chat)).push(m);
+          const p = chat;
+          if (p !== me.u) {
+            locl.delete(p);
+            writtenTo.add(p);
+            db.ref('userChats/' + me.u + '/' + p).set(true);
+            db.ref('userChats/' + p + '/' + me.u).set(true);
+          }
+          db.ref('typing/' + room(p) + '/' + me.u).remove();
+        }
+      } catch (e) { console.error(e); toast(t('uploadFailed')); }
+      hideLoader();
+    };
+    r.readAsDataURL(f);
+  };
+  inp.click();
 }
 
 async function send() {
@@ -1261,6 +1348,7 @@ async function cmd(x0) {
   return true;
 }
 $('send').onclick = send;
+$('attach').onclick = sendPhoto;
 $('inp').onkeydown = e => {
   if (e.key !== 'Enter' || e.isComposing) return;
   const ctrl = e.ctrlKey || e.metaKey;
@@ -1292,7 +1380,7 @@ $('mb').onclick = e => {
   const p = chat;
   const menu = document.createElement('div');
   menu.className = 'ctx';
-  const add = (x, f, c) => { const d = document.createElement('div'); d.textContent = x; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
+  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = E(x); if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
   add(t('profile'), () => profile(p));
   add(t('clearH'), async () => { if (await ask(t('clearQ'), t('clearP'), t('clear'), 1)) { cleared[p] = Date.now(); save(); render(); side(); } });
   add(t('delChat'), async () => { if (await ask(t('delChatQ'), t('delChatP'), t('del'), 1)) { cleared[p] = Date.now(); save(); locl.delete(p); idx.delete(p); db.ref('userChats/' + me.u + '/' + p).remove(); open(globalDisabled ? me.u : 'global'); } });
@@ -1340,7 +1428,7 @@ async function profile(u) {
   const x = (await db.ref('users/' + u).once('value')).val() || {};
   const banned = banOf(u);
   if (banned && !self) {
-    modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px;background:#2a2a2a"><div class="ir">' + avatar(u, 0) + '<div><b>' + E(nm(u)) + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + t('accountUnavailable') + '<small>' + t('unavailableDesc') + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + t('accountUnavailableInfo') + '</div></div></div></div>', 'pm');
+    modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px;background:#2a2a2a"><div class="ir">' + avatar(u, 0) + '<div><b>' + E(nm(u)) + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailable')) + '<small>' + E(t('unavailableDesc')) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailableInfo')) + '</div></div></div></div>', 'pm');
     return;
   }
   const [fs, fg] = await Promise.all([db.ref('followers/' + u).once('value'), db.ref('following/' + u).once('value')]);
@@ -1348,7 +1436,7 @@ async function profile(u) {
   let isF = fs.hasChild(me.u);
   const isFriend = isF && fg.hasChild(me.u);
   const lsT = online.has(u) ? t('online') : (x.showLastSeen !== false && x.lastSeen ? lastSeenText(x.lastSeen) : t('lastSeen'));
-  const bio = x.bio ? E(x.bio) : '<span class="hint">' + t('noBio') + '</span>';
+  const bio = x.bio ? E(x.bio) : '<span class="hint">' + E(t('noBio')) + '</span>';
   let bdayHtml = '';
   if (x.birthday && x.birthday.d && x.birthday.m) {
     const vis = x.birthday.vis || 'all';
@@ -1359,18 +1447,17 @@ async function profile(u) {
       else if (vis === 'pick') { const list = (await db.ref('users/' + u + '/birthdayVisList').once('value')).val() || {}; canSee = !!list[me.u]; }
       else canSee = false;
     }
-    if (canSee) bdayHtml = '<div class="ir">' + ico('info', '#f59e0b') + '<div>' + bdayText(x.birthday) + '<small>' + t('birthday') + '</small></div></div>';
+    if (canSee) bdayHtml = '<div class="ir">' + ico('info', '#f59e0b') + '<div>' + E(bdayText(x.birthday)) + '<small>' + E(t('birthday')) + '</small></div></div>';
   }
   let lsHtml = '';
   if (x.showLastSeen !== false) {
     const ls = online.has(u) ? Date.now() : x.lastSeen;
-    lsHtml = '<div class="ir">' + ico('info', '#10b981') + '<div>' + lastSeenText(ls) + '<small>' + t('lastSeenT') + '</small></div></div>';
+    lsHtml = '<div class="ir">' + ico('info', '#10b981') + '<div>' + E(lastSeenText(ls)) + '<small>' + E(t('lastSeenT')) + '</small></div></div>';
   }
-  // Список каналов пользователя
   const ownedChannels = Object.keys(GR).filter(g => GR[g].owner === u && GR[g].type === 'channel');
   let channelsHtml = '';
   if (ownedChannels.length) {
-    channelsHtml = '<div class="sh" style="margin-top:12px">' + t('myChannels') + '</div><div class="grp">' +
+    channelsHtml = '<div class="sh" style="margin-top:12px">' + E(t('myChannels')) + '</div><div class="grp">' +
       ownedChannels.map(g => '<div class="nav" data-g="' + g + '" style="padding:10px 0">' + avatar('g:' + g) + '<span><b style="display:block">' + E(GR[g].title) + '</b><small class="hint">@' + esc(GR[g].username) + '</small></span>' + CH + '</div>').join('') + '</div>';
   }
   const o = modal(
@@ -1378,31 +1465,31 @@ async function profile(u) {
       '<button class="ib x" id="c"><svg viewBox="0 0 24 24">' + IC.x + '</svg></button>' +
       avatar(u, 0, 1) +
       '<b>' + E(nm(u)) + badge(u) + '</b>' +
-      '<span>' + lsT + (isFriend ? ' · ' + t('friends') : '') + '</span>' +
+      '<span>' + E(lsT) + (isFriend ? ' · ' + E(t('friends')) : '') + '</span>' +
     '</div>' +
     '<div class="pb">' +
       '<div class="info">' +
-        '<div class="ir">' + ico('at', '#2b7fff') + '<div>@' + esc(u) + '<small>' + t('uname') + '</small></div></div>' +
-        '<div class="ir">' + ico('info', '#6b7280') + '<div>' + bio + '<small>' + t('about') + '</small></div></div>' +
+        '<div class="ir">' + ico('at', '#2b7fff') + '<div>@' + esc(u) + '<small>' + E(t('uname')) + '</small></div></div>' +
+        '<div class="ir">' + ico('info', '#6b7280') + '<div>' + bio + '<small>' + E(t('about')) + '</small></div></div>' +
         bdayHtml +
         lsHtml +
       '</div>' +
       channelsHtml +
     '</div>' +
     '<div class="stats">' +
-      '<div><b id="fc">' + cnt + '</b><span>' + t('followers') + '</span></div>' +
-      '<div><b>' + fg.numChildren() + '</b><span>' + t('following') + '</span></div>' +
+      '<div><b id="fc">' + cnt + '</b><span>' + E(t('followers')) + '</span></div>' +
+      '<div><b>' + fg.numChildren() + '</b><span>' + E(t('following')) + '</span></div>' +
     '</div>' +
     (self
       ? ''
-      : '<div class="row"><button class="b g" id="w">' + t('message2') + '</button><button class="b" id="fb"></button></div>') +
-    (x.createdAt ? '<div class="hint" style="text-align:center">' + t('joined') + new Date(x.createdAt).toLocaleDateString(loc()) + '</div>' : ''),
+      : '<div class="row"><button class="b g" id="w">' + E(t('message2')) + '</button><button class="b" id="fb"></button></div>') +
+    (x.createdAt ? '<div class="hint" style="text-align:center">' + E(t('joined')) + new Date(x.createdAt).toLocaleDateString(loc()) + '</div>' : ''),
     'pm'
   );
   o.querySelector('#c').onclick = () => o.remove();
   if (self) return;
   const fb = o.querySelector('#fb');
-  const paint = () => { fb.textContent = isF ? t('unfollow') : t('follow'); fb.className = 'b' + (isF ? ' g' : ''); o.querySelector('#fc').textContent = cnt; };
+  const paint = () => { fb.innerHTML = E(isF ? t('unfollow') : t('follow')); fb.className = 'b' + (isF ? ' g' : ''); o.querySelector('#fc').textContent = cnt; };
   paint();
   o.querySelector('#w').onclick = () => { o.remove(); open(u, true); };
   fb.onclick = async () => {
@@ -1427,13 +1514,13 @@ async function keyDialog(done) {
   let k = await freshKey();
   if (!k) return toast(t('failed'));
   const o = modal(
-    '<h3>' + t('keyT') + '</h3>' +
-    '<p>' + t('keyD') + '</p>' +
+    '<h3>' + E(t('keyT')) + '</h3>' +
+    '<p>' + E(t('keyD')) + '</p>' +
     '<div class="kbox" id="kv">' + esc(k) + '</div>' +
-    '<button class="b" id="ka">' + t('keyApply') + '</button>' +
+    '<button class="b" id="ka">' + E(t('keyApply')) + '</button>' +
     '<div class="row">' +
-      '<button class="b g" id="kg">' + t('keyAnother') + '</button>' +
-      '<button class="b g" id="kx">' + t('keyExit') + '</button>' +
+      '<button class="b g" id="kg">' + E(t('keyAnother')) + '</button>' +
+      '<button class="b g" id="kx">' + E(t('keyExit')) + '</button>' +
     '</div>'
   );
   const kv = o.querySelector('#kv');
@@ -1452,11 +1539,11 @@ async function keyDialog(done) {
       const storedPass = localStorage.getItem('mg_pass_' + me.u) || sessionStorage.getItem('mg_pass_' + me.u) || '';
       if (storedPass) localStorage.setItem('mg_key_' + k, JSON.stringify({ u: me.u, p: storedPass }));
       o.querySelector('.md').innerHTML =
-        '<h3>' + t('keySaved') + '</h3>' +
+        '<h3>' + E(t('keySaved')) + '</h3>' +
         '<div class="kbox">' + esc(k) + '</div>' +
         '<div class="row">' +
-          '<button class="b g" id="cp">' + t('keyCopy') + '</button>' +
-          '<button class="b" id="dn2">' + t('done') + '</button>' +
+          '<button class="b g" id="cp">' + E(t('keyCopy')) + '</button>' +
+          '<button class="b" id="dn2">' + E(t('done')) + '</button>' +
         '</div>';
       o.querySelector('#cp').onclick = () => navigator.clipboard && navigator.clipboard.writeText(k).then(() => toast(t('copied')));
       o.querySelector('#dn2').onclick = () => o.remove();
@@ -1513,14 +1600,14 @@ async function renameUser(o, n) {
 const CH = '<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>';
 const CV = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
 const HUES = [0, 25, 45, 95, 150, 175, 200, 220, 260, 290, 320, 345];
-const rd = (n, v, l, c, s) => '<label class="rd"><input type="radio" name="' + n + '" value="' + v + '" ' + (c ? 'checked' : '') + ' class="sw2"><span>' + l + (s ? '<small>' + s + '</small>' : '') + '</span></label>';
-const ck = (n, l, c, s) => '<label class="rd"><input type="checkbox" name="' + n + '" ' + (c ? 'checked' : '') + ' class="sw2"><span>' + l + (s ? '<small>' + s + '</small>' : '') + '</span></label>';
+const rd = (n, v, l, c, s) => '<label class="rd"><input type="radio" name="' + n + '" value="' + v + '" ' + (c ? 'checked' : '') + ' class="sw2"><span>' + E(l) + (s ? '<small>' + E(s) + '</small>' : '') + '</span></label>';
+const ck = (n, l, c, s) => '<label class="rd"><input type="checkbox" name="' + n + '" ' + (c ? 'checked' : '') + ' class="sw2"><span>' + E(l) + (s ? '<small>' + E(s) + '</small>' : '') + '</span></label>';
 
 function dd(id, opts, val) {
   const cur = opts.find(x => x[0] == val) || opts[0];
   return '<div class="dd" id="' + id + '" data-v="' + cur[0] + '">' +
-    '<button type="button" class="fld ddb"><span>' + cur[1] + '</span>' + CV + '</button>' +
-    '<div class="ddl hide">' + opts.map(x => '<div data-v="' + x[0] + '" class="' + (x[0] == cur[0] ? 'on' : '') + '">' + x[1] + '</div>').join('') + '</div>' +
+    '<button type="button" class="fld ddb"><span>' + E(cur[1]) + '</span>' + CV + '</button>' +
+    '<div class="ddl hide">' + opts.map(x => '<div data-v="' + x[0] + '" class="' + (x[0] == cur[0] ? 'on' : '') + '">' + E(x[1]) + '</div>').join('') + '</div>' +
     '</div>';
 }
 
@@ -1547,7 +1634,7 @@ document.addEventListener('click', e => {
   if (it && ddOpen && ddOpen.l.contains(it)) {
     const d = ddOpen.d;
     d.dataset.v = it.dataset.v;
-    d.querySelector('.ddb span').textContent = it.textContent;
+    d.querySelector('.ddb span').innerHTML = E(it.textContent);
     ddOpen.l.querySelectorAll('div').forEach(x => x.classList.toggle('on', x === it));
     closeDD();
     d.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1567,7 +1654,7 @@ document.addEventListener('click', e => {
 
 async function promptKey() {
   return new Promise(r => {
-    const o = modal('<h3>' + t('needKey') + '</h3><input class="fld" id="pk" maxlength="5" autocomplete="off"><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b" id="y">' + t('done') + '</button></div>');
+    const o = modal('<h3>' + E(t('needKey')) + '</h3><input class="fld" id="pk" maxlength="5" autocomplete="off"><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('done')) + '</button></div>');
     const i = o.querySelector('#pk');
     i.focus();
     const ok = () => { o.remove(); r(i.value.trim()); };
@@ -1578,7 +1665,7 @@ async function promptKey() {
 }
 async function promptPass() {
   return new Promise(r => {
-    const o = modal('<h3>' + t('needPass') + '</h3><input class="fld" id="pp" type="password" maxlength="50"><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b" id="y">' + t('done') + '</button></div>');
+    const o = modal('<h3>' + E(t('needPass')) + '</h3><input class="fld" id="pp" type="password" maxlength="50"><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('done')) + '</button></div>');
     const i = o.querySelector('#pp');
     i.focus();
     const ok = () => { o.remove(); r(i.value); };
@@ -1602,10 +1689,10 @@ async function settings(pg) {
   let pc = colors[me.u] != null ? colors[me.u] : null;
   let pbg = bannerColors(me.u);
   const hd = (ti, back) => {
-    H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + ti + '</b>';
+    H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + E(ti) + '</b>';
     H.querySelector('#bk').onclick = back ? () => show('main') : () => o.remove();
   };
-  const nav = (p, ti, v) => '<div class="nav" data-pg="' + p + '"><span>' + ti + '</span><em>' + v + '</em>' + CH + '</div>';
+  const nav = (p, ti, v) => '<div class="nav" data-pg="' + p + '"><span>' + E(ti) + '</span><em>' + E(v) + '</em>' + CH + '</div>';
   const prev = () => {
     const h = pc !== null ? pc : hh(me.u);
     const [a, b] = pbg;
@@ -1636,29 +1723,28 @@ async function settings(pg) {
       for (let y = curY - 14; y >= 1900; y--) years.push([y, y]);
       B.innerHTML =
         '<div style="display:flex;justify-content:center" id="pv"></div>' +
-        '<div><span class="lb">' + t('nameL') + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
-        '<div><span class="lb">' + t('lastName') + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + t('lastNameP') + '" value="' + esc(X.lastName || '') + '"></div>' +
-        '<div><span class="lb">' + t('userL') + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
-        '<div class="hint">' + t('userHint') + '</div>' +
-        '<div><span class="lb">' + t('bio') + '</span><textarea class="fld" id="bio" rows="3" maxlength="140" placeholder="' + t('bioP') + '">' + esc(X.bio || '') + '</textarea></div>' +
-        '<div><span class="lb">' + t('birthday') + '</span>' +
+        '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
+        '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(X.lastName || '') + '"></div>' +
+        '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
+        '<div class="hint">' + E(t('userHint')) + '</div>' +
+        '<div><span class="lb">' + E(t('bio')) + '</span><textarea class="fld" id="bio" rows="3" maxlength="140" placeholder="' + E(t('bioP')) + '">' + esc(X.bio || '') + '</textarea></div>' +
+        '<div><span class="lb">' + E(t('birthday')) + '</span>' +
           '<div class="row">' + dd('bd', days, bd.d) + dd('bm', months, bd.m) + dd('by', years, bd.y) + '</div>' +
         '</div>' +
-        '<div class="hint">' + t('birthdayMin') + '</div>' +
-        '<div><span class="lb">' + t('birthdayVis') + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
-        '<div><span class="lb">' + t('color') + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + t('bannerTop') + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + t('bannerBottom') + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + t('avatarUrl') + '</span>' +
+        '<div class="hint">' + E(t('birthdayMin')) + '</div>' +
+        '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
+        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
+        '<div><span class="lb">' + E(t('bannerTop')) + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
+        '<div><span class="lb">' + E(t('bannerBottom')) + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
+        '<div><span class="lb">' + E(t('avatarUrl')) + '</span>' +
           '<div class="row"><input class="fld" id="avurl" placeholder="https://..." value="' + esc(AV[me.u] || '') + '"><button class="b g" id="avbtn" style="flex:0 0 auto">📁</button></div>' +
-          '<div class="hint">' + t('orUpload') + '</div>' +
+          '<div class="hint">' + E(t('orUpload')) + '</div>' +
         '</div>' +
-        '<div><span class="lb">' + t('backgroundUrl') + '</span>' +
+        '<div><span class="lb">' + E(t('backgroundUrl')) + '</span>' +
           '<div class="row"><input class="fld" id="bgurl" placeholder="https://..." value="' + esc(LK[me.u] || '') + '"><button class="b g" id="bgbtn" style="flex:0 0 auto">📁</button></div>' +
         '</div>' +
-        '<button class="b" id="sv">' + t('save') + '</button>';
+        '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
-      // Загрузка аватарки через файл
       B.querySelector('#avbtn').onclick = () => {
         const inp = document.createElement('input');
         inp.type = 'file';
@@ -1672,7 +1758,6 @@ async function settings(pg) {
         };
         inp.click();
       };
-      // Загрузка фона через файл
       B.querySelector('#bgbtn').onclick = () => {
         const inp = document.createElement('input');
         inp.type = 'file';
@@ -1737,21 +1822,21 @@ async function settings(pg) {
       if (isVer) accOpts.push(['-1', t('never')]);
       const agPolicy = X.addToGroups || 'nobody';
       B.innerHTML =
-        '<div class="sh">' + t('loginKey') + '</div><div class="grp"><div class="bl"><span>' + (X.keyHash ? t('keyOn') : t('keyNone')) + '</span><button class="b' + (X.keyHash ? ' g' : '') + '" id="kc">' + (X.keyHash ? t('keyRemove') : t('keyCreate')) + '</button></div></div>' +
-        '<div class="sh">' + t('blacklist') + '</div>' + (bl.length
-          ? '<div class="grp">' + bl.map(u => '<div class="bl"><span>' + esc(nm(u)) + ' <span class="hint">@' + esc(u) + '</span></span><button class="b g" data-ub="' + esc(u) + '">' + t('unblock') + '</button></div>').join('') + '</div>'
-          : '<div class="hint" style="margin:6px 4px">' + t('noBlocked') + '</div>') +
-        '<div class="sh">' + t('privacy') + '</div>' +
+        '<div class="sh">' + E(t('loginKey')) + '</div><div class="grp"><div class="bl"><span>' + E(X.keyHash ? t('keyOn') : t('keyNone')) + '</span><button class="b' + (X.keyHash ? ' g' : '') + '" id="kc">' + E(X.keyHash ? t('keyRemove') : t('keyCreate')) + '</button></div></div>' +
+        '<div class="sh">' + E(t('blacklist')) + '</div>' + (bl.length
+          ? '<div class="grp">' + bl.map(u => '<div class="bl"><span>' + E(nm(u)) + ' <span class="hint">@' + esc(u) + '</span></span><button class="b g" data-ub="' + esc(u) + '">' + E(t('unblock')) + '</button></div>').join('') + '</div>'
+          : '<div class="hint" style="margin:6px 4px">' + E(t('noBlocked')) + '</div>') +
+        '<div class="sh">' + E(t('privacy')) + '</div>' +
         '<div class="grp">' +
-          '<div class="bl"><span>' + t('noPin') + '</span><input type="checkbox" id="np" ' + (X.noPin ? 'checked' : '') + ' class="sw2"></div>' +
-          '<div class="bl"><span>' + t('showLastSeen') + '</span><input type="checkbox" id="sls" ' + (X.showLastSeen !== false ? 'checked' : '') + ' class="sw2"></div>' +
-          '<div class="bl"><span>' + t('disableGlobal') + '</span><input type="checkbox" id="dg" ' + (globalDisabled ? 'checked' : '') + ' class="sw2"></div>' +
+          '<div class="bl"><span>' + E(t('noPin')) + '</span><input type="checkbox" id="np" ' + (X.noPin ? 'checked' : '') + ' class="sw2"></div>' +
+          '<div class="bl"><span>' + E(t('showLastSeen')) + '</span><input type="checkbox" id="sls" ' + (X.showLastSeen !== false ? 'checked' : '') + ' class="sw2"></div>' +
+          '<div class="bl"><span>' + E(t('disableGlobal')) + '</span><input type="checkbox" id="dg" ' + (globalDisabled ? 'checked' : '') + ' class="sw2"></div>' +
         '</div>' +
-        '<div class="sh">' + t('onlineWho') + '</div>' + dd('ov', [['all', t('onlineAll')], ['chat', t('onlineChat')]], X.onlineVis || 'all') +
-        '<div class="sh">' + t('addToGroups') + '</div>' + dd('ag', [['nobody', t('addToGroupsNobody')], ['chat', t('addToGroupsChat')], ['all', t('addToGroupsAll')]], agPolicy) +
-        '<div class="sh">' + t('msgDel') + '</div>' + dd('adm', ADO(), String(autoDel)) +
-        '<div class="hint" style="margin:6px 4px">' + t('autoDelS') + '</div>' +
-        '<div class="sh">' + t('autoDelAcc') + '</div>' + dd('acd', accOpts, accDel);
+        '<div class="sh">' + E(t('onlineWho')) + '</div>' + dd('ov', [['all', t('onlineAll')], ['chat', t('onlineChat')]], X.onlineVis || 'all') +
+        '<div class="sh">' + E(t('addToGroups')) + '</div>' + dd('ag', [['nobody', t('addToGroupsNobody')], ['chat', t('addToGroupsChat')], ['all', t('addToGroupsAll')]], agPolicy) +
+        '<div class="sh">' + E(t('msgDel')) + '</div>' + dd('adm', ADO(), String(autoDel)) +
+        '<div class="hint" style="margin:6px 4px">' + E(t('autoDelS')) + '</div>' +
+        '<div class="sh">' + E(t('autoDelAcc')) + '</div>' + dd('acd', accOpts, accDel);
       B.querySelector('#kc').onclick = async () => {
         if (!X.keyHash) return keyDialog(async () => { X = (await db.ref('users/' + me.u).once('value')).val() || {}; show('sec'); });
         if (!isAdm()) {
@@ -1781,34 +1866,34 @@ async function settings(pg) {
     } else if (p === 'look') {
       hd(t('appearance'), 1);
       B.innerHTML =
-        '<div class="sh">' + t('theme') + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + rd('th', 'auto', t('auto'), theme() === 'auto') + '</div>' +
+        '<div class="sh">' + E(t('theme')) + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + '</div>' +
         '<div class="sh">Color Theme</div>' +
         '<div class="grp">' +
             ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => 
                 rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)
             ).join('') +
         '</div>' +
-        '<div class="sh">' + t('scale') + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
-        '<div class="sh">' + t('effects') + '</div><div class="grp">' + ck('bl', t('blurUi'), blurOn()) + '</div>' +
-        '<div class="sh">' + t('hdrBlur') + '</div>' + dd('hb', BLO, String(hdrBlur())) +
-        (innerWidth <= 768 ? '<div class="sh">' + t('sideBlur') + '</div>' + dd('sbl', BLO, String(sideBlur())) : '') +
-        '<div class="sh">' + t('radius') + '</div>' +
+        '<div class="sh">' + E(t('scale')) + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
+        '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('bl', t('blurUi'), blurOn()) + '</div>' +
+        '<div class="sh">' + E(t('hdrBlur')) + '</div>' + dd('hb', BLO, String(hdrBlur())) +
+        (innerWidth <= 768 ? '<div class="sh">' + E(t('sideBlur')) + '</div>' + dd('sbl', BLO, String(sideBlur())) : '') +
+        '<div class="sh">' + E(t('radius')) + '</div>' +
         '<div class="grp" style="padding:14px">' +
           '<input type="range" id="rad" min="0" max="100" value="' + radius() + '">' +
           '<div style="display:flex;justify-content:space-between;color:var(--m);font-size:12px;margin-top:6px"><span>0</span><span id="radv">' + radius() + '</span><span>100</span></div>' +
-          '<div class="hint" style="margin:10px 0 6px 0">' + t('preview') + '</div>' +
+          '<div class="hint" style="margin:10px 0 6px 0">' + E(t('preview')) + '</div>' +
           '<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start">' +
-            '<div class="preview-bubble" style="border-radius:var(--r) var(--r) var(--r) var(--rt)">' + t('hi') + '</div>' +
-            '<div class="preview-bubble me" style="border-radius:var(--r) var(--r) var(--rt) var(--r)">' + t('how') + '</div>' +
+            '<div class="preview-bubble" style="border-radius:var(--r) var(--r) var(--r) var(--rt)">' + E(t('hi')) + '</div>' +
+            '<div class="preview-bubble me" style="border-radius:var(--r) var(--r) var(--rt) var(--r)">' + E(t('how')) + '</div>' +
           '</div>' +
         '</div>';
     } else if (p === 'funcs') {
       hd(t('funcs'), 1);
       B.innerHTML =
-        '<div class="sh">' + t('timeFmt') + '</div><div class="grp">' + rd('hf', '12', t('h12'), h12()) + rd('hf', '24', t('h24'), !h12()) + '</div>' +
-        '<div class="sh">' + t('kbd') + '</div><div class="grp">' + rd('sm', 'enter', t('sendEnter'), sendMode() === 'enter', t('sendEnterS')) + rd('sm', 'ctrl', t('sendCtrl'), sendMode() === 'ctrl', t('sendCtrlS')) + ck('ar', t('autoRep'), autoRep(), t('autoRepS')) + '</div>' +
-        '<div class="sh">' + t('effects') + '</div><div class="grp">' + ck('anim', t('animUi'), animOn()) + '</div>' +
-        '<div class="sh">' + t('language') + '</div><div class="grp">' + rd('lg', 'en', 'English', lang() === 'en') + rd('lg', 'ru', 'Русский', lang() === 'ru') + '</div>';
+        '<div class="sh">' + E(t('timeFmt')) + '</div><div class="grp">' + rd('hf', '12', t('h12'), h12()) + rd('hf', '24', t('h24'), !h12()) + '</div>' +
+        '<div class="sh">' + E(t('kbd')) + '</div><div class="grp">' + rd('sm', 'enter', t('sendEnter'), sendMode() === 'enter', t('sendEnterS')) + rd('sm', 'ctrl', t('sendCtrl'), sendMode() === 'ctrl', t('sendCtrlS')) + ck('ar', t('autoRep'), autoRep(), t('autoRepS')) + '</div>' +
+        '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('anim', t('animUi'), animOn()) + '</div>' +
+        '<div class="sh">' + E(t('language')) + '</div><div class="grp">' + rd('lg', 'en', 'English', lang() === 'en') + rd('lg', 'ru', 'Русский', lang() === 'ru') + '</div>';
     }
   }
   B.onclick = e => {
@@ -1867,7 +1952,7 @@ function checkBan() {
     document.body.appendChild(banEl);
   }
   banEl.dataset.k = k;
-  banEl.innerHTML = '<div class="md" style="text-align:center"><h3>' + t('youBanned') + '</h3><p>' + t('reasonIs') + ': ' + E(b.reason || '') + '</p><p>' + (b.until ? t('until') + ' ' + fdate(b.until) : t('permanent')) + '</p>' + (b.byName ? '<p>' + t('byName') + ': ' + esc(b.byName) + '</p>' : '') + '<button class="b g" id="bo">' + t('signOut') + '</button></div>';
+  banEl.innerHTML = '<div class="md" style="text-align:center"><h3>' + E(t('youBanned')) + '</h3><p>' + E(t('reasonIs')) + ': ' + E(b.reason || '') + '</p><p>' + E(b.until ? t('until') + ' ' + fdate(b.until) : t('permanent')) + '</p>' + (b.byName ? '<p>' + E(t('byName')) + ': ' + esc(b.byName) + '</p>' : '') + '<button class="b g" id="bo">' + E(t('signOut')) + '</button></div>';
   banEl.querySelector('#bo').onclick = () => $('exitb').click();
 }
 
@@ -1886,18 +1971,18 @@ async function panel() {
   const oc = new MutationObserver(() => { if (!o.isConnected) { closeDD(); oc.disconnect(); } });
   oc.observe(document.body, { childList: true });
   const hd = (ti, back) => {
-    H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + ti + '</b>';
+    H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + E(ti) + '</b>';
     H.querySelector('#bk').onclick = back ? list : () => o.remove();
   };
   function list() {
     closeDD();
     B.scrollTop = 0;
     hd(t('admin'));
-    B.innerHTML = '<button class="b d" id="cg">' + t('clearGlobal') + '</button><input class="fld" id="uq" placeholder="' + t('searchU') + '" autocomplete="off" style="margin-top:8px"><div class="grp" id="ul"></div>';
+    B.innerHTML = '<button class="b d" id="cg">' + E(t('clearGlobal')) + '</button><input class="fld" id="uq" placeholder="' + E(t('searchU')) + '" autocomplete="off" style="margin-top:8px"><div class="grp" id="ul"></div>';
     const draw = () => {
       const q = B.querySelector('#uq').value.trim().toLowerCase();
       const a = US.filter(x => x.u !== me.u && (!q || x.u.includes(q) || x.n.toLowerCase().includes(q))).slice(0, 60);
-      B.querySelector('#ul').innerHTML = a.map(x => '<div class="nav" data-u="' + esc(x.u) + '">' + avatar(x.u) + '<span><b style="display:block">' + E(nm(x.u)) + badge(x.u) + '</b><small class="hint">@' + esc(x.u) + (banOf(x.u) ? ' · ' + t('banned') : '') + '</small></span>' + CH + '</div>').join('') || '<div class="hint" style="padding:12px 0">' + t('nobody') + '</div>';
+      B.querySelector('#ul').innerHTML = a.map(x => '<div class="nav" data-u="' + esc(x.u) + '">' + avatar(x.u) + '<span><b style="display:block">' + E(nm(x.u)) + badge(x.u) + '</b><small class="hint">@' + esc(x.u) + (banOf(x.u) ? ' · ' + E(t('banned')) : '') + '</small></span>' + CH + '</div>').join('') || '<div class="hint" style="padding:12px 0">' + E(t('nobody')) + '</div>';
     };
     B.querySelector('#uq').oninput = draw;
     draw();
@@ -1917,25 +2002,25 @@ async function panel() {
     const can = u !== 'admin11' && (sup || ty !== 'admin');
     hd(E(nm(u)), 1);
     let h = '<div style="display:flex;flex-direction:column;align-items:center;gap:2px">' + avatar(u, 0, 1) + '<b style="margin-top:10px">' + E(nm(u)) + badge(u) + '</b><span class="hint">@' + esc(u) + '</span></div>';
-    h += '<div class="sh">' + t('verification') + '</div><div class="grp"><div class="nav" style="cursor:default"><span>' + (ty === 'admin' ? t('stAdmin') : ty ? t('stVerified') : t('stNone')) + '</span></div></div>';
+    h += '<div class="sh">' + E(t('verification')) + '</div><div class="grp"><div class="nav" style="cursor:default"><span>' + E(ty === 'admin' ? t('stAdmin') : ty ? t('stVerified') : t('stNone')) + '</span></div></div>';
     if (can) {
-      if (!ty) h += '<button class="b" data-st="checked">' + t('verifyAct') + '</button>';
-      if (ty === 'checked' && sup) h += '<button class="b" data-st="admin">' + t('makeAdmin') + '</button>';
-      if (ty === 'admin') h += '<button class="b g" data-st="checked">' + t('removeAdmin') + '</button>';
-      if (ty) h += '<button class="b g" data-st="off">' + t('unverify') + '</button>';
+      if (!ty) h += '<button class="b" data-st="checked">' + E(t('verifyAct')) + '</button>';
+      if (ty === 'checked' && sup) h += '<button class="b" data-st="admin">' + E(t('makeAdmin')) + '</button>';
+      if (ty === 'admin') h += '<button class="b g" data-st="checked">' + E(t('removeAdmin')) + '</button>';
+      if (ty) h += '<button class="b g" data-st="off">' + E(t('unverify')) + '</button>';
     }
-    h += '<div class="sh">' + t('ban') + '</div>';
+    h += '<div class="sh">' + E(t('ban')) + '</div>';
     if (b) {
-      h += '<div class="grp"><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + t('reasonIs') + '</small>' + E(b.reason || '') + '</span></div><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + t('until') + '</small>' + (b.until ? fdate(b.until) : t('permanent')) + '</span></div>' + (b.byName ? '<div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + t('byName') + '</small>' + esc(b.byName) + '</span></div>' : '') + '</div><button class="b g" id="ub">' + t('unbanAct') + '</button>';
+      h += '<div class="grp"><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('reasonIs')) + '</small>' + E(b.reason || '') + '</span></div><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('until')) + '</small>' + E(b.until ? fdate(b.until) : t('permanent')) + '</span></div>' + (b.byName ? '<div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('byName')) + '</small>' + esc(b.byName) + '</span></div>' : '') + '</div><button class="b g" id="ub">' + E(t('unbanAct')) + '</button>';
     } else if (can) {
       const reasons = lang() === 'ru' ? BAN_REASONS_RU : BAN_REASONS_EN;
       const reasonOpts = reasons.map(r => [r, r]);
       const admOpts = allAdmins.map(a => [a, nm(a)]);
-      h += '<div class="sh">' + t('reasonIs') + '</div>' + dd('br', reasonOpts, reasons[0]) + '<input class="fld" id="rs" maxlength="200" placeholder="' + t('reasonP') + '" style="margin-top:8px">' +
-        '<div class="sh">' + t('banAs') + '</div>' + dd('bi', admOpts, me.u) +
+      h += '<div class="sh">' + E(t('reasonIs')) + '</div>' + dd('br', reasonOpts, reasons[0]) + '<input class="fld" id="rs" maxlength="200" placeholder="' + E(t('reasonP')) + '" style="margin-top:8px">' +
+        '<div class="sh">' + E(t('banAs')) + '</div>' + dd('bi', admOpts, me.u) +
         '<div class="row" style="margin-top:8px"><input class="fld" id="cv" inputmode="numeric" maxlength="3" value="1">' + dd('cu', [[60, t('unMin')], [3600, t('unHour')], [86400, t('unDay')]], 86400) + '</div>' +
         '<div class="grp" style="margin-top:8px">' + ck('fv', t('forever'), false) + '</div>' +
-        '<button class="b d" id="bn" style="margin-top:8px">' + t('banUser') + '</button>';
+        '<button class="b d" id="bn" style="margin-top:8px">' + E(t('banUser')) + '</button>';
     }
     B.innerHTML = h;
     B.querySelectorAll('[data-st]').forEach(x => x.onclick = async () => {
@@ -2028,7 +2113,7 @@ function menuAt(el, items) {
   document.querySelectorAll('.ctx').forEach(x => x.remove());
   const m = document.createElement('div');
   m.className = 'ctx';
-  items.forEach(([x, f]) => { const d = document.createElement('div'); d.textContent = x; d.onclick = () => { m.remove(); f(); }; m.appendChild(d); });
+  items.forEach(([x, f]) => { const d = document.createElement('div'); d.innerHTML = E(x); d.onclick = () => { m.remove(); f(); }; m.appendChild(d); });
   document.body.appendChild(m);
   const r = el.getBoundingClientRect();
   m.style.top = r.bottom + 6 + 'px';
@@ -2084,12 +2169,12 @@ async function newGroup(type) {
     return;
   }
   const o = modal(
-    '<h3>' + (type === 'group' ? t('createGroup') : t('createChannel')) + '</h3>' +
-    '<input class="fld" id="gti" maxlength="30" placeholder="' + t('enterTitle') + '">' +
+    '<h3>' + E(type === 'group' ? t('createGroup') : t('createChannel')) + '</h3>' +
+    '<input class="fld" id="gti" maxlength="30" placeholder="' + E(t('enterTitle')) + '">' +
     '<input class="fld" id="gn" maxlength="16" placeholder="name (a-z, 0-9, _ - !)">' +
     '<div class="hint" id="gh">@name_' + esc(me.u) + '</div>' +
     '<textarea class="fld" id="gb" rows="2" maxlength="140" placeholder="Description"></textarea>' +
-    '<button class="b" id="gc">' + t('save') + '</button>'
+    '<button class="b" id="gc">' + E(t('save')) + '</button>'
   );
   const n = o.querySelector('#gn');
   n.oninput = () => { n.value = n.value.toLowerCase(); o.querySelector('#gh').textContent = '@' + (n.value || 'name') + '_' + me.u; };
@@ -2136,15 +2221,15 @@ async function groupInfo(g) {
     '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">' +
       avatar(p, 0, 1) +
       '<b style="margin-top:10px;font-size:18px">' + E(G.title) + '</b>' +
-      '<span class="hint">' + TN[G.type] + ' · @' + esc(G.username) + ' · ' + us.length + '/' + limit + ' ' + (lang()==='ru'?'участников':'members') + '</span>' +
+      '<span class="hint">' + E(TN[G.type]) + ' · @' + esc(G.username) + ' · ' + us.length + '/' + limit + ' ' + (lang()==='ru'?'участников':'members') + '</span>' +
     '</div>' +
     (G.bio ? '<div style="white-space:pre-wrap">' + E(G.bio) + '</div>' : '') +
-    '<div class="grp">' + us.map(u => '<div class="bl" data-m="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + RN[mem[u]] + '</span></div>').join('') + '</div>' +
-    (adm ? '<button class="b" id="iv">' + t('inviteLink') + '</button><button class="b g" id="ed">' + t('editGroup') + '</button>' : '') +
-    '<button class="b g" id="lg">' + t('eventLog') + '</button>' +
+    '<div class="grp">' + us.map(u => '<div class="bl" data-m="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + E(RN[mem[u]]) + '</span></div>').join('') + '</div>' +
+    (adm ? '<button class="b" id="iv">' + E(t('inviteLink')) + '</button><button class="b g" id="ed">' + E(t('editGroup')) + '</button>' : '') +
+    '<button class="b g" id="lg">' + E(t('eventLog')) + '</button>' +
     (r === 'owner' 
-      ? '<button class="b g" id="tr">' + t('transferOwnership') + '</button><button class="b d" id="dl">' + t('deleteGroup') + '</button>' 
-      : r ? '<button class="b d" id="lv">' + t('leaveGroup') + '</button>' : '')
+      ? '<button class="b g" id="tr">' + E(t('transferOwnership')) + '</button><button class="b d" id="dl">' + E(t('deleteGroup')) + '</button>' 
+      : r ? '<button class="b d" id="lv">' + E(t('leaveGroup')) + '</button>' : '')
   );
   const q = s => o.querySelector(s);
   o.querySelectorAll('[data-m]').forEach(x => x.onclick = () => {
@@ -2173,8 +2258,8 @@ function transferOwnership(g) {
   const candidates = Object.keys(mem).filter(u => u !== me.u && RK[mem[u]] >= 2);
   if (!candidates.length) return toast(lang()==='ru'?'Нет админов для передачи прав':'No admins to transfer to');
   const o = modal(
-    '<h3>' + t('selectNewOwner') + '</h3>' +
-    '<div class="grp">' + candidates.map(u => '<div class="bl" data-t="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + RN[mem[u]] + '</span></div>').join('') + '</div>'
+    '<h3>' + E(t('selectNewOwner')) + '</h3>' +
+    '<div class="grp">' + candidates.map(u => '<div class="bl" data-t="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + E(RN[mem[u]]) + '</span></div>').join('') + '</div>'
   );
   o.querySelectorAll('[data-t]').forEach(x => x.onclick = async () => {
     const nu = x.dataset.t;
@@ -2197,9 +2282,9 @@ function manage(g, u) {
   const opts = ['admin', 'mod', 'member'].filter(x => x !== tr && RK[x] < RK[mr]);
   const o = modal(
     '<h3>' + E(nm(u)) + '</h3>' +
-    '<div class="hint">' + RN[tr] + '</div>' +
-    opts.map(x => '<button class="b g" data-r="' + x + '">' + t('setRole') + ': ' + RN[x] + '</button>').join('') +
-    '<button class="b d" id="k">' + t('kickMember') + '</button>'
+    '<div class="hint">' + E(RN[tr]) + '</div>' +
+    opts.map(x => '<button class="b g" data-r="' + x + '">' + E(t('setRole')) + ': ' + E(RN[x]) + '</button>').join('') +
+    '<button class="b d" id="k">' + E(t('kickMember')) + '</button>'
   );
   o.querySelectorAll('[data-r]').forEach(b => b.onclick = async () => {
     o.remove();
@@ -2220,7 +2305,7 @@ async function invite(g) {
   const tk = db.ref('invites').push().key + Math.random().toString(36).slice(2, 8);
   await db.ref('invites/' + tk).set({ g, by: me.u, at: Date.now() });
   const url = location.origin + location.pathname + '#join=' + tk;
-  const o = modal('<h3>' + t('invitation') + '</h3><input class="fld" id="u" readonly value="' + esc(url) + '"><button class="b" id="c">' + t('inviteCopy') + '</button>');
+  const o = modal('<h3>' + E(t('invitation')) + '</h3><input class="fld" id="u" readonly value="' + esc(url) + '"><button class="b" id="c">' + E(t('inviteCopy')) + '</button>');
   o.querySelector('#c').onclick = () => navigator.clipboard && navigator.clipboard.writeText(url).then(() => { toast(t('copied')); o.remove(); });
 }
 
@@ -2242,32 +2327,30 @@ async function joinTok(tk) {
   open('g:' + g, true);
 }
 
-// РЕДАКТИРОВАНИЕ ГРУППЫ С АВАТАРКОЙ И ФОНОМ
 function editG(g) {
   const G = GR[g];
   const curAvatar = G.avatar || '';
   const curBg = G.banner || '';
   const curColor = grpColors[g] || 220;
   const o = modal(
-    '<h3>' + t('editGroup') + '</h3>' +
+    '<h3>' + E(t('editGroup')) + '</h3>' +
     '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="Title">' +
     '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="Description">' + esc(G.bio || '') + '</textarea>' +
-    '<div><span class="lb">' + t('groupAvatar') + '</span>' +
+    '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
       '<div class="row"><input class="fld" id="c" placeholder="https://..." value="' + esc(curAvatar) + '"><button class="b g" id="cbtn" style="flex:0 0 auto">📁</button></div>' +
       '<img class="grp-avatar-preview" id="cprev" src="' + (curAvatar && IMG.test(curAvatar) ? esc(curAvatar) : '') + '" style="' + (curAvatar && IMG.test(curAvatar) ? '' : 'display:none') + '">' +
     '</div>' +
-    '<div><span class="lb">' + t('groupBackground') + '</span>' +
+    '<div><span class="lb">' + E(t('groupBackground')) + '</span>' +
       '<div class="row"><input class="fld" id="d" placeholder="https://..." value="' + esc(curBg) + '"><button class="b g" id="dbtn" style="flex:0 0 auto">📁</button></div>' +
       '<img class="grp-bg-preview" id="dprev" src="' + (curBg && IMG.test(curBg) ? esc(curBg) : '') + '" style="' + (curBg && IMG.test(curBg) ? '' : 'display:none') + '">' +
     '</div>' +
-    '<div><span class="lb">' + t('groupColor') + '</span>' +
+    '<div><span class="lb">' + E(t('groupColor')) + '</span>' +
       '<div class="sw" id="swg">' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)' + (h === curColor ? ';outline:2px solid var(--t);outline-offset:2px' : '') + '"></i>').join('') + '</div>' +
     '</div>' +
-    '<button class="b" id="s">' + t('save') + '</button>'
+    '<button class="b" id="s">' + E(t('save')) + '</button>'
   );
   const q = s => o.querySelector(s);
   let chosenColor = curColor;
-  // Загрузка аватарки группы через файл
   q('#cbtn').onclick = () => {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -2281,7 +2364,6 @@ function editG(g) {
     };
     inp.click();
   };
-  // Загрузка фона группы через файл
   q('#dbtn').onclick = () => {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -2320,8 +2402,8 @@ async function glog(g) {
   const v = (await db.ref('groupLog/' + g).limitToLast(50).once('value')).val() || {};
   const a = Object.values(v).sort((x, y) => y.at - x.at);
   const o = modal(
-    '<h3>' + t('eventLog') + '</h3><div class="grp" style="max-height:50vh;overflow-y:auto">' +
-    (a.map(x => '<div class="bl" style="display:block"><div>' + E(nm(x.by)) + ' ' + x.type + (x.target ? ' ' + E(nm(x.target)) : '') + (x.extra ? ' · ' + x.extra : '') + '</div><small class="hint">' + fdate(x.at) + '</small></div>').join('') || '<div class="hint" style="padding:12px 0">' + t('empty') + '</div>') +
+    '<h3>' + E(t('eventLog')) + '</h3><div class="grp" style="max-height:50vh;overflow-y:auto">' +
+    (a.map(x => '<div class="bl" style="display:block"><div>' + E(nm(x.by)) + ' ' + E(x.type) + (x.target ? ' ' + E(nm(x.target)) : '') + (x.extra ? ' · ' + E(x.extra) : '') + '</div><small class="hint">' + fdate(x.at) + '</small></div>').join('') || '<div class="hint" style="padding:12px 0">' + E(t('empty')) + '</div>') +
     '</div>'
   );
 }
@@ -2344,8 +2426,8 @@ async function delGroup(g) {
 function fwd(m) {
   const ps = [...new Set([me.u, ...[...plist()].filter(p => !isG(p) || canPost(p))])];
   const o = modal(
-    '<h3>' + t('forward') + '</h3><div class="grp">' +
-    ps.map(p => '<div class="nav" data-p="' + esc(p) + '">' + (p === me.u ? '<div class="av" style="background:#5b6bff;color:#fff">' + esc(t('savedShort')) + '</div><span>' + t('saved') + '</span>' : avatar(p) + '<span>' + E(nm(p)) + '</span>') + '</div>').join('') +
+    '<h3>' + E(t('forward')) + '</h3><div class="grp">' +
+    ps.map(p => '<div class="nav" data-p="' + esc(p) + '">' + (p === me.u ? '<div class="av" style="background:#5b6bff;color:#fff">' + esc(t('savedShort')) + '</div><span>' + E(t('saved')) + '</span>' : avatar(p) + '<span>' + E(nm(p)) + '</span>') + '</div>').join('') +
     '</div>'
   );
   o.onclick = async e => {
@@ -2481,7 +2563,7 @@ side = function() {
   if (q.length < 2) { pubRes = []; pq = ''; return; }
   if (q !== pq) pubFind(q);
   const rows = pubRes.filter(x => !idx.has('g:' + x.g));
-  if (rows.length) $('list').insertAdjacentHTML('beforeend', '<div class="sec">Public groups</div>' + rows.map(x => '<div class="nav" data-pg="' + esc(x.g) + '"><div class="av">#</div><span><b style="display:block">' + E(x.G.title) + '</b><small class="hint">' + TN[x.G.type] + ' · @' + esc(x.un) + '</small></span></div>').join(''));
+  if (rows.length) $('list').insertAdjacentHTML('beforeend', '<div class="sec">Public groups</div>' + rows.map(x => '<div class="nav" data-pg="' + esc(x.g) + '"><div class="av">#</div><span><b style="display:block">' + E(x.G.title) + '</b><small class="hint">' + E(TN[x.G.type]) + ' · @' + esc(x.un) + '</small></span></div>').join(''));
 };
 $('q').oninput = side;
 $('list').addEventListener('click', async e => {
@@ -2512,7 +2594,7 @@ groupInfo = async function(g) {
   if (!md) return;
   const b = document.createElement('button');
   b.className = 'b g';
-  b.textContent = G.pub ? t('hideFromSearch') : t('makePublic');
+  b.innerHTML = E(G.pub ? t('hideFromSearch') : t('makePublic'));
   b.onclick = async () => {
     const up = {};
     up['publicGroups/' + G.username] = G.pub ? null : g;
@@ -2525,7 +2607,8 @@ groupInfo = async function(g) {
 try {
   const a = JSON.parse(sessionStorage.getItem('mg_auto') || 'null');
   if (a) { sessionStorage.removeItem('mg_auto'); start(a.dn, a.u, null, 1); }
-} catch (e) { console.error(e); }
+  else { hideLoader(); }
+} catch (e) { console.error(e); hideLoader(); }
 </script>
 </body>
 </html>
