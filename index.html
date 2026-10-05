@@ -11,8 +11,33 @@
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
 ::-webkit-scrollbar { display: none; }
-:root { --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #3a3a3a; --oth: #1d1d1d; --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d; --fb: #555; --side: #0b0b0b; --h1: #ffffff0d; --h2: #ffffff17; --av: #3a3a3a; --avt: #fff; --day: #1c1c1c; --sn: #bbb; --rp: #aaa; --rpl: #888; --rpb: #ddd; --fl: #5a5a5a; --ctx: #202020; --ovl: #000000b0; --r: 18px; --rt: 4px; --check-on: #5a5a5a; --gl: rgba(20, 20, 20, .55); --gl2: rgba(20, 20, 20, .85); --gb: rgba(255, 255, 255, .08); --soft: rgba(255, 255, 255, .04); --hv2: rgba(255, 255, 255, .08); --hv3: rgba(255, 255, 255, .12); --blur: 22px; --sideblur: 22px; }
-:root[data-theme=light] { --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #23272d; --oth: #fff; --d: #d9453d; --btn: #1c1e22; --btnt: #fff; --g: #eceef1; --hv: #0000000d; --fld: #f6f7f8; --fb: #9aa0a8; --side: #fff; --h1: #0000000a; --h2: #00000012; --av: #e3e6ea; --avt: #4a5058; --day: #e4e6ea; --sn: #555; --rp: #777; --rpl: #999; --rpb: #333; --fl: #d5d8dd; --ctx: #fff; --ovl: #1a1c1f66; --check-on: #8b9099; --gl: rgba(255, 255, 255, .65); --gl2: rgba(255, 255, 255, .9); --gb: rgba(0, 0, 0, .06); --soft: rgba(0, 0, 0, .02); --hv2: rgba(0, 0, 0, .05); --hv3: rgba(0, 0, 0, .08); }
+
+/* ЦВЕТОВЫЕ СХЕМЫ */
+:root { 
+    --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #3a3a3a; --oth: #1d1d1d; 
+    --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d; 
+    --fb: #555; --side: #0b0b0b; --h1: #ffffff0d; --h2: #ffffff17; --av: #3a3a3a; --avt: #fff; 
+    --day: #1c1c1c; --sn: #bbb; --rp: #aaa; --rpl: #888; --rpb: #ddd; --fl: #5a5a5a; --ctx: #202020; 
+    --ovl: #000000b0; --r: 18px; --rt: 4px; --check-on: #5a5a5a; --gl: rgba(20, 20, 20, .55); 
+    --gl2: rgba(20, 20, 20, .85); --gb: rgba(255, 255, 255, .08); --soft: rgba(255, 255, 255, .04); 
+    --hv2: rgba(255, 255, 255, .08); --hv3: rgba(255, 255, 255, .12); --blur: 22px; --sideblur: 22px; 
+}
+:root[data-theme=light] { 
+    --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #23272d; --oth: #fff; 
+    --d: #d9453d; --btn: #1c1e22; --btnt: #fff; --g: #eceef1; --hv: #0000000d; --fld: #f6f7f8; 
+    --fb: #9aa0a8; --side: #fff; --h1: #0000000a; --h2: #00000012; --av: #e3e6ea; --avt: #4a5058; 
+    --day: #e4e6ea; --sn: #555; --rp: #777; --rpl: #999; --rpb: #333; --fl: #d5d8dd; --ctx: #fff; 
+    --ovl: #1a1c1f66; --check-on: #8b9099; --gl: rgba(255, 255, 255, .65); --gl2: rgba(255, 255, 255, .9); 
+    --gb: rgba(0, 0, 0, .06); --soft: rgba(0, 0, 0, .02); --hv2: rgba(0, 0, 0, .05); --hv3: rgba(0, 0, 0, .08); 
+}
+/* НОВЫЕ ТЕМЫ */
+:root[data-color-theme="redfox"] { --mine: #e5534b; --btnt: #fff; }
+:root[data-color-theme="ocean"] { --mine: #2b7fff; --btnt: #fff; --av: #2b7fff; }
+:root[data-color-theme="forest"] { --mine: #2e7d32; --btnt: #fff; --av: #2e7d32; }
+:root[data-color-theme="sunset"] { --mine: #f57c00; --btnt: #fff; --av: #f57c00; }
+:root[data-color-theme="purple"] { --mine: #7b1fa2; --btnt: #fff; --av: #7b1fa2; }
+:root[data-color-theme="monochrome"] { --mine: #555; --btnt: #fff; --av: #555; }
+
 :root[data-blur=off] { --gl: var(--p); --gl2: var(--p); }
 :root[data-anim=off] * { animation: none !important; transition: none !important; }
 :root[data-blur=off] * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
@@ -404,7 +429,8 @@ const L = {
     sysJoined: 'You joined the group «{title}»',
     sysJoinedOther: '{who} joined the group «{title}»',
     sysCreated: '{by} created the group «{title}»', sysLeft: '{who} left the group',
-    sysKicked: '{by} removed {who} from the group'
+    sysKicked: '{by} removed {who} from the group',
+    createGroup: 'Create group', createChannel: 'Create channel', selectType: 'Select type'
   },
   ru: {
     dname: 'Отображаемое имя', dnp: 'Ваше имя', uname: 'Имя пользователя', unp: 'a-z, 0-9, _ - !',
@@ -498,7 +524,8 @@ const L = {
     sysJoined: 'Вы присоединились к группе «{title}»',
     sysJoinedOther: '{who} присоединился(ась) к группе «{title}»',
     sysCreated: '{by} создал(а) группу «{title}»', sysLeft: '{who} покинул(а) группу',
-    sysKicked: '{by} удалил(а) {who} из группы'
+    sysKicked: '{by} удалил(а) {who} из группы',
+    createGroup: 'Создать группу', createChannel: 'Создать канал', selectType: 'Выберите тип'
   }
 };
 
@@ -534,6 +561,7 @@ const radius = () => +(localStorage.getItem('mg_radius') || 100);
 const blurOn = () => localStorage.getItem('mg_blur') !== '0';
 const hdrBlur = () => +(localStorage.getItem('mg_hdrblur') || 100);
 const sideBlur = () => +(localStorage.getItem('mg_sideblur') || 100);
+const colorTheme = () => localStorage.getItem('mg_color_theme') || 'redfox';
 
 function applyBlur() {
   const r = document.documentElement;
@@ -553,6 +581,7 @@ function applyTheme() {
   let v = theme();
   if (v === 'auto') v = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   document.documentElement.dataset.theme = v;
+  document.documentElement.dataset.colorTheme = colorTheme();
   const c = document.querySelector('.h-captcha');
   if (c) c.dataset.theme = v;
 }
@@ -1301,13 +1330,13 @@ async function profile(u) {
       '<div><b>' + fg.numChildren() + '</b><span>' + t('following') + '</span></div>' +
     '</div>' +
     (self
-      ? '<button class="b g" id="ed">' + t('editProfile') + '</button>'
+      ? '' // Убрана кнопка редактирования профиля
       : '<div class="row"><button class="b g" id="w">' + t('message2') + '</button><button class="b" id="fb"></button></div>') +
     (x.createdAt ? '<div class="hint" style="text-align:center">' + t('joined') + new Date(x.createdAt).toLocaleDateString(loc()) + '</div>' : ''),
     'pm'
   );
   o.querySelector('#c').onclick = () => o.remove();
-  if (self) { o.querySelector('#ed').onclick = () => { o.remove(); settings('account'); }; return; }
+  if (self) return; // Если это я, дальше ничего не делаем, т.к. кнопки редактирования нет
   const fb = o.querySelector('#fb');
   const paint = () => { fb.textContent = isF ? t('unfollow') : t('follow'); fb.className = 'b' + (isF ? ' g' : ''); o.querySelector('#fc').textContent = cnt; };
   paint();
@@ -1497,6 +1526,7 @@ async function promptPass() {
 const ADO = () => [['0', t('off')], ['60', '1 ' + t('unMin')], ['300', t('m5')], ['3600', t('h1')], ['86400', t('d1')], ['604800', t('w1')], ['2592000', t('m1')], ['15552000', t('m6')], ['31536000', t('y1')], ['157680000', t('y5')]];
 const BLO = [['75', '75%'], ['100', '100%'], ['125', '125%']];
 
+// --- НАСТРОЙКИ ---
 async function settings(pg) {
   let X = (await db.ref('users/' + me.u).once('value')).val() || {};
   const o = modal('<div class="sth"></div><div class="sb"></div>', 'st');
@@ -1554,6 +1584,9 @@ async function settings(pg) {
         '<div><span class="lb">' + t('color') + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + t('bannerTop') + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + t('bannerBottom') + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + t('colorAuto') + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
+        // ДОБАВЛЕНЫ ПОЛЯ ДЛЯ АВАТАРКИ И ФОНА
+        '<div><span class="lb">Avatar URL</span><input class="fld" id="avurl" placeholder="https://..." value="' + esc(AV[me.u] || '') + '"></div>' +
+        '<div><span class="lb">Profile background URL</span><input class="fld" id="bgurl" placeholder="https://..." value="' + esc(LK[me.u] || '') + '"></div>' +
         '<button class="b" id="sv">' + t('save') + '</button>';
       prev();
       B.querySelector('#sv').onclick = async e => {
@@ -1562,9 +1595,13 @@ async function settings(pg) {
         const ln = B.querySelector('#aln').value.trim().slice(0, 20);
         const un = B.querySelector('#au').value.trim().toLowerCase().replace(/^@/, '');
         const bio = B.querySelector('#bio').value.trim().slice(0, 140);
+        const avUrl = B.querySelector('#avurl').value.trim();
+        const bgUrl = B.querySelector('#bgurl').value.trim();
         const bdv = { d: +B.querySelector('#bd').dataset.v, m: +B.querySelector('#bm').dataset.v, y: +B.querySelector('#by').dataset.v, vis: B.querySelector('#bv').dataset.v };
         if (!dn || dn.length > 20) return toast(t('e1'));
         if (!/^[a-z0-9_\-!]{1,9}$/.test(un)) return toast(t('e2'));
+        if (avUrl && !IMG.test(avUrl)) return toast('Invalid avatar URL');
+        if (bgUrl && !IMG.test(bgUrl)) return toast('Invalid background URL');
         const now = new Date(), bd = new Date(bdv.y, bdv.m - 1, bdv.d);
         let age = now.getFullYear() - bd.getFullYear();
         if (now.getMonth() < bd.getMonth() || (now.getMonth() === bd.getMonth() && now.getDate() < bd.getDate())) age--;
@@ -1573,10 +1610,21 @@ async function settings(pg) {
         try {
           let u = me.u;
           if (un !== me.u) { if (await renameUser(me.u, un) === 'taken') { btn.disabled = false; return toast(t('e8')); } u = un; }
-          await db.ref('users/' + u).update({ displayName: dn, lastName: ln, bio, birthday: bdv });
+          
+          // Сохраняем все данные
+          const up = { displayName: dn, lastName: ln, bio, birthday: bdv };
+          await db.ref('users/' + u).update(up);
+          
           if (pc === null) await db.ref('userColors/' + u).remove();
           else await db.ref('userColors/' + u).set(pc);
           await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1] });
+          
+          if (avUrl) await db.ref('userAvatars/' + u).set(avUrl);
+          else await db.ref('userAvatars/' + u).remove();
+          
+          if (bgUrl) await db.ref('userLinks/' + u).set(bgUrl);
+          else await db.ref('userLinks/' + u).remove();
+
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
             try { const l = JSON.parse(localStorage.getItem('mg_last') || 'null'); if (l && l.u === me.u) localStorage.setItem('mg_last', JSON.stringify({ dn, u })); } catch (x) {}
             sessionStorage.setItem('mg_auto', JSON.stringify({ dn, u }));
@@ -1643,8 +1691,15 @@ async function settings(pg) {
       B.querySelector('#acd').addEventListener('change', e => { const v = +e.currentTarget.dataset.v; X.autoDelAcc = v; db.ref('users/' + me.u + '/autoDelAcc').set(v); });
     } else if (p === 'look') {
       hd(t('appearance'), 1);
+      // ДОБАВЛЕНЫ ЦВЕТОВЫЕ ТЕМЫ
       B.innerHTML =
         '<div class="sh">' + t('theme') + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + rd('th', 'auto', t('auto'), theme() === 'auto') + '</div>' +
+        '<div class="sh">Color Theme</div>' +
+        '<div class="grp">' +
+            ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => 
+                rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)
+            ).join('') +
+        '</div>' +
         '<div class="sh">' + t('scale') + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
         '<div class="sh">' + t('effects') + '</div><div class="grp">' + ck('bl', t('blurUi'), blurOn()) + '</div>' +
         '<div class="sh">' + t('hdrBlur') + '</div>' + dd('hb', BLO, String(hdrBlur())) +
@@ -1686,6 +1741,7 @@ async function settings(pg) {
     const i = e.target;
     const n = i.name || i.id;
     if (n === 'th') { localStorage.setItem('mg_theme', i.value); applyTheme(); }
+    else if (n === 'ct') { localStorage.setItem('mg_color_theme', i.value); applyTheme(); }
     else if (n === 'hf') { localStorage.setItem('mg_h', i.value); render(); }
     else if (n === 'zs') { localStorage.setItem('mg_scale', i.value); applyScale(); }
     else if (n === 'sm') localStorage.setItem('mg_send', i.value);
@@ -1863,18 +1919,24 @@ $('kbtn').onclick = () => {
   lerr('');
 };
 
+// КНОПКА "+" и МЕНЮ СОЗДАНИЯ
 (() => {
   const b = document.createElement('button');
   b.className = 'ib';
   b.id = 'plusb';
-  b.title = 'Menu';
+  b.title = 'Create';
   b.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
   $('setb').before(b);
   b.onclick = e => {
     e.stopPropagation();
-    menuAt(b, [['New group or channel', newGroup], ['Saved messages', () => open(me.u, true)], ['Contacts', contacts], ['Avatar and link', profLink], ['Accounts', accounts]]);
+    // Меню с выбором типа
+    menuAt(b, [
+      [t('createGroup'), () => newGroup('group')], 
+      [t('createChannel'), () => newGroup('channel')]
+    ]);
   };
 })();
+
 function menuAt(el, items) {
   document.querySelectorAll('.ctx').forEach(x => x.remove());
   const m = document.createElement('div');
@@ -1926,10 +1988,17 @@ function watchG(p) {
   });
 }
 
-function newGroup() {
+// ЛОГИКА СОЗДАНИЯ ГРУППЫ/КАНАЛА
+async function newGroup(type) {
+  // Проверка лимитов
+  const myGroups = Object.keys(GR).filter(g => GR[g].owner === me.u);
+  const limit = (badges[me.u] === 'checked' || badges[me.u] === 'admin' || me.u === 'admin11') ? 5 : 1;
+  if (myGroups.length >= limit) {
+    return toast(`You can only create ${limit} group/channel${limit > 1 ? 's' : ''}.`);
+  }
+
   const o = modal(
-    '<h3>New chat</h3>' +
-    dd('gt', [['group', 'Group'], ['channel', 'Channel']], 'group') +
+    '<h3>' + (type === 'group' ? t('createGroup') : t('createChannel')) + '</h3>' +
     '<input class="fld" id="gti" maxlength="30" placeholder="Title">' +
     '<input class="fld" id="gn" maxlength="16" placeholder="name (a-z, 0-9, _ - !)">' +
     '<div class="hint" id="gh">@name_' + esc(me.u) + '</div>' +
@@ -1951,7 +2020,7 @@ function newGroup() {
       const r = await db.ref('groupNames/' + un).transaction(c => c === null ? g : undefined);
       if (!r.committed) { b.disabled = false; return toast('Name taken'); }
       const up = {};
-      up['groups/' + g] = { title: ti, username: un, type: o.querySelector('#gt').dataset.v, owner: me.u, bio: o.querySelector('#gb').value.trim(), at: Date.now() };
+      up['groups/' + g] = { title: ti, username: un, type: type, owner: me.u, bio: o.querySelector('#gb').value.trim(), at: Date.now() };
       up['members/' + g + '/' + me.u] = 'owner';
       up['userChats/' + me.u + '/g:' + g] = true;
       await db.ref().update(up);
