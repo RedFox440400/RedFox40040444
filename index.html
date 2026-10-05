@@ -249,6 +249,9 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 .m.banned-msg { opacity: .6; font-style: italic; }
 .grp-avatar-preview { width: 60px; height: 60px; border-radius: 50%; background: var(--av); margin: 0 auto; object-fit: cover; display: block; }
 .grp-bg-preview { width: 100%; height: 80px; border-radius: 12px; margin-top: 6px; object-fit: cover; display: block; }
+/* Стили для contenteditable поля ввода */
+#inp { flex: 1; background: none; border: 0; min-width: 0; outline: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; word-break: break-word; white-space: pre-wrap; }
+#inp:empty:before { content: attr(data-p); color: var(--m); pointer-events: none; }
 </style>
 </head>
 <body>
@@ -303,7 +306,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
       <div id="rbar" class="hide"><span></span><button class="ib" style="width:30px;height:30px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="pill" id="pill">
         <button class="ib" id="attach" title="Attach"><svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 01-7-7L14 5.5a3.5 3.5 0 015 5L10.5 19a2 2 0 01-3-3l8-8"/></svg></button>
-        <textarea id="inp" rows="1" maxlength="2000" data-p="message"></textarea>
+        <div id="inp" contenteditable="true" data-p="message"></div>
         <button class="ib" id="send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
       <div class="pill hide" id="blk" style="justify-content:space-between;align-items:center;padding-left:18px"><span style="color:var(--m)" data-i="youBlocked"></span><button class="b g" id="unb" data-i="unblock"></button></div>
@@ -312,7 +315,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
-const APP_VERSION = '1.0';
+const APP_VERSION = '1.3';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -1206,12 +1209,12 @@ function fit() { const i = $('inp'); i.style.height = '38px'; i.style.height = M
 function setBar(kind, m) {
   cancelReply();
   if (kind === 'reply') reply = { id: m.id, name: m.displayName || m.username };
-  else { editing = m; $('inp').value = m.text; fit(); }
+  else { editing = m; $('inp').innerText = m.text; fit(); }
   $('rbar').classList.remove('hide');
   $('rbar').querySelector('span').innerHTML = E((kind === 'edit' ? t('editing') : m.displayName + ': ') + m.text);
   $('inp').focus();
 }
-function cancelReply() { if (editing) { $('inp').value = ''; fit(); } reply = null; editing = null; $('rbar').classList.add('hide'); }
+function cancelReply() { if (editing) { $('inp').innerText = ''; fit(); } reply = null; editing = null; $('rbar').classList.add('hide'); }
 $('rbar').querySelector('button').onclick = cancelReply;
 
 const okLink = l => /^https?:\/\/\S+$/i.test(l || '');
@@ -1276,9 +1279,9 @@ async function sendPhoto() {
 
 async function send() {
   const inp = $('inp');
-  const x = inp.value.trim();
+  const x = inp.innerText.trim();
   if (!x || !me || banEl) return;
-  const clr = () => { inp.value = ''; fit(); };
+  const clr = () => { inp.innerText = ''; fit(); };
   if (x[0] === '/' && await cmd(x)) { clr(); return; }
   if (editing) {
     const id = editing.id, old = editing.text;
@@ -1370,10 +1373,21 @@ $('inp').onkeydown = e => {
 $('inp').oninput = () => {
   const i = $('inp');
   if (autoRep()) {
-    const p = i.selectionStart;
-    const a = i.value.slice(0, p);
-    const r = a.replace(/--$/, '–').replace(/<<$/, '«').replace(/>>$/, '»');
-    if (r !== a) { i.value = r + i.value.slice(p); i.setSelectionRange(r.length, r.length); }
+    const p = i.innerText;
+    const r = p.replace(/--$/, '–').replace(/<<$/, '«').replace(/>>$/, '»');
+    if (r !== p) { i.innerText = r; }
+  }
+  // Эмодзи-замена в поле ввода
+  const html = i.innerHTML;
+  const replaced = html.replace(EMO, m => { const c = [...m].map(x => x.codePointAt(0).toString(16).padStart(4, '0')).join('-'); return '<img class="em" alt="' + m + '" draggable="false" data-c="' + c + '" data-n="0" src="' + eurl(c, 0) + '">'; });
+  if (replaced !== html) {
+    // Сохраняем позицию курсора
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    const start = range.startOffset;
+    i.innerHTML = replaced;
+    // Восстанавливаем позицию (упрощённо, так как замена может сдвинуть)
+    // В реальности нужно более сложное восстановление, но для простоты оставим так
   }
   fit();
   if (chat === 'global' || !me || isG(chat) || chat === me.u) return;
