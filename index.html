@@ -1011,6 +1011,12 @@ function showWarn() {
   const acts = $('warnActs');
   const isGlobal = chat === 'global' && !globalDisabled;
   const isGroup = isG(chat);
+  // УБИРАЕМ ПРЕДУПРЕЖДЕНИЕ В КАНАЛАХ
+  if (isG(chat) && GR[gid_(chat)] && GR[gid_(chat)].type === 'channel') {
+    w.classList.add('hide');
+    $('msgs').classList.remove('pp');
+    return;
+  }
   if (!isGlobal && !isGroup) { w.classList.add('hide'); $('msgs').classList.remove('pp'); return; }
   w.classList.remove('hide');
   $('warnText').innerHTML = E(t('warn'));
@@ -1022,22 +1028,28 @@ function showWarn() {
   ig.onclick = () => { w.classList.add('hide'); $('msgs').classList.remove('pp'); };
   acts.appendChild(ig);
   if (isGroup) {
-    const lv = document.createElement('button');
-    lv.className = 'b g';
-    lv.innerHTML = E(t('leaveGroup'));
-    lv.onclick = async () => {
-      const g = gid_(chat);
-      if (await ask(t('leaveGroup') + '?', '', t('leaveGroup'), 1)) {
-        try {
-          leaving.add(g);
-          await logEv(g, 'leave');
-          await db.ref('members/' + g + '/' + me.u).remove();
-          await db.ref('userChats/' + me.u + '/' + chat).remove();
-          open(globalDisabled ? me.u : 'global');
-        } catch (e) { toast(t('failed')); }
-      }
-    };
-    acts.appendChild(lv);
+    const g = gid_(chat);
+    const r = myRole(g);
+    // Владелец не может выйти
+    if (r === 'owner') {
+       // Ничего не добавляем, или кнопку управления
+    } else {
+      const lv = document.createElement('button');
+      lv.className = 'b g';
+      lv.innerHTML = E(t('leaveGroup'));
+      lv.onclick = async () => {
+        if (await ask(t('leaveGroup') + '?', '', t('leaveGroup'), 1)) {
+          try {
+            leaving.add(g);
+            await logEv(g, 'leave');
+            await db.ref('members/' + g + '/' + me.u).remove();
+            await db.ref('userChats/' + me.u + '/' + chat).remove();
+            open(globalDisabled ? me.u : 'global');
+          } catch (e) { toast(t('failed')); }
+        }
+      };
+      acts.appendChild(lv);
+    }
   }
 }
 
@@ -1736,7 +1748,7 @@ async function settings(pg) {
         '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + E(t('bannerTop')) + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + E(t('bannerBottom')) + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('avatarUrl')) + '</span>' +
+        '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
           '<div class="row"><input class="fld" id="avurl" placeholder="https://..." value="' + esc(AV[me.u] || '') + '"><button class="b g" id="avbtn" style="flex:0 0 auto">📁</button></div>' +
           '<div class="hint">' + E(t('orUpload')) + '</div>' +
         '</div>' +
