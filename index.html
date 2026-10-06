@@ -321,7 +321,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
-const APP_VERSION = '1.8';
+const APP_VERSION = '1.9';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -696,7 +696,7 @@ let globalDisabled = false, addToGroupsPolicy = 'nobody', mutedUntil = 0;
 let AV = {}, GR = {}, MB = {}, LK = {}, CT = {}, grpKnown = new Set(), leaving = new Set();
 let grpColors = {}, grpBanners = {};
 
-const IMG = /^https:\/\/[^\s'"()<>\\]+$/;
+const IMG = { test: s => typeof s === 'string' && (/^data:image\/(png|jpe?g|webp|gif);base64,/.test(s) || /^https:\/\/[^\s'"()<>\\]+$/.test(s)) };
 const isG = p => typeof p === 'string' && p.startsWith('g:');
 const gid_ = p => p.slice(2);
 const RK = { owner: 3, admin: 2, mod: 1, member: 0 };
@@ -732,16 +732,23 @@ function modal(h, cls) {
   const o = document.createElement('div');
   o.className = 'ov';
   o.innerHTML = '<div class="md ' + (cls || '') + '">' + h + '</div>';
-  const closeBtn = document.createElement('button');
-  closeBtn.className = 'ib close-btn';
-  closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  closeBtn.onclick = () => o.remove();
-  o.querySelector('.md').appendChild(closeBtn);
-  o.onclick = e => { if (e.target === o) o.remove(); };
+  if (!/\b(st|pm)\b/.test(cls || '')) {
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'ib close-btn';
+    closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    closeBtn.onclick = () => o.remove();
+    o.querySelector('.md').appendChild(closeBtn);
+  }
   document.body.appendChild(o);
   return o;
 }
-function ask(ti, p, ok, danger) {
+  if (!/\b(st|pm)\b/.test(cls || '')) {
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'ib close-btn';
+    closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    closeBtn.onclick = () => o.remove();
+    o.querySelector('.md').appendChild(closeBtn);
+  }
   return new Promise(r => {
     const o = modal('<h3>' + ti + '</h3><p>' + p + '</p><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b ' + (danger ? 'd' : '') + '" id="y">' + ok + '</button></div>');
     o.querySelector('#n').onclick = () => { o.remove(); r(false); };
@@ -770,10 +777,16 @@ const hue = u => colors[u] != null ? colors[u] : hh(u);
 const avStyle = u => 'background:hsl(' + hue(u) + ' 42% 38%);color:#fff';
 function bannerColors(u) {
   const b = banners[u];
-  if (b && typeof b === 'object') return [a = +b.a || 0, z = +b.b || (a + 45) % 360];
+  if (b && typeof b === 'object') { const a = +b.a || 0; return [a, +b.b || (a + 45) % 360]; }
   const h = hh(u);
   return [h, (h + 45) % 360];
 }
+const banStyle = u => {
+  const bi = banners[u];
+  if (bi && bi.img && IMG.test(bi.img)) return "background:center/cover url('" + esc(bi.img) + "')";
+  const [a, b] = bannerColors(u);
+  return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
+};
 const banStyle = u => { const [a, b] = bannerColors(u); return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))'; };
 
 const avatar = (u, dot, big) => {
@@ -920,7 +933,7 @@ function start(dn, u, uid, auto) {
   on(db.ref('bans'), s => { bans = s.val() || {}; checkBan(); render(); side(); });
   setInterval(checkBan, 5000);
   on(db.ref('userBanners'), s => { banners = s.val() || {}; });
-  on(db.ref('userColors'), s => { colors = s.val() || {}; $('meav').style.cssText = avStyle(me.u); side(); });
+  on(db.ref('userColors'), s => { colors = s.val() || {}; paintMe(); side(); });
   on(db.ref('userBadges'), s => { badges = {}; const v = s.val() || {}; for (const k in v) badges[k] = v[k].type; updAdmin(); side(); render(); hdr(); });
   on(db.ref('messages').orderByChild('time').limitToLast(MAX), s => { const a = []; s.forEach(c => { const m = { id: c.key, ...c.val() }; a.push(m); if (m.username && m.displayName) names.set(m.username, m.displayName); }); C.global = a; if (chat === 'global' && !globalDisabled) render(); side(); hideLoader(); });
   on(db.ref('userChats/' + u), s => { idx = new Set(Object.keys(s.val() || {})); idx.forEach(listen); side(); });
@@ -1182,7 +1195,7 @@ $('msgs').onclick = e => {
   const bi = e.target.closest('[data-banned-info]');
   if (bi) return bannedInfo(bi.dataset.bannedInfo);
   const att = e.target.closest('.att');
-  if (att) return window.open(att.dataset.full, '_blank', 'noopener');
+  if (att) return viewImg(att.dataset.full);
   const bt = e.target.closest('.bt');
   if (bt) return linkAsk(bt.dataset.link);
   const n = e.target.closest('.sn');
@@ -1256,43 +1269,28 @@ function canSendPhoto() {
 }
 
 async function sendPhoto() {
-  if (!canSendPhoto()) {
-    if (chat === 'global') return toast(t('photoOnlyAdmin'));
-    return toast(t('photoNotAllowed'));
-  }
-  const inp = document.createElement('input');
-  inp.type = 'file';
-  inp.accept = 'image/*';
-  inp.onchange = () => {
-    const f = inp.files[0];
-    if (!f) return;
-    if (f.size > 5 * 1024 * 1024) return toast('Max 5MB');
-    const r = new FileReader();
-    r.onload = async () => {
-      const data = r.result;
-      try {
-        showLoader();
-        const m = { username: me.u, displayName: me.n, text: '', att: data, time: Date.now() };
-        if (reply) { m.replyTo = reply.id; m.replyToSender = reply.name; cancelReply(); }
-        mineNew = true;
-        if (chat === 'global') { await db.ref('messages').push(m); trim(); }
-        else {
-          await db.ref(pathFor(chat)).push(m);
-          const p = chat;
-          if (p !== me.u) {
-            locl.delete(p);
-            writtenTo.add(p);
-            db.ref('userChats/' + me.u + '/' + p).set(true);
-            db.ref('userChats/' + p + '/' + me.u).set(true);
-          }
-          db.ref('typing/' + room(p) + '/' + me.u).remove();
+  if (!canSendPhoto()) return toast(chat === 'global' ? t('photoOnlyAdmin') : t('photoNotAllowed'));
+  pickImage(1280, async data => {
+    try {
+      showLoader();
+      const m = { username: me.u, displayName: me.n, text: '', att: data, time: Date.now() };
+      if (reply) { m.replyTo = reply.id; m.replyToSender = reply.name; cancelReply(); }
+      mineNew = true;
+      if (chat === 'global') { await db.ref('messages').push(m); trim(); }
+      else {
+        await db.ref(pathFor(chat)).push(m);
+        const p = chat;
+        if (p !== me.u) {
+          locl.delete(p);
+          writtenTo.add(p);
+          db.ref('userChats/' + me.u + '/' + p).set(true);
+          db.ref('userChats/' + p + '/' + me.u).set(true);
         }
-      } catch (e) { console.error(e); toast(t('uploadFailed')); }
-      hideLoader();
-    };
-    r.readAsDataURL(f);
-  };
-  inp.click();
+        db.ref('typing/' + room(p) + '/' + me.u).remove();
+      }
+    } catch (e) { console.error(e); toast(t('uploadFailed')); }
+    hideLoader();
+  }, 0.82);
 }
 
 async function send() {
@@ -1725,6 +1723,7 @@ async function settings(pg) {
   oc.observe(document.body, { childList: true });
   let pc = colors[me.u] != null ? colors[me.u] : null;
   let pbg = bannerColors(me.u);
+  let newAv = AV[me.u] || '', newBan = (banners[me.u] && banners[me.u].img) || '';
   const hd = (ti, back) => {
     H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + E(ti) + '</b>';
     H.querySelector('#bk').onclick = back ? () => show('main') : () => o.remove();
@@ -1735,14 +1734,11 @@ async function settings(pg) {
     const [a, b] = pbg;
     const n = ((B.querySelector('#an') || {}).value || me.n).trim();
     const e = B.querySelector('#pv');
-    if (e) {
-      e.style.cssText = 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%));border-radius:20px;padding:22px;display:flex;justify-content:center';
-      e.innerHTML = '<div class="av big" style="background:hsl(' + h + ' 42% 38%);color:#fff">' + esc(n.charAt(0).toUpperCase()) + '</div>';
+        if (e) {
+      const bg = newBan ? "center/cover url('" + newBan + "')" : 'radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
+      e.style.cssText = 'background:' + bg + ';border-radius:20px;padding:22px;display:flex;justify-content:center';
+      e.innerHTML = '<div class="av big" style="' + (newAv ? "background:center/cover url('" + newAv + "')" : 'background:hsl(' + h + ' 42% 38%);color:#fff') + '">' + (newAv ? '' : esc(n.charAt(0).toUpperCase())) + '</div>';
     }
-    B.querySelectorAll('#sw i').forEach(i => i.classList.toggle('on', i.dataset.h === 'a' ? pc === null : +i.dataset.h === pc));
-    B.querySelectorAll('#swa i').forEach(i => i.classList.toggle('on', i.dataset.h === 'a' ? pbg[0] === hh(me.u) : +i.dataset.h === pbg[0]));
-    B.querySelectorAll('#swb i').forEach(i => i.classList.toggle('on', i.dataset.h === 'a' ? pbg[1] === (hh(me.u) + 45) % 360 : +i.dataset.h === pbg[1]));
-  };
   function show(p) {
     closeDD();
     B.scrollTop = 0;
@@ -1760,6 +1756,10 @@ async function settings(pg) {
       for (let y = curY - 14; y >= 1900; y--) years.push([y, y]);
       B.innerHTML =
         '<div style="display:flex;justify-content:center" id="pv"></div>' +
+        '<div class="row"><button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button><button class="b g" id="dav">' + E(t('removeAvatar')) + '</button></div>' +
+        '<div class="row"><button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button><button class="b g" id="dbn">' + E(t('removeBanner')) + '</button></div>' +
+        '<div class="row"><button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button><button class="b g" id="dav">' + E(t('removeAvatar')) + '</button></div>' +
+        '<div class="row"><button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button><button class="b g" id="dbn">' + E(t('removeBanner')) + '</button></div>' +
         '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
         '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(X.lastName || '') + '"></div>' +
         '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
@@ -1770,24 +1770,15 @@ async function settings(pg) {
         '</div>' +
         '<div class="hint">' + E(t('birthdayMin')) + '</div>' +
         '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
-        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '<i class="upload" data-upload="avatar"></i></div></div>' +
+        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + E(t('bannerColor')) + '</span><div class="sh" style="margin-top:-4px">' + E(t('bannerTop')) + '</div><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div><div class="sh">' + E(t('bannerBottom')) + '</div><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
       let newAv = AV[me.u] || '';
-      B.querySelectorAll('[data-upload="avatar"]').forEach(el => el.onclick = () => {
-        const inp = document.createElement('input');
-        inp.type = 'file';
-        inp.accept = 'image/*';
-        inp.onchange = () => {
-          const f = inp.files[0];
-          if (!f) return;
-          const r = new FileReader();
-          r.onload = () => { newAv = r.result; toast(t('saved')); };
-          r.readAsDataURL(f);
-        };
-        inp.click();
-      });
+      B.querySelector('#uav').onclick = () => pickImage(256, d => { newAv = d; prev(); });
+      B.querySelector('#dav').onclick = () => { newAv = ''; prev(); };
+      B.querySelector('#ubn').onclick = () => pickImage(900, d => { newBan = d; prev(); });
+      B.querySelector('#dbn').onclick = () => { newBan = ''; prev(); };
       B.querySelector('#sv').onclick = async e => {
         const btn = e.currentTarget;
         const dn = B.querySelector('#an').value.trim();
@@ -1809,7 +1800,7 @@ async function settings(pg) {
           await db.ref('users/' + u).update(up);
           if (pc === null) await db.ref('userColors/' + u).remove();
           else await db.ref('userColors/' + u).set(pc);
-          await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1] });
+          await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1], img: newBan || null });
           if (newAv) await db.ref('userAvatars/' + u).set(newAv);
           else await db.ref('userAvatars/' + u).remove();
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
@@ -2340,26 +2331,39 @@ async function joinTok(tk) {
 
 function editG(g) {
   const G = GR[g];
-  const curAvatar = G.avatar || '';
-  const curBg = G.banner || '';
-  const curColor = grpColors[g] || 220;
+  let av = G.avatar || '', bn = G.banner || '', col = grpColors[g] || 220;
   const o = modal(
     '<h3>' + E(t('editGroup')) + '</h3>' +
-    '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="Title">' +
-    '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="Description">' + esc(G.bio || '') + '</textarea>' +
-    '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
-      '<div class="row"><button class="b g" id="cbtn" style="flex:0 0 auto">📁</button><button class="b g" id="cdel" style="flex:0 0 auto">🗑</button></div>' +
-      '<img class="grp-avatar-preview" id="cprev" src="' + (curAvatar && IMG.test(curAvatar) ? esc(curAvatar) : '') + '" style="' + (curAvatar && IMG.test(curAvatar) ? '' : 'display:none') + '">' +
-    '</div>' +
-    '<div><span class="lb">' + E(t('groupBackground')) + '</span>' +
-      '<div class="row"><button class="b g" id="dbtn" style="flex:0 0 auto">📁</button><button class="b g" id="ddel" style="flex:0 0 auto">🗑</button></div>' +
-      '<img class="grp-bg-preview" id="dprev" src="' + (curBg && IMG.test(curBg) ? esc(curBg) : '') + '" style="' + (curBg && IMG.test(curBg) ? '' : 'display:none') + '">' +
-    '</div>' +
-    '<div><span class="lb">' + E(t('groupColor')) + '</span>' +
-      '<div class="sw" id="swg">' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)' + (h === curColor ? ';outline:2px solid var(--t);outline-offset:2px' : '') + '"></i>').join('') + '</div>' +
-    '</div>' +
+    '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="' + E(t('enterTitle')) + '">' +
+    '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="' + E(t('bioP')) + '">' + esc(G.bio || '') + '</textarea>' +
+    '<div class="row"><button class="b g" id="ua">' + E(t('uploadAvatar')) + '</button><button class="b g" id="da">' + E(t('removeAvatar')) + '</button></div>' +
+    '<div class="row"><button class="b g" id="ub">' + E(t('uploadBanner')) + '</button><button class="b g" id="db2">' + E(t('removeBanner')) + '</button></div>' +
+    '<div class="sw" id="swg">' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)' + (h === col ? ';outline:2px solid var(--t);outline-offset:2px' : '') + '"></i>').join('') + '</div>' +
     '<button class="b" id="s">' + E(t('save')) + '</button>'
   );
+  const q = s => o.querySelector(s);
+  q('#ua').onclick = () => pickImage(256, d => { av = d; toast(t('done')); });
+  q('#da').onclick = () => { av = ''; toast(t('done')); };
+  q('#ub').onclick = () => pickImage(900, d => { bn = d; toast(t('done')); });
+  q('#db2').onclick = () => { bn = ''; toast(t('done')); };
+  o.querySelectorAll('#swg i').forEach(el => el.onclick = () => {
+    col = +el.dataset.h;
+    o.querySelectorAll('#swg i').forEach(x => x.style.outline = 'none');
+    el.style.outline = '2px solid var(--t)';
+    el.style.outlineOffset = '2px';
+  });
+  q('#s').onclick = async () => {
+    const ti = q('#a').value.trim();
+    if (!ti) return toast(t('enterTitle'));
+    try {
+      await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: av || null, banner: bn || null });
+      await db.ref('groupColors/' + g).set(col);
+      await db.ref('groupLog/' + g).push({ type: 'edit', by: me.u, target: null, extra: null, at: Date.now() });
+      o.remove();
+      toast(t('saved'));
+    } catch (e) { toast(t('failed')); }
+  };
+}
   const q = s => o.querySelector(s);
   let chosenColor = curColor;
   let newAvatar = curAvatar;
