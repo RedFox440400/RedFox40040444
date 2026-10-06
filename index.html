@@ -325,7 +325,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
-const APP_VERSION = '1.6';
+const APP_VERSION = '1.7';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -1790,15 +1790,16 @@ async function settings(pg) {
         '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + E(t('bannerTop')) + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
         '<div><span class="lb">' + E(t('bannerBottom')) + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
-          '<div class="row"><input class="fld" id="avurl" placeholder="https://..." value="' + esc(AV[me.u] || '') + '"><button class="b g" id="avbtn" style="flex:0 0 auto">📁</button></div>' +
-          '<div class="hint">' + E(t('orUpload')) + '</div>' +
+        '<div><span class="lb">' + E(t('uploadAvatar')) + '</span>' +
+          '<div class="row"><button class="b g" id="avbtn" style="flex:0 0 auto">📁 ' + E(t('upload')) + '</button><button class="b g" id="avdel" style="flex:0 0 auto">🗑 ' + E(t('removeAvatar')) + '</button></div>' +
         '</div>' +
-        '<div><span class="lb">' + E(t('backgroundUrl')) + '</span>' +
-          '<div class="row"><input class="fld" id="bgurl" placeholder="https://..." value="' + esc(LK[me.u] || '') + '"><button class="b g" id="bgbtn" style="flex:0 0 auto">📁</button></div>' +
+        '<div><span class="lb">' + E(t('uploadBanner')) + '</span>' +
+          '<div class="row"><button class="b g" id="bgbtn" style="flex:0 0 auto">📁 ' + E(t('upload')) + '</button><button class="b g" id="bgdel" style="flex:0 0 auto">🗑 ' + E(t('removeBanner')) + '</button></div>' +
         '</div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
+      let newAv = AV[me.u] || '';
+      let newBg = LK[me.u] || '';
       B.querySelector('#avbtn').onclick = () => {
         const inp = document.createElement('input');
         inp.type = 'file';
@@ -1807,11 +1808,12 @@ async function settings(pg) {
           const f = inp.files[0];
           if (!f) return;
           const r = new FileReader();
-          r.onload = () => { B.querySelector('#avurl').value = r.result; };
+          r.onload = () => { newAv = r.result; };
           r.readAsDataURL(f);
         };
         inp.click();
       };
+      B.querySelector('#avdel').onclick = () => { newAv = ''; };
       B.querySelector('#bgbtn').onclick = () => {
         const inp = document.createElement('input');
         inp.type = 'file';
@@ -1820,19 +1822,18 @@ async function settings(pg) {
           const f = inp.files[0];
           if (!f) return;
           const r = new FileReader();
-          r.onload = () => { B.querySelector('#bgurl').value = r.result; };
+          r.onload = () => { newBg = r.result; };
           r.readAsDataURL(f);
         };
         inp.click();
       };
+      B.querySelector('#bgdel').onclick = () => { newBg = ''; };
       B.querySelector('#sv').onclick = async e => {
         const btn = e.currentTarget;
         const dn = B.querySelector('#an').value.trim();
         const ln = B.querySelector('#aln').value.trim().slice(0, 20);
         const un = B.querySelector('#au').value.trim().toLowerCase().replace(/^@/, '');
         const bio = B.querySelector('#bio').value.trim().slice(0, 140);
-        const avUrl = B.querySelector('#avurl').value.trim();
-        const bgUrl = B.querySelector('#bgurl').value.trim();
         const bdv = { d: +B.querySelector('#bd').dataset.v, m: +B.querySelector('#bm').dataset.v, y: +B.querySelector('#by').dataset.v, vis: B.querySelector('#bv').dataset.v };
         if (!dn || dn.length > 20) return toast(t('e1'));
         if (!/^[a-z0-9_\-!]{1,9}$/.test(un)) return toast(t('e2'));
@@ -1849,9 +1850,9 @@ async function settings(pg) {
           if (pc === null) await db.ref('userColors/' + u).remove();
           else await db.ref('userColors/' + u).set(pc);
           await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1] });
-          if (avUrl) await db.ref('userAvatars/' + u).set(avUrl);
+          if (newAv) await db.ref('userAvatars/' + u).set(newAv);
           else await db.ref('userAvatars/' + u).remove();
-          if (bgUrl) await db.ref('userLinks/' + u).set(bgUrl);
+          if (newBg) await db.ref('userLinks/' + u).set(newBg);
           else await db.ref('userLinks/' + u).remove();
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
             try { const l = JSON.parse(localStorage.getItem('mg_last') || 'null'); if (l && l.u === me.u) localStorage.setItem('mg_last', JSON.stringify({ dn, u })); } catch (x) {}
@@ -2391,11 +2392,11 @@ function editG(g) {
     '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="Title">' +
     '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="Description">' + esc(G.bio || '') + '</textarea>' +
     '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
-      '<div class="row"><input class="fld" id="c" placeholder="https://..." value="' + esc(curAvatar) + '"><button class="b g" id="cbtn" style="flex:0 0 auto">📁</button></div>' +
+      '<div class="row"><button class="b g" id="cbtn" style="flex:0 0 auto">📁 ' + E(t('uploadImage')) + '</button><button class="b g" id="cdel" style="flex:0 0 auto">🗑 ' + E(t('removeImage')) + '</button></div>' +
       '<img class="grp-avatar-preview" id="cprev" src="' + (curAvatar && IMG.test(curAvatar) ? esc(curAvatar) : '') + '" style="' + (curAvatar && IMG.test(curAvatar) ? '' : 'display:none') + '">' +
     '</div>' +
     '<div><span class="lb">' + E(t('groupBackground')) + '</span>' +
-      '<div class="row"><input class="fld" id="d" placeholder="https://..." value="' + esc(curBg) + '"><button class="b g" id="dbtn" style="flex:0 0 auto">📁</button></div>' +
+      '<div class="row"><button class="b g" id="dbtn" style="flex:0 0 auto">📁 ' + E(t('uploadImage')) + '</button><button class="b g" id="ddel" style="flex:0 0 auto">🗑 ' + E(t('removeImage')) + '</button></div>' +
       '<img class="grp-bg-preview" id="dprev" src="' + (curBg && IMG.test(curBg) ? esc(curBg) : '') + '" style="' + (curBg && IMG.test(curBg) ? '' : 'display:none') + '">' +
     '</div>' +
     '<div><span class="lb">' + E(t('groupColor')) + '</span>' +
@@ -2405,6 +2406,8 @@ function editG(g) {
   );
   const q = s => o.querySelector(s);
   let chosenColor = curColor;
+  let newAvatar = curAvatar;
+  let newBg = curBg;
   q('#cbtn').onclick = () => {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -2413,11 +2416,12 @@ function editG(g) {
       const f = inp.files[0];
       if (!f) return;
       const r = new FileReader();
-      r.onload = () => { q('#c').value = r.result; q('#cprev').src = r.result; q('#cprev').style.display = 'block'; };
+      r.onload = () => { newAvatar = r.result; q('#cprev').src = r.result; q('#cprev').style.display = 'block'; };
       r.readAsDataURL(f);
     };
     inp.click();
   };
+  q('#cdel').onclick = () => { newAvatar = ''; q('#cprev').src = ''; q('#cprev').style.display = 'none'; };
   q('#dbtn').onclick = () => {
     const inp = document.createElement('input');
     inp.type = 'file';
@@ -2426,11 +2430,12 @@ function editG(g) {
       const f = inp.files[0];
       if (!f) return;
       const r = new FileReader();
-      r.onload = () => { q('#d').value = r.result; q('#dprev').src = r.result; q('#dprev').style.display = 'block'; };
+      r.onload = () => { newBg = r.result; q('#dprev').src = r.result; q('#dprev').style.display = 'block'; };
       r.readAsDataURL(f);
     };
     inp.click();
   };
+  q('#ddel').onclick = () => { newBg = ''; q('#dprev').src = ''; q('#dprev').style.display = 'none'; };
   o.querySelectorAll('#swg i').forEach(el => el.onclick = () => {
     chosenColor = +el.dataset.h;
     o.querySelectorAll('#swg i').forEach(x => x.style.outline = 'none');
@@ -2439,11 +2444,9 @@ function editG(g) {
   });
   q('#s').onclick = async () => {
     const ti = q('#a').value.trim();
-    const av = q('#c').value.trim();
-    const bg = q('#d').value.trim();
     if (!ti) return toast(t('enterTitle'));
     try {
-      await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: av || null, banner: bg || null });
+      await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: newAvatar || null, banner: newBg || null });
       await db.ref('groupColors/' + g).set(chosenColor);
       await db.ref('groupLog/' + g).push({ type: 'edit', by: me.u, target: null, extra: null, at: Date.now() });
       o.remove();
