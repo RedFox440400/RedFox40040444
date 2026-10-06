@@ -142,7 +142,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .ctx .dd { color: var(--d); }
 .ctx .tm { color: var(--m); font-size: 12px; cursor: default; border-bottom: 1px solid var(--gb); }
 .ov { position: fixed; inset: 0; background: var(--ovl); backdrop-filter: blur(calc(var(--blur) * .4)); -webkit-backdrop-filter: blur(calc(var(--blur) * .4)); display: flex; align-items: center; justify-content: center; z-index: 9500; padding: 16px; animation: fade .18s ease; }
-.md { border-radius: 24px; padding: 24px; width: 100%; max-width: 400px; max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; animation: up .2s ease; box-shadow: 0 12px 40px #0000001a; }
+.md { border-radius: 24px; padding: 24px; width: 100%; max-width: 400px; max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; animation: up .2s ease; box-shadow: 0 12px 40px #0000001a; position: relative; }
 .md > * { flex-shrink: 0; }
 .md h3 { font-size: 18px; font-weight: 600; }
 .md p, .md .hint { color: var(--m); font-size: 13px; }
@@ -150,6 +150,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .md hr { border: 0; border-top: 1px solid var(--gb); }
 .md.pm { padding: 0; gap: 0; }
 .md.st { padding: 0; gap: 0; overflow: hidden; height: min(640px, 88vh); }
+.md .close-btn { position: absolute; top: 12px; right: 12px; z-index: 10; }
 .row { display: flex; gap: 10px; }
 .row > * { flex: 1; }
 .bl { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; }
@@ -198,7 +199,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .ddb { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; text-align: left; color: var(--t); white-space: nowrap; }
 .ddb svg { width: 16px; height: 16px; color: var(--m); flex-shrink: 0; }
 .ddl { position: fixed; background: var(--ctx); border: 1px solid var(--gb); border-radius: 14px; overflow-y: auto; z-index: 99990; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); animation: pop .14s ease; }
-.ddl div { padding: 11px 15px; cursor: pointer; white-space: nowrap; }
+.ddl div { padding: 11px 15px; cursor: pointer; white-space: nowrap; color: var(--t); }
 .ddl div:hover { background: var(--hv2); }
 .ddl div.on { background: var(--hv3); }
 .sw { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
@@ -252,6 +253,15 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 /* Стили для contenteditable поля ввода */
 #inp { flex: 1; background: none; border: 0; min-width: 0; outline: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; word-break: break-word; white-space: pre-wrap; }
 #inp:empty:before { content: attr(data-p); color: var(--m); pointer-events: none; }
+/* Модалка для просмотра фото */
+.img-modal { position: fixed; inset: 0; background: #000000e0; display: flex; align-items: center; justify-content: center; z-index: 100000; cursor: zoom-out; }
+.img-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
+.img-modal .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; }
+/* Стили для тем */
+:root[data-theme="dark-blue"] { --bg: #0a0e1a; --p: #121826; --l: #1e2636; --t: #e0e6f0; --m: #7a869a; --mine: #2b5ea7; --oth: #1a2233; --d: #e5534b; --btn: #e0e6f0; --btnt: #0a0e1a; --g: #1e2636; --fld: #0a0e1a; --side: #0a0e1a; --ctx: #1a2233; --gl: rgba(10, 14, 26, .7); --gl2: rgba(10, 14, 26, .9); }
+:root[data-theme="dark-green"] { --bg: #0a1a0e; --p: #122616; --l: #1e361e; --t: #e0f0e0; --m: #7a9a7a; --mine: #2e7d32; --oth: #1a331a; --d: #e5534b; --btn: #e0f0e0; --btnt: #0a1a0e; --g: #1e361e; --fld: #0a1a0e; --side: #0a1a0e; --ctx: #1a331a; --gl: rgba(10, 26, 14, .7); --gl2: rgba(10, 26, 14, .9); }
+:root[data-theme="dark-purple"] { --bg: #140a1a; --p: #1e1226; --l: #2e1e36; --t: #f0e0f0; --m: #9a7a9a; --mine: #7b1fa2; --oth: #2a1a33; --d: #e5534b; --btn: #f0e0f0; --btnt: #140a1a; --g: #2e1e36; --fld: #140a1a; --side: #140a1a; --ctx: #2a1a33; --gl: rgba(20, 10, 26, .7); --gl2: rgba(20, 10, 26, .9); }
+:root[data-theme="light-pink"] { --bg: #fdf2f8; --p: #fff; --l: #fce7f3; --t: #831843; --m: #be185d; --mine: #ec4899; --oth: #fff; --d: #e5534b; --btn: #831843; --btnt: #fff; --g: #fce7f3; --fld: #fdf2f8; --side: #fff; --ctx: #fff; --gl: rgba(255, 255, 255, .7); --gl2: rgba(255, 255, 255, .9); }
 </style>
 </head>
 <body>
@@ -315,7 +325,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
-const APP_VERSION = '1.4';
+const APP_VERSION = '1.6';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -476,7 +486,11 @@ const L = {
     orUpload: 'or upload', backgroundUrl: 'Background URL',
     attach: 'Attach photo', photoOnlyAdmin: 'Only admins can send photos to global chat',
     photoNotAllowed: 'Photos are not allowed in this chat', uploadFailed: 'Upload failed',
-    loading: 'Loading...'
+    loading: 'Loading...', close: 'Close', themeDark: 'Dark', themeLight: 'Light', themeDarkBlue: 'Dark Blue',
+    themeDarkGreen: 'Dark Green', themeDarkPurple: 'Dark Purple', themeLightPink: 'Light Pink',
+    chooseColor: 'Choose color', chooseImage: 'Choose image', upload: 'Upload', color: 'Color', image: 'Image',
+    selectType: 'Select type', uploadAvatar: 'Upload avatar', removeAvatar: 'Remove avatar',
+    uploadBanner: 'Upload banner', removeBanner: 'Remove banner'
   },
   ru: {
     dname: 'Отображаемое имя', dnp: 'Ваше имя', uname: 'Имя пользователя', unp: 'a-z, 0-9, _ - !',
@@ -595,7 +609,11 @@ const L = {
     orUpload: 'или загрузите', backgroundUrl: 'Ссылка на фон',
     attach: 'Прикрепить фото', photoOnlyAdmin: 'Только админы могут отправлять фото в общий чат',
     photoNotAllowed: 'Фото запрещены в этом чате', uploadFailed: 'Не удалось загрузить',
-    loading: 'Загрузка...'
+    loading: 'Загрузка...', close: 'Закрыть', themeDark: 'Тёмная', themeLight: 'Светлая', themeDarkBlue: 'Тёмно-синяя',
+    themeDarkGreen: 'Тёмно-зелёная', themeDarkPurple: 'Тёмно-фиолетовая', themeLightPink: 'Светло-розовая',
+    chooseColor: 'Выбрать цвет', chooseImage: 'Выбрать картинку', upload: 'Загрузить', color: 'Цвет', image: 'Картинка',
+    selectType: 'Выберите тип', uploadAvatar: 'Загрузить аватар', removeAvatar: 'Удалить аватар',
+    uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
   }
 };
 
@@ -636,6 +654,7 @@ const blurOn = () => localStorage.getItem('mg_blur') !== '0';
 const hdrBlur = () => +(localStorage.getItem('mg_hdrblur') || 100);
 const sideBlur = () => +(localStorage.getItem('mg_sideblur') || 100);
 const colorTheme = () => localStorage.getItem('mg_color_theme') || 'monochrome';
+const uiTheme = () => localStorage.getItem('mg_ui_theme') || 'dark';
 
 function applyBlur() {
   const r = document.documentElement;
@@ -652,10 +671,9 @@ function applyRadius() {
   document.documentElement.style.setProperty('--rt', t2 + 'px');
 }
 function applyTheme() {
-  let v = theme();
-  // Всегда тёмная, без автоопределения
-  document.documentElement.dataset.theme = v;
+  document.documentElement.dataset.theme = theme();
   document.documentElement.dataset.colorTheme = colorTheme();
+  document.documentElement.dataset.uiTheme = uiTheme();
   const c = document.querySelector('.h-captcha');
   if (c) c.dataset.theme = 'dark';
 }
@@ -720,6 +738,11 @@ function modal(h, cls) {
   const o = document.createElement('div');
   o.className = 'ov';
   o.innerHTML = '<div class="md ' + (cls || '') + '">' + h + '</div>';
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'ib close-btn';
+  closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  closeBtn.onclick = () => o.remove();
+  o.querySelector('.md').appendChild(closeBtn);
   o.onclick = e => { if (e.target === o) o.remove(); };
   document.body.appendChild(o);
   return o;
@@ -962,6 +985,11 @@ function side() {
   let c = q
     ? [...names.keys()].filter(u => u !== me.u && (u.includes(q) || nm(u).toLowerCase().includes(q)))
     : [...ps];
+  c = c.filter(p => {
+    if (p === me.u || p === 'global') return true;
+    const msgs = C[p] || [];
+    return msgs.length > 0 || unread(p) > 0 || idx.has(p);
+  });
   c.sort((a, b) => lastT_(b) - lastT_(a));
   let h = '';
   const savedRow = '<div class="it ' + (chat === me.u ? 'on' : '') + '" data-u="' + esc(me.u) + '"><div class="av" style="background:#5b6bff;color:#fff">' + esc(t('savedShort')) + '</div><div><b>' + E(t('saved')) + '</b><small>' + E(t('empty')) + '</small></div></div>';
@@ -1454,8 +1482,8 @@ async function profile(u) {
   const x = (await db.ref('users/' + u).once('value')).val() || {};
   const banned = banOf(u);
   if (banned && !self) {
-    modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px;background:#2a2a2a"><div class="ir">' + avatar(u, 0) + '<div><b>' + E(nm(u)) + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailable')) + '<small>' + E(t('unavailableDesc')) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailableInfo')) + '</div></div></div></div>', 'pm');
-    return;
+    // Отображаем как обычного пользователя, но с пометкой
+    // (аватарка сверху, информация снизу)
   }
   const [fs, fg] = await Promise.all([db.ref('followers/' + u).once('value'), db.ref('following/' + u).once('value')]);
   let cnt = fs.numChildren();
