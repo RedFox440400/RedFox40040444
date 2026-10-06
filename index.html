@@ -12,7 +12,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
 ::-webkit-scrollbar { display: none; }
 
-/* Тёмная тема по умолчанию */
 :root { 
     --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #555; --oth: #1d1d1d; 
     --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d; 
@@ -32,7 +31,6 @@
     --gb: rgba(0, 0, 0, .06); --soft: rgba(0, 0, 0, .02); --hv2: rgba(0, 0, 0, .05); --hv3: rgba(0, 0, 0, .08); 
     --send-bg: #1c1e22; --send-fg: #fff;
 }
-/* Цветовые темы */
 :root[data-color-theme="redfox"] { --mine: #e5534b; --btnt: #fff; }
 :root[data-color-theme="ocean"] { --mine: #2b7fff; --btnt: #fff; --av: #2b7fff; }
 :root[data-color-theme="forest"] { --mine: #2e7d32; --btnt: #fff; --av: #2e7d32; }
@@ -206,6 +204,8 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .sw i { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 13px; color: var(--m); }
 .sw i.au { background: var(--g); }
 .sw i.on { outline: 2px solid var(--t); outline-offset: 2px; }
+.sw i.upload { background: var(--g); border: 2px dashed var(--m); position: relative; }
+.sw i.upload::after { content: '+'; font-size: 18px; color: var(--m); }
 .kbox { font: 600 32px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 4px; text-align: center; padding: 18px; border-radius: 16px; user-select: all; word-break: break-all; }
 #fN { display: flex; flex-direction: column; gap: 14px; }
 img.em { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -.28em; margin: 0 .03em; object-fit: contain; -webkit-user-drag: none; }
@@ -227,7 +227,6 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 #login .row #kbtn { flex: 0 0 auto; padding: 10px 12px; font-size: 12px; }
 #login .row #lbtn { flex: 1; }
 #login.cap-off .h-captcha { display: none; }
-/* ЗАГРУЗКА */
 #loader { position: fixed; inset: 0; background: var(--bg); z-index: 100000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; transition: opacity .3s; }
 #loader.hide { opacity: 0; pointer-events: none; }
 .spinner { width: 40px; height: 40px; border: 3px solid var(--l); border-top-color: var(--t); border-radius: 50%; animation: spin .8s linear infinite; }
@@ -250,14 +249,11 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 .m.banned-msg { opacity: .6; font-style: italic; }
 .grp-avatar-preview { width: 60px; height: 60px; border-radius: 50%; background: var(--av); margin: 0 auto; object-fit: cover; display: block; }
 .grp-bg-preview { width: 100%; height: 80px; border-radius: 12px; margin-top: 6px; object-fit: cover; display: block; }
-/* Стили для contenteditable поля ввода */
 #inp { flex: 1; background: none; border: 0; min-width: 0; outline: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; word-break: break-word; white-space: pre-wrap; }
 #inp:empty:before { content: attr(data-p); color: var(--m); pointer-events: none; }
-/* Модалка для просмотра фото */
 .img-modal { position: fixed; inset: 0; background: #000000e0; display: flex; align-items: center; justify-content: center; z-index: 100000; cursor: zoom-out; }
 .img-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
 .img-modal .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; }
-/* Стили для тем */
 :root[data-theme="dark-blue"] { --bg: #0a0e1a; --p: #121826; --l: #1e2636; --t: #e0e6f0; --m: #7a869a; --mine: #2b5ea7; --oth: #1a2233; --d: #e5534b; --btn: #e0e6f0; --btnt: #0a0e1a; --g: #1e2636; --fld: #0a0e1a; --side: #0a0e1a; --ctx: #1a2233; --gl: rgba(10, 14, 26, .7); --gl2: rgba(10, 14, 26, .9); }
 :root[data-theme="dark-green"] { --bg: #0a1a0e; --p: #122616; --l: #1e361e; --t: #e0f0e0; --m: #7a9a7a; --mine: #2e7d32; --oth: #1a331a; --d: #e5534b; --btn: #e0f0e0; --btnt: #0a1a0e; --g: #1e361e; --fld: #0a1a0e; --side: #0a1a0e; --ctx: #1a331a; --gl: rgba(10, 26, 14, .7); --gl2: rgba(10, 26, 14, .9); }
 :root[data-theme="dark-purple"] { --bg: #140a1a; --p: #1e1226; --l: #2e1e36; --t: #f0e0f0; --m: #9a7a9a; --mine: #7b1fa2; --oth: #2a1a33; --d: #e5534b; --btn: #f0e0f0; --btnt: #140a1a; --g: #2e1e36; --fld: #140a1a; --side: #140a1a; --ctx: #2a1a33; --gl: rgba(20, 10, 26, .7); --gl2: rgba(20, 10, 26, .9); }
@@ -325,7 +321,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 </div>
 
 <script>
-const APP_VERSION = '1.7';
+const APP_VERSION = '1.8';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -441,7 +437,7 @@ const L = {
     hdrBlur: 'Chat header blur', sideBlur: 'Sidebar blur', byName: 'Banned by', banAs: 'Ban on behalf of',
     hi: 'Hello! 👋', seenToday: 'last seen today at', seenYest: 'last seen yesterday at',
     seenOn: 'last seen', seenAt: 'at', seenLong: 'last seen long ago', animUi: 'Animations',
-    effects: 'Effects', kbd: 'Keyboard', bannerColor: 'Profile background', bannerTop: 'Top-left color',
+    effects: 'Effects', kbd: 'Keyboard', bannerColor: 'Banner color', bannerTop: 'Top-left color',
     bannerBottom: 'Bottom-right color', how: 'How are you?', agoM: 'min ago', agoH: 'h ago', agoD: 'd ago',
     disableGlobal: 'Disable global chat', disableGlobalS: 'Hide global chat from the sidebar',
     addToGroups: 'Who can add me to groups', addToGroupsNobody: 'Nobody',
@@ -564,8 +560,8 @@ const L = {
     hdrBlur: 'Размытие шапки чата', sideBlur: 'Размытие сайдбара', byName: 'Забанен от имени',
     banAs: 'Забанить от имени', hi: 'Привет! 👋', seenToday: 'был(а) в сети сегодня в',
     seenYest: 'был(а) в сети вчера в', seenOn: 'был(а) в сети', seenAt: 'в', seenLong: 'был(а) в сети давно',
-    animUi: 'Анимации', effects: 'Эффекты', kbd: 'Клавиатура', bannerColor: 'Фон профиля',
-    bannerTop: 'Цвет сверху слева', bannerBottom: 'Цвет снизу справа', how: 'Как дела?',
+    animUi: 'Анимации', effects: 'Эффекты', kbd: 'Клавиатура', bannerColor: 'Цвет баннера',
+    bannerTop: 'Цвет баннера сверху слева', bannerBottom: 'Цвет баннера снизу справа', how: 'Как дела?',
     agoM: 'мин назад', agoH: 'ч назад', agoD: 'д назад', disableGlobal: 'Отключить общий чат',
     disableGlobalS: 'Скрыть общий чат из списка', addToGroups: 'Кто может добавлять меня в группы',
     addToGroupsNobody: 'Никто', addToGroupsChat: 'Только те, кому я писал', addToGroupsAll: 'Все',
@@ -617,7 +613,6 @@ const L = {
   }
 };
 
-// Язык по умолчанию — английский
 const lang = () => localStorage.getItem('mg_lang') || 'en';
 const loc = () => lang() === 'ru' ? 'ru-RU' : 'en-US';
 const t = k => (L[lang()] && L[lang()][k]) || L.en[k] || k;
@@ -644,7 +639,6 @@ const applyScale = () => {
     e.style.transform = k === 1 ? 'none' : 'scale(' + k + ')';
   });
 };
-// Тема по умолчанию — тёмная
 const theme = () => localStorage.getItem('mg_theme') || 'dark';
 const h12 = () => (localStorage.getItem('mg_h') || '12') === '12';
 const sendMode = () => localStorage.getItem('mg_send') || 'enter';
@@ -938,7 +932,6 @@ function start(dn, u, uid, auto) {
   setInterval(expire, 5000);
   open(globalDisabled ? me.u : 'global');
   boot(dn, u);
-  // Скрываем загрузчик через 800мс после старта (чтобы не мелькал)
   setTimeout(hideLoader, 800);
 }
 
@@ -1042,7 +1035,6 @@ function showWarn() {
   const acts = $('warnActs');
   const isGlobal = chat === 'global' && !globalDisabled;
   const isGroup = isG(chat);
-  // УБИРАЕМ ПРЕДУПРЕЖДЕНИЕ В КАНАЛАХ
   if (isG(chat) && GR[gid_(chat)] && GR[gid_(chat)].type === 'channel') {
     w.classList.add('hide');
     $('msgs').classList.remove('pp');
@@ -1061,9 +1053,7 @@ function showWarn() {
   if (isGroup) {
     const g = gid_(chat);
     const r = myRole(g);
-    // Владелец не может выйти
     if (r === 'owner') {
-       // Ничего не добавляем, или кнопку управления
     } else {
       const lv = document.createElement('button');
       lv.className = 'b g';
@@ -1405,17 +1395,13 @@ $('inp').oninput = () => {
     const r = p.replace(/--$/, '–').replace(/<<$/, '«').replace(/>>$/, '»');
     if (r !== p) { i.innerText = r; }
   }
-  // Эмодзи-замена в поле ввода
   const html = i.innerHTML;
   const replaced = html.replace(EMO, m => { const c = [...m].map(x => x.codePointAt(0).toString(16).padStart(4, '0')).join('-'); return '<img class="em" alt="' + m + '" draggable="false" data-c="' + c + '" data-n="0" src="' + eurl(c, 0) + '">'; });
   if (replaced !== html) {
-    // Сохраняем позицию курсора
     const sel = window.getSelection();
     const range = sel.getRangeAt(0);
     const start = range.startOffset;
     i.innerHTML = replaced;
-    // Восстанавливаем позицию (упрощённо, так как замена может сдвинуть)
-    // В реальности нужно более сложное восстановление, но для простоты оставим так
   }
   fit();
   if (chat === 'global' || !me || isG(chat) || chat === me.u) return;
@@ -1482,8 +1468,6 @@ async function profile(u) {
   const x = (await db.ref('users/' + u).once('value')).val() || {};
   const banned = banOf(u);
   if (banned && !self) {
-    // Отображаем как обычного пользователя, но с пометкой
-    // (аватарка сверху, информация снизу)
   }
   const [fs, fg] = await Promise.all([db.ref('followers/' + u).once('value'), db.ref('following/' + u).once('value')]);
   let cnt = fs.numChildren();
@@ -1536,7 +1520,7 @@ async function profile(u) {
     '</div>' +
     (self
       ? ''
-      : '<div class="row"><button class="b g" id="w">' + E(t('message2')) + '</button><button class="b" id="fb"></button></div>') +
+      : '<div class="row" style="justify-content:center"><button class="b g" id="w" style="flex:0 1 auto;padding:8px 16px;font-size:12px">' + E(t('message2')) + '</button><button class="b" id="fb" style="flex:0 1 auto;padding:8px 16px;font-size:12px"></button></div>') +
     (x.createdAt ? '<div class="hint" style="text-align:center">' + E(t('joined')) + new Date(x.createdAt).toLocaleDateString(loc()) + '</div>' : ''),
     'pm'
   );
@@ -1732,7 +1716,6 @@ async function promptPass() {
 const ADO = () => [['0', t('off')], ['60', '1 ' + t('unMin')], ['300', t('m5')], ['3600', t('h1')], ['86400', t('d1')], ['604800', t('w1')], ['2592000', t('m1')], ['15552000', t('m6')], ['31536000', t('y1')], ['157680000', t('y5')]];
 const BLO = [['75', '75%'], ['100', '100%'], ['125', '125%']];
 
-// --- НАСТРОЙКИ ---
 async function settings(pg) {
   let X = (await db.ref('users/' + me.u).once('value')).val() || {};
   const o = modal('<div class="sth"></div><div class="sb"></div>', 'st');
@@ -1787,20 +1770,12 @@ async function settings(pg) {
         '</div>' +
         '<div class="hint">' + E(t('birthdayMin')) + '</div>' +
         '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
-        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('bannerTop')) + '</span><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('bannerBottom')) + '</span><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('uploadAvatar')) + '</span>' +
-          '<div class="row"><button class="b g" id="avbtn" style="flex:0 0 auto">📁 ' + E(t('upload')) + '</button><button class="b g" id="avdel" style="flex:0 0 auto">🗑 ' + E(t('removeAvatar')) + '</button></div>' +
-        '</div>' +
-        '<div><span class="lb">' + E(t('uploadBanner')) + '</span>' +
-          '<div class="row"><button class="b g" id="bgbtn" style="flex:0 0 auto">📁 ' + E(t('upload')) + '</button><button class="b g" id="bgdel" style="flex:0 0 auto">🗑 ' + E(t('removeBanner')) + '</button></div>' +
-        '</div>' +
+        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '<i class="upload" data-upload="avatar"></i></div></div>' +
+        '<div><span class="lb">' + E(t('bannerColor')) + '</span><div class="sh" style="margin-top:-4px">' + E(t('bannerTop')) + '</div><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div><div class="sh">' + E(t('bannerBottom')) + '</div><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
       let newAv = AV[me.u] || '';
-      let newBg = LK[me.u] || '';
-      B.querySelector('#avbtn').onclick = () => {
+      B.querySelectorAll('[data-upload="avatar"]').forEach(el => el.onclick = () => {
         const inp = document.createElement('input');
         inp.type = 'file';
         inp.accept = 'image/*';
@@ -1808,26 +1783,11 @@ async function settings(pg) {
           const f = inp.files[0];
           if (!f) return;
           const r = new FileReader();
-          r.onload = () => { newAv = r.result; };
+          r.onload = () => { newAv = r.result; toast(t('saved')); };
           r.readAsDataURL(f);
         };
         inp.click();
-      };
-      B.querySelector('#avdel').onclick = () => { newAv = ''; };
-      B.querySelector('#bgbtn').onclick = () => {
-        const inp = document.createElement('input');
-        inp.type = 'file';
-        inp.accept = 'image/*';
-        inp.onchange = () => {
-          const f = inp.files[0];
-          if (!f) return;
-          const r = new FileReader();
-          r.onload = () => { newBg = r.result; };
-          r.readAsDataURL(f);
-        };
-        inp.click();
-      };
-      B.querySelector('#bgdel').onclick = () => { newBg = ''; };
+      });
       B.querySelector('#sv').onclick = async e => {
         const btn = e.currentTarget;
         const dn = B.querySelector('#an').value.trim();
@@ -1852,8 +1812,6 @@ async function settings(pg) {
           await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1] });
           if (newAv) await db.ref('userAvatars/' + u).set(newAv);
           else await db.ref('userAvatars/' + u).remove();
-          if (newBg) await db.ref('userLinks/' + u).set(newBg);
-          else await db.ref('userLinks/' + u).remove();
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
             try { const l = JSON.parse(localStorage.getItem('mg_last') || 'null'); if (l && l.u === me.u) localStorage.setItem('mg_last', JSON.stringify({ dn, u })); } catch (x) {}
             sessionStorage.setItem('mg_auto', JSON.stringify({ dn, u }));
@@ -2147,7 +2105,6 @@ $('kbtn').onclick = () => {
   lerr('');
 };
 
-// КНОПКА "+" и МЕНЮ СОЗДАНИЯ
 (() => {
   const b = document.createElement('button');
   b.className = 'ib';
@@ -2215,7 +2172,6 @@ function watchG(p) {
   });
 }
 
-// СОЗДАНИЕ ГРУППЫ/КАНАЛА
 async function newGroup(type) {
   const myGroups = Object.keys(GR).filter(g => GR[g].owner === me.u);
   const limit = (badges[me.u] === 'checked' || badges[me.u] === 'admin' || me.u === 'admin11') ? 5 : 1;
@@ -2392,11 +2348,11 @@ function editG(g) {
     '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="Title">' +
     '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="Description">' + esc(G.bio || '') + '</textarea>' +
     '<div><span class="lb">' + E(t('groupAvatar')) + '</span>' +
-      '<div class="row"><button class="b g" id="cbtn" style="flex:0 0 auto">📁 ' + E(t('uploadImage')) + '</button><button class="b g" id="cdel" style="flex:0 0 auto">🗑 ' + E(t('removeImage')) + '</button></div>' +
+      '<div class="row"><button class="b g" id="cbtn" style="flex:0 0 auto">📁</button><button class="b g" id="cdel" style="flex:0 0 auto">🗑</button></div>' +
       '<img class="grp-avatar-preview" id="cprev" src="' + (curAvatar && IMG.test(curAvatar) ? esc(curAvatar) : '') + '" style="' + (curAvatar && IMG.test(curAvatar) ? '' : 'display:none') + '">' +
     '</div>' +
     '<div><span class="lb">' + E(t('groupBackground')) + '</span>' +
-      '<div class="row"><button class="b g" id="dbtn" style="flex:0 0 auto">📁 ' + E(t('uploadImage')) + '</button><button class="b g" id="ddel" style="flex:0 0 auto">🗑 ' + E(t('removeImage')) + '</button></div>' +
+      '<div class="row"><button class="b g" id="dbtn" style="flex:0 0 auto">📁</button><button class="b g" id="ddel" style="flex:0 0 auto">🗑</button></div>' +
       '<img class="grp-bg-preview" id="dprev" src="' + (curBg && IMG.test(curBg) ? esc(curBg) : '') + '" style="' + (curBg && IMG.test(curBg) ? '' : 'display:none') + '">' +
     '</div>' +
     '<div><span class="lb">' + E(t('groupColor')) + '</span>' +
