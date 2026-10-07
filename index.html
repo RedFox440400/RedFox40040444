@@ -12,24 +12,24 @@
 * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; -webkit-tap-highlight-color: transparent; }
 ::-webkit-scrollbar { display: none; }
 
-:root { 
-    --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #555; --oth: #1d1d1d; 
-    --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d; 
-    --fb: #555; --side: #0b0b0b; --h1: #ffffff0d; --h2: #ffffff17; --av: #3a3a3a; --avt: #fff; 
-    --day: #1c1c1c; --sn: #bbb; --rp: #aaa; --rpl: #888; --rpb: #ddd; --fl: #5a5a5a; --ctx: #202020; 
-    --ovl: #000000b0; --r: 18px; --rt: 4px; --check-on: #5a5a5a; --gl: rgba(20, 20, 20, .55); 
-    --gl2: rgba(20, 20, 20, .85); --gb: rgba(255, 255, 255, .08); --soft: rgba(255, 255, 255, .04); 
-    --hv2: rgba(255, 255, 255, .08); --hv3: rgba(255, 255, 255, .12); --blur: 22px; --sideblur: 22px; 
-    --send-bg: #e6e6e6; --send-fg: #111;
+:root {
+  --bg: #000; --p: #161616; --l: #262626; --t: #ececec; --m: #8a8a8a; --mine: #555; --oth: #1d1d1d;
+  --d: #e5534b; --btn: #e6e6e6; --btnt: #111; --g: #2a2a2a; --hv: #ffffff14; --fld: #0d0d0d;
+  --fb: #555; --side: #0b0b0b; --h1: #ffffff0d; --h2: #ffffff17; --av: #3a3a3a; --avt: #fff;
+  --day: #1c1c1c; --sn: #bbb; --rp: #aaa; --rpl: #888; --rpb: #ddd; --fl: #5a5a5a; --ctx: #202020;
+  --ovl: #000000b0; --r: 18px; --rt: 4px; --check-on: #5a5a5a; --gl: rgba(20,20,20,.55);
+  --gl2: rgba(20,20,20,.85); --gb: rgba(255,255,255,.08); --soft: rgba(255,255,255,.04);
+  --hv2: rgba(255,255,255,.08); --hv3: rgba(255,255,255,.12); --blur: 22px; --sideblur: 22px;
+  --send-bg: #e6e6e6; --send-fg: #111;
 }
-:root[data-theme=light] { 
-    --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #23272d; --oth: #fff; 
-    --d: #d9453d; --btn: #1c1e22; --btnt: #fff; --g: #eceef1; --hv: #0000000d; --fld: #f6f7f8; 
-    --fb: #9aa0a8; --side: #fff; --h1: #0000000a; --h2: #00000012; --av: #e3e6ea; --avt: #4a5058; 
-    --day: #e4e6ea; --sn: #555; --rp: #777; --rpl: #999; --rpb: #333; --fl: #d5d8dd; --ctx: #fff; 
-    --ovl: #1a1c1f66; --check-on: #8b9099; --gl: rgba(255, 255, 255, .65); --gl2: rgba(255, 255, 255, .9); 
-    --gb: rgba(0, 0, 0, .06); --soft: rgba(0, 0, 0, .02); --hv2: rgba(0, 0, 0, .05); --hv3: rgba(0, 0, 0, .08); 
-    --send-bg: #1c1e22; --send-fg: #fff;
+:root[data-theme=light] {
+  --bg: #f1f2f4; --p: #fff; --l: #e3e5e8; --t: #1a1c1f; --m: #7b8088; --mine: #23272d; --oth: #fff;
+  --d: #d9453d; --btn: #1c1e22; --btnt: #fff; --g: #eceef1; --hv: #0000000d; --fld: #f6f7f8;
+  --fb: #9aa0a8; --side: #fff; --h1: #0000000a; --h2: #00000012; --av: #e3e6ea; --avt: #4a5058;
+  --day: #e4e6ea; --sn: #555; --rp: #777; --rpl: #999; --rpb: #333; --fl: #d5d8dd; --ctx: #fff;
+  --ovl: #1a1c1f66; --check-on: #8b9099; --gl: rgba(255,255,255,.65); --gl2: rgba(255,255,255,.9);
+  --gb: rgba(0,0,0,.06); --soft: rgba(0,0,0,.02); --hv2: rgba(0,0,0,.05); --hv3: rgba(0,0,0,.08);
+  --send-bg: #1c1e22; --send-fg: #fff;
 }
 :root[data-color-theme="redfox"] { --mine: #e5534b; --btnt: #fff; }
 :root[data-color-theme="ocean"] { --mine: #2b7fff; --btnt: #fff; --av: #2b7fff; }
@@ -129,12 +129,11 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 #rbar { border-radius: 16px; padding: 7px 6px 7px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--sn); animation: down .15s ease; }
 #rbar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pill { display: flex; align-items: flex-end; gap: 6px; border-radius: 26px; padding: 6px 6px 6px 18px; min-height: 52px; box-shadow: 0 4px 18px #00000014; }
-.pill textarea { flex: 1; background: none; border: 0; min-width: 0; resize: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; }
 #send { background: var(--send-bg); color: var(--send-fg); }
 #send:hover { opacity: .85; }
 #attach { background: none; color: var(--m); }
 #attach:hover { background: var(--hv); color: var(--t); }
-.ctx { position: fixed; z-index: 9000; min-width: 190px; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); animation: pop .14s ease; max-height: 60vh; overflow-y: auto; }
+.ctx { position: fixed; z-index: 9000; min-width: 190px; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.4); animation: pop .14s ease; max-height: 60vh; overflow-y: auto; }
 .ctx div { padding: 11px 16px; cursor: pointer; font-size: 14px; transition: background .12s; }
 .ctx div:hover { background: var(--hv2); }
 .ctx .dd { color: var(--d); }
@@ -177,7 +176,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .stats { display: flex; justify-content: center; gap: 40px; text-align: center; }
 .stats b { display: block; font-size: 18px; }
 .stats span { font-size: 12px; color: var(--m); }
-.toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); color: var(--t); padding: 10px 18px; border-radius: 12px; font-size: 14px; z-index: 99999; animation: toast 2.2s ease forwards; box-shadow: 0 8px 32px rgba(0, 0, 0, .25); }
+.toast { position: fixed; bottom: 84px; left: 50%; transform: translateX(-50%); color: var(--t); padding: 10px 18px; border-radius: 12px; font-size: 14px; z-index: 99999; animation: toast 2.2s ease forwards; box-shadow: 0 8px 32px rgba(0,0,0,.25); }
 #scrim { display: none; }
 .bt { margin-top: 8px; padding: 9px 16px; border-radius: var(--rt); text-align: center; font-weight: 600; cursor: pointer; transition: opacity .15s; background: var(--h2); }
 .bt:hover { opacity: .75; }
@@ -196,7 +195,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .dd { position: relative; }
 .ddb { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; text-align: left; color: var(--t); white-space: nowrap; }
 .ddb svg { width: 16px; height: 16px; color: var(--m); flex-shrink: 0; }
-.ddl { position: fixed; background: var(--ctx); border: 1px solid var(--gb); border-radius: 14px; overflow-y: auto; z-index: 99990; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); animation: pop .14s ease; }
+.ddl { position: fixed; background: var(--ctx); border: 1px solid var(--gb); border-radius: 14px; overflow-y: auto; z-index: 99990; box-shadow: 0 10px 30px rgba(0,0,0,.4); animation: pop .14s ease; }
 .ddl div { padding: 11px 15px; cursor: pointer; white-space: nowrap; color: var(--t); }
 .ddl div:hover { background: var(--hv2); }
 .ddl div.on { background: var(--hv3); }
@@ -204,8 +203,6 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .sw i { width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 13px; color: var(--m); }
 .sw i.au { background: var(--g); }
 .sw i.on { outline: 2px solid var(--t); outline-offset: 2px; }
-.sw i.upload { background: var(--g); border: 2px dashed var(--m); position: relative; }
-.sw i.upload::after { content: '+'; font-size: 18px; color: var(--m); }
 .kbox { font: 600 32px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 4px; text-align: center; padding: 18px; border-radius: 16px; user-select: all; word-break: break-all; }
 #fN { display: flex; flex-direction: column; gap: 14px; }
 img.em { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -.28em; margin: 0 .03em; object-fit: contain; -webkit-user-drag: none; }
@@ -221,8 +218,8 @@ input[type=range]::-moz-range-track { height: 6px; background: var(--hv3); borde
 input[type=range]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--btn); border: 0; cursor: pointer; }
 input.sw2 { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border-radius: 7px; background: transparent; border: 1.5px solid var(--fb); cursor: pointer; position: relative; flex-shrink: 0; margin: 0; transition: background .15s, border-color .15s; }
 input.sw2:checked { background: var(--check-on); border-color: var(--check-on); }
-input.sw2::after { content: ''; position: absolute; left: 50%; top: 46%; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: translate(-50%, -50%) rotate(45deg) scale(0); transition: transform .15s; }
-input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(1); }
+input.sw2::after { content: ''; position: absolute; left: 50%; top: 46%; width: 5px; height: 10px; border: solid #fff; border-width: 0 2px 2px 0; transform: translate(-50%,-50%) rotate(45deg) scale(0); transition: transform .15s; }
+input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1); }
 #login .row { display: flex; gap: 8px; margin-top: 2px; }
 #login .row #kbtn { flex: 0 0 auto; padding: 10px 12px; font-size: 12px; }
 #login .row #lbtn { flex: 1; }
@@ -235,7 +232,7 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 @keyframes down { from { opacity: 0; transform: translateY(-6px); } }
 @keyframes pop { from { opacity: 0; transform: scale(.96) translateY(6px); } }
 @keyframes fade { from { opacity: 0; } }
-@keyframes toast { 0% { opacity: 0; transform: translate(-50%, 8px); } 10%, 80% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; } }
+@keyframes toast { 0% { opacity: 0; transform: translate(-50%,8px); } 10%,80% { opacity: 1; transform: translate(-50%,0); } 100% { opacity: 0; } }
 @media (max-width: 768px) {
   #side { position: fixed; inset: 0 auto 0 0; width: 290px; z-index: 1000; transform: translateX(-100%); background: var(--gl); backdrop-filter: blur(var(--sideblur)) saturate(180%); -webkit-backdrop-filter: blur(var(--sideblur)) saturate(180%); border-right: 1px solid var(--gb); }
   #side.show { transform: none; }
@@ -247,17 +244,11 @@ input.sw2:checked::after { transform: translate(-50%, -50%) rotate(45deg) scale(
 .banned-link { color: #2b7fff; cursor: pointer; text-decoration: underline; }
 .banned-link:hover { opacity: .8; }
 .m.banned-msg { opacity: .6; font-style: italic; }
-.grp-avatar-preview { width: 60px; height: 60px; border-radius: 50%; background: var(--av); margin: 0 auto; object-fit: cover; display: block; }
-.grp-bg-preview { width: 100%; height: 80px; border-radius: 12px; margin-top: 6px; object-fit: cover; display: block; }
 #inp { flex: 1; background: none; border: 0; min-width: 0; outline: none; height: 38px; max-height: 120px; line-height: 22px; padding: 8px 0; overflow-y: auto; word-break: break-word; white-space: pre-wrap; }
 #inp:empty:before { content: attr(data-p); color: var(--m); pointer-events: none; }
 .img-modal { position: fixed; inset: 0; background: #000000e0; display: flex; align-items: center; justify-content: center; z-index: 100000; cursor: zoom-out; }
 .img-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
 .img-modal .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; }
-:root[data-theme="dark-blue"] { --bg: #0a0e1a; --p: #121826; --l: #1e2636; --t: #e0e6f0; --m: #7a869a; --mine: #2b5ea7; --oth: #1a2233; --d: #e5534b; --btn: #e0e6f0; --btnt: #0a0e1a; --g: #1e2636; --fld: #0a0e1a; --side: #0a0e1a; --ctx: #1a2233; --gl: rgba(10, 14, 26, .7); --gl2: rgba(10, 14, 26, .9); }
-:root[data-theme="dark-green"] { --bg: #0a1a0e; --p: #122616; --l: #1e361e; --t: #e0f0e0; --m: #7a9a7a; --mine: #2e7d32; --oth: #1a331a; --d: #e5534b; --btn: #e0f0e0; --btnt: #0a1a0e; --g: #1e361e; --fld: #0a1a0e; --side: #0a1a0e; --ctx: #1a331a; --gl: rgba(10, 26, 14, .7); --gl2: rgba(10, 26, 14, .9); }
-:root[data-theme="dark-purple"] { --bg: #140a1a; --p: #1e1226; --l: #2e1e36; --t: #f0e0f0; --m: #9a7a9a; --mine: #7b1fa2; --oth: #2a1a33; --d: #e5534b; --btn: #f0e0f0; --btnt: #140a1a; --g: #2e1e36; --fld: #140a1a; --side: #140a1a; --ctx: #2a1a33; --gl: rgba(20, 10, 26, .7); --gl2: rgba(20, 10, 26, .9); }
-:root[data-theme="light-pink"] { --bg: #fdf2f8; --p: #fff; --l: #fce7f3; --t: #831843; --m: #be185d; --mine: #ec4899; --oth: #fff; --d: #e5534b; --btn: #831843; --btnt: #fff; --g: #fce7f3; --fld: #fdf2f8; --side: #fff; --ctx: #fff; --gl: rgba(255, 255, 255, .7); --gl2: rgba(255, 255, 255, .9); }
 </style>
 </head>
 <body>
@@ -405,7 +396,7 @@ const L = {
     autoDel: 'Auto-delete messages', off: 'Off', d1: '1 day', w1: '1 week', m1: '1 month', unMin: 'min',
     unHour: 'hours', unDay: 'days', autoDelS: 'Applies to messages sent from now on in private chats.',
     language: 'Language', privacy: 'Privacy', noPin: 'Prevent pinning my messages', noBlocked: 'No blocked users',
-    save: 'Save', saved: 'Saved', byKey: 'Sign in with key', back: 'Back', keyL: 'Login key',
+    save: 'Save', saved: 'Saved messages', byKey: 'Sign in with key', back: 'Back', keyL: 'Login key',
     keyP: 'Enter key', e7: 'Invalid key', e8: 'This username is taken', account: 'Account',
     nameL: 'Name', userL: 'Username', userHint: 'Changing the username moves your chats to the new one.',
     color: 'Avatar color', colorAuto: 'A', loginKey: 'Login key', keyOn: 'Set', keyNone: 'Not set',
@@ -448,22 +439,14 @@ const L = {
     accountUnavailableInfo: 'This account is banned. All messages are inactive.',
     matWarning: 'Profanity and insults are prohibited in the global chat. You have been muted for {n}.',
     matMuted: 'You have been muted for {n}', seconds: 'seconds', minute: 'minute', minutes: 'minutes',
-    zeroSeconds: '0 seconds', saved: 'Saved messages', savedShort: 'S',
-    groupFull: 'Group is full ({n} members max)', pwdTitle: 'Password',
-    pwdCreate: 'Create a password for this account', pwdEnter: 'Enter your password',
+    zeroSeconds: '0 seconds', savedShort: 'S',
+    groupFull: 'Group is full ({n} members max)',
     pwdMin: 'Password: min. 6 characters', pwdWrong: 'Wrong password',
-    sysAdded: '{by} added you to the group «{title}»',
-    sysAddedOther: '{by} added {who} to the group «{title}»',
-    sysJoined: 'You joined the group «{title}»',
-    sysJoinedOther: '{who} joined the group «{title}»',
-    sysCreated: '{by} created the group «{title}»', sysLeft: '{who} left the group',
-    sysKicked: '{by} removed {who} from the group',
-    createGroup: 'Create group', createChannel: 'Create channel', selectType: 'Select type',
-    channels: 'Channels', ownerCannotLeave: 'Owner cannot leave. Transfer ownership first.',
+    createGroup: 'Create group', createChannel: 'Create channel',
     transferOwnership: 'Transfer ownership', selectNewOwner: 'Select new owner',
-    ownershipTransferred: 'Ownership transferred', leaveAfterTransfer: 'Leave group',
+    ownershipTransferred: 'Ownership transferred',
     groupAvatar: 'Group avatar', groupBackground: 'Group background', groupColor: 'Group color',
-    uploadImage: 'Upload image', removeImage: 'Remove image', editGroup: 'Edit group',
+    editGroup: 'Edit group',
     deleteGroup: 'Delete group', deleteGroupQ: 'Delete group?',
     deleteGroupP: 'The group and all its history will be permanently deleted for everyone.',
     groupDeleted: 'Group deleted', inviteLink: 'Invite link', eventLog: 'Event log',
@@ -472,20 +455,15 @@ const L = {
     enterTitle: 'Enter a title', nameRules: 'Name: a-z, 0-9, _ - !', inviteCopy: 'Copy',
     invitation: 'Invitation', invalidLink: 'Invalid link', groupNotFound: 'Group not found',
     youWereRemoved: 'You were removed from', onlyAdminsCanPost: 'Only admins can post',
-    youAreNotMember: 'You are not a member', removeMember: 'Remove', setRole: 'Set role',
-    changeRole: 'Change role', kickMember: 'Kick member', roleOwner: 'Owner', roleAdmin: 'Admin',
-    roleMod: 'Moderator', roleMember: 'Member', typeGroup: 'Group', typeChannel: 'Channel',
+    youAreNotMember: 'You are not a member', setRole: 'Set role',
+    kickMember: 'Kick member',
     forward: 'Forward', deleteForAll: 'Delete for all', deleteForAllQ: 'Delete message for everyone?',
     deleteForAllP: 'It will disappear for all participants.', limitReached: 'You can create only {n} group/channel',
     limitReachedPlural: 'You can create only {n} groups/channels',
-    myChannels: 'My channels', noChannels: 'No channels', avatarUrl: 'Avatar URL',
-    orUpload: 'or upload', backgroundUrl: 'Background URL',
+    myChannels: 'My channels',
     attach: 'Attach photo', photoOnlyAdmin: 'Only admins can send photos to global chat',
     photoNotAllowed: 'Photos are not allowed in this chat', uploadFailed: 'Upload failed',
-    loading: 'Loading...', close: 'Close', themeDark: 'Dark', themeLight: 'Light', themeDarkBlue: 'Dark Blue',
-    themeDarkGreen: 'Dark Green', themeDarkPurple: 'Dark Purple', themeLightPink: 'Light Pink',
-    chooseColor: 'Choose color', chooseImage: 'Choose image', upload: 'Upload', color: 'Color', image: 'Image',
-    selectType: 'Select type', uploadAvatar: 'Upload avatar', removeAvatar: 'Remove avatar',
+    uploadAvatar: 'Upload avatar', removeAvatar: 'Remove avatar',
     uploadBanner: 'Upload banner', removeBanner: 'Remove banner'
   },
   ru: {
@@ -525,7 +503,7 @@ const L = {
     d1: '1 день', w1: '1 неделя', m1: '1 месяц', unMin: 'мин', unHour: 'часов', unDay: 'дней',
     autoDelS: 'Действует на сообщения, отправленные после включения, в личных чатах.',
     language: 'Язык', privacy: 'Приватность', noPin: 'Запретить закреплять мои сообщения',
-    noBlocked: 'Нет заблокированных', save: 'Сохранить', saved: 'Сохранено', byKey: 'Войти по ключу',
+    noBlocked: 'Нет заблокированных', save: 'Сохранить', saved: 'Избранное', byKey: 'Войти по ключу',
     back: 'Назад', keyL: 'Ключ входа', keyP: 'Введите ключ', e7: 'Неверный ключ',
     e8: 'Это имя пользователя занято', account: 'Аккаунт', nameL: 'Имя', userL: 'Имя пользователя',
     userHint: 'При смене имени пользователя ваши чаты переносятся на новое.', color: 'Цвет аватарки',
@@ -571,22 +549,14 @@ const L = {
     accountUnavailableInfo: 'Этот аккаунт забанен. Все сообщения неактивны.',
     matWarning: 'В общем чате запрещены оскорбления и нецензурная лексика. Вы заглушены на {n}.',
     matMuted: 'Вы заглушены на {n}', seconds: 'секунд', minute: 'минуту', minutes: 'минут',
-    zeroSeconds: '0 секунд', saved: 'Сохранённые сообщения', savedShort: 'И',
-    groupFull: 'Группа заполнена (макс. {n} участников)', pwdTitle: 'Пароль',
-    pwdCreate: 'Придумайте пароль для этого аккаунта', pwdEnter: 'Введите пароль',
+    zeroSeconds: '0 секунд', savedShort: 'И',
+    groupFull: 'Группа заполнена (макс. {n} участников)',
     pwdMin: 'Пароль: минимум 6 символов', pwdWrong: 'Неверный пароль',
-    sysAdded: '{by} добавил(а) вас в группу «{title}»',
-    sysAddedOther: '{by} добавил(а) {who} в группу «{title}»',
-    sysJoined: 'Вы присоединились к группе «{title}»',
-    sysJoinedOther: '{who} присоединился(ась) к группе «{title}»',
-    sysCreated: '{by} создал(а) группу «{title}»', sysLeft: '{who} покинул(а) группу',
-    sysKicked: '{by} удалил(а) {who} из группы',
-    createGroup: 'Создать группу', createChannel: 'Создать канал', selectType: 'Выберите тип',
-    channels: 'Каналы', ownerCannotLeave: 'Владелец не может выйти. Сначала передайте права.',
+    createGroup: 'Создать группу', createChannel: 'Создать канал',
     transferOwnership: 'Передать права', selectNewOwner: 'Выберите нового владельца',
-    ownershipTransferred: 'Права переданы', leaveAfterTransfer: 'Выйти из группы',
+    ownershipTransferred: 'Права переданы',
     groupAvatar: 'Аватарка группы', groupBackground: 'Фон группы', groupColor: 'Цвет группы',
-    uploadImage: 'Загрузить картинку', removeImage: 'Удалить картинку', editGroup: 'Редактировать группу',
+    editGroup: 'Редактировать группу',
     deleteGroup: 'Удалить группу', deleteGroupQ: 'Удалить группу?',
     deleteGroupP: 'Группа и вся её история будут безвозвратно удалены для всех.',
     groupDeleted: 'Группа удалена', inviteLink: 'Ссылка-приглашение', eventLog: 'Журнал событий',
@@ -595,20 +565,15 @@ const L = {
     enterTitle: 'Введите название', nameRules: 'Имя: a-z, 0-9, _ - !', inviteCopy: 'Копировать',
     invitation: 'Приглашение', invalidLink: 'Неверная ссылка', groupNotFound: 'Группа не найдена',
     youWereRemoved: 'Вас удалили из', onlyAdminsCanPost: 'Только админы могут писать',
-    youAreNotMember: 'Вы не участник', removeMember: 'Удалить', setRole: 'Назначить роль',
-    changeRole: 'Изменить роль', kickMember: 'Исключить', roleOwner: 'Владелец', roleAdmin: 'Админ',
-    roleMod: 'Модератор', roleMember: 'Участник', typeGroup: 'Группа', typeChannel: 'Канал',
+    youAreNotMember: 'Вы не участник', setRole: 'Назначить роль',
+    kickMember: 'Исключить',
     forward: 'Переслать', deleteForAll: 'Удалить для всех', deleteForAllQ: 'Удалить сообщение для всех?',
     deleteForAllP: 'Оно исчезнет у всех участников.', limitReached: 'Вы можете создать только {n} группу/канал',
     limitReachedPlural: 'Вы можете создать только {n} групп/каналов',
-    myChannels: 'Мои каналы', noChannels: 'Нет каналов', avatarUrl: 'Ссылка на аватарку',
-    orUpload: 'или загрузите', backgroundUrl: 'Ссылка на фон',
+    myChannels: 'Мои каналы',
     attach: 'Прикрепить фото', photoOnlyAdmin: 'Только админы могут отправлять фото в общий чат',
     photoNotAllowed: 'Фото запрещены в этом чате', uploadFailed: 'Не удалось загрузить',
-    loading: 'Загрузка...', close: 'Закрыть', themeDark: 'Тёмная', themeLight: 'Светлая', themeDarkBlue: 'Тёмно-синяя',
-    themeDarkGreen: 'Тёмно-зелёная', themeDarkPurple: 'Тёмно-фиолетовая', themeLightPink: 'Светло-розовая',
-    chooseColor: 'Выбрать цвет', chooseImage: 'Выбрать картинку', upload: 'Загрузить', color: 'Цвет', image: 'Картинка',
-    selectType: 'Выберите тип', uploadAvatar: 'Загрузить аватар', removeAvatar: 'Удалить аватар',
+    uploadAvatar: 'Загрузить аватар', removeAvatar: 'Удалить аватар',
     uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
   }
 };
@@ -648,7 +613,6 @@ const blurOn = () => localStorage.getItem('mg_blur') !== '0';
 const hdrBlur = () => +(localStorage.getItem('mg_hdrblur') || 100);
 const sideBlur = () => +(localStorage.getItem('mg_sideblur') || 100);
 const colorTheme = () => localStorage.getItem('mg_color_theme') || 'monochrome';
-const uiTheme = () => localStorage.getItem('mg_ui_theme') || 'dark';
 
 function applyBlur() {
   const r = document.documentElement;
@@ -659,15 +623,12 @@ function applyBlur() {
 }
 function applyRadius() {
   const v = radius();
-  const r = Math.round(v * 18 / 100);
-  const t2 = Math.round(v * 4 / 100);
-  document.documentElement.style.setProperty('--r', r + 'px');
-  document.documentElement.style.setProperty('--rt', t2 + 'px');
+  document.documentElement.style.setProperty('--r', Math.round(v * 18 / 100) + 'px');
+  document.documentElement.style.setProperty('--rt', Math.round(v * 4 / 100) + 'px');
 }
 function applyTheme() {
   document.documentElement.dataset.theme = theme();
   document.documentElement.dataset.colorTheme = colorTheme();
-  document.documentElement.dataset.uiTheme = uiTheme();
   const c = document.querySelector('.h-captcha');
   if (c) c.dataset.theme = 'dark';
 }
@@ -732,23 +693,11 @@ function modal(h, cls) {
   const o = document.createElement('div');
   o.className = 'ov';
   o.innerHTML = '<div class="md ' + (cls || '') + '">' + h + '</div>';
-  if (!/\b(st|pm)\b/.test(cls || '')) {
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'ib close-btn';
-    closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-    closeBtn.onclick = () => o.remove();
-    o.querySelector('.md').appendChild(closeBtn);
-  }
   document.body.appendChild(o);
+  o.onclick = e => { if (e.target === o) o.remove(); };
   return o;
 }
-  if (!/\b(st|pm)\b/.test(cls || '')) {
-    const closeBtn = document.createElement('button');
-    closeBtn.className = 'ib close-btn';
-    closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-    closeBtn.onclick = () => o.remove();
-    o.querySelector('.md').appendChild(closeBtn);
-  }
+function ask(ti, p, ok, danger) {
   return new Promise(r => {
     const o = modal('<h3>' + ti + '</h3><p>' + p + '</p><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b ' + (danger ? 'd' : '') + '" id="y">' + ok + '</button></div>');
     o.querySelector('#n').onclick = () => { o.remove(); r(false); };
@@ -787,7 +736,6 @@ const banStyle = u => {
   const [a, b] = bannerColors(u);
   return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
 };
-const banStyle = u => { const [a, b] = bannerColors(u); return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))'; };
 
 const avatar = (u, dot, big) => {
   if (banOf(u)) return '<div class="av' + (big ? ' big' : '') + '" style="' + (big ? 'width:92px;height:92px;font-size:38px' : '') + ';background:#555;color:#aaa">?</div>';
@@ -1095,7 +1043,7 @@ function hdr() {
     : chat === me.u
       ? E(t('saved'))
       : isG(chat)
-        ? (GR[gid_(chat)] ? TN[GR[gid_(chat)].type] + ' · ' + Object.keys(MB[gid_(chat)] || {}).length + '/' + groupLimit(gid_(chat)) + ' ' + (lang()==='ru'?'участников':'members') : '')
+        ? (GR[gid_(chat)] ? TN[GR[gid_(chat)].type] + ' · ' + Object.keys(MB[gid_(chat)] || {}).length + '/' + groupLimit(gid_(chat)) + ' ' + (lang() === 'ru' ? 'участников' : 'members') : '')
         : typing
           ? E(t('typing'))
           : online.has(chat)
@@ -1395,12 +1343,7 @@ $('inp').oninput = () => {
   }
   const html = i.innerHTML;
   const replaced = html.replace(EMO, m => { const c = [...m].map(x => x.codePointAt(0).toString(16).padStart(4, '0')).join('-'); return '<img class="em" alt="' + m + '" draggable="false" data-c="' + c + '" data-n="0" src="' + eurl(c, 0) + '">'; });
-  if (replaced !== html) {
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    const start = range.startOffset;
-    i.innerHTML = replaced;
-  }
+  if (replaced !== html) { i.innerHTML = replaced; }
   fit();
   if (chat === 'global' || !me || isG(chat) || chat === me.u) return;
   if (Date.now() - lastT > 2000) { lastT = Date.now(); db.ref('typing/' + room(chat) + '/' + me.u).set(Date.now()); }
@@ -1464,9 +1407,6 @@ async function profile(u) {
   if (isG(u)) return groupInfo(gid_(u));
   const self = u === me.u;
   const x = (await db.ref('users/' + u).once('value')).val() || {};
-  const banned = banOf(u);
-  if (banned && !self) {
-  }
   const [fs, fg] = await Promise.all([db.ref('followers/' + u).once('value'), db.ref('following/' + u).once('value')]);
   let cnt = fs.numChildren();
   let isF = fs.hasChild(me.u);
@@ -1523,6 +1463,7 @@ async function profile(u) {
     'pm'
   );
   o.querySelector('#c').onclick = () => o.remove();
+  o.querySelectorAll('[data-g]').forEach(el => el.onclick = () => { o.remove(); open('g:' + el.dataset.g, true); });
   if (self) return;
   const fb = o.querySelector('#fb');
   const paint = () => { fb.innerHTML = E(isF ? t('unfollow') : t('follow')); fb.className = 'b' + (isF ? ' g' : ''); o.querySelector('#fc').textContent = cnt; };
@@ -1537,7 +1478,6 @@ async function profile(u) {
     fb.disabled = false;
     paint();
   };
-  o.querySelectorAll('[data-g]').forEach(el => el.onclick = () => { o.remove(); open('g:' + el.dataset.g, true); });
 }
 $('menm').onclick = $('meav').onclick = () => profile(me.u);
 
@@ -1584,11 +1524,7 @@ async function keyDialog(done) {
       o.querySelector('#cp').onclick = () => navigator.clipboard && navigator.clipboard.writeText(k).then(() => toast(t('copied')));
       o.querySelector('#dn2').onclick = () => o.remove();
       done && done();
-    } catch (e) {
-      console.error(e);
-      toast(t('failed'));
-      b.disabled = false;
-    }
+    } catch (e) { console.error(e); toast(t('failed')); b.disabled = false; }
   };
 }
 
@@ -1688,23 +1624,12 @@ document.addEventListener('click', e => {
   placeDD();
 });
 
-async function promptKey() {
+function promptKey() {
   return new Promise(r => {
     const o = modal('<h3>' + E(t('needKey')) + '</h3><input class="fld" id="pk" maxlength="5" autocomplete="off"><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('done')) + '</button></div>');
     const i = o.querySelector('#pk');
     i.focus();
     const ok = () => { o.remove(); r(i.value.trim()); };
-    o.querySelector('#y').onclick = ok;
-    i.onkeydown = e => { if (e.key === 'Enter') ok(); };
-    o.querySelector('#n').onclick = () => { o.remove(); r(null); };
-  });
-}
-async function promptPass() {
-  return new Promise(r => {
-    const o = modal('<h3>' + E(t('needPass')) + '</h3><input class="fld" id="pp" type="password" maxlength="50"><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('done')) + '</button></div>');
-    const i = o.querySelector('#pp');
-    i.focus();
-    const ok = () => { o.remove(); r(i.value); };
     o.querySelector('#y').onclick = ok;
     i.onkeydown = e => { if (e.key === 'Enter') ok(); };
     o.querySelector('#n').onclick = () => { o.remove(); r(null); };
@@ -1734,11 +1659,12 @@ async function settings(pg) {
     const [a, b] = pbg;
     const n = ((B.querySelector('#an') || {}).value || me.n).trim();
     const e = B.querySelector('#pv');
-        if (e) {
+    if (e) {
       const bg = newBan ? "center/cover url('" + newBan + "')" : 'radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
       e.style.cssText = 'background:' + bg + ';border-radius:20px;padding:22px;display:flex;justify-content:center';
       e.innerHTML = '<div class="av big" style="' + (newAv ? "background:center/cover url('" + newAv + "')" : 'background:hsl(' + h + ' 42% 38%);color:#fff') + '">' + (newAv ? '' : esc(n.charAt(0).toUpperCase())) + '</div>';
     }
+  };
   function show(p) {
     closeDD();
     B.scrollTop = 0;
@@ -1758,8 +1684,6 @@ async function settings(pg) {
         '<div style="display:flex;justify-content:center" id="pv"></div>' +
         '<div class="row"><button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button><button class="b g" id="dav">' + E(t('removeAvatar')) + '</button></div>' +
         '<div class="row"><button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button><button class="b g" id="dbn">' + E(t('removeBanner')) + '</button></div>' +
-        '<div class="row"><button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button><button class="b g" id="dav">' + E(t('removeAvatar')) + '</button></div>' +
-        '<div class="row"><button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button><button class="b g" id="dbn">' + E(t('removeBanner')) + '</button></div>' +
         '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
         '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(X.lastName || '') + '"></div>' +
         '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
@@ -1774,7 +1698,6 @@ async function settings(pg) {
         '<div><span class="lb">' + E(t('bannerColor')) + '</span><div class="sh" style="margin-top:-4px">' + E(t('bannerTop')) + '</div><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div><div class="sh">' + E(t('bannerBottom')) + '</div><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
-      let newAv = AV[me.u] || '';
       B.querySelector('#uav').onclick = () => pickImage(256, d => { newAv = d; prev(); });
       B.querySelector('#dav').onclick = () => { newAv = ''; prev(); };
       B.querySelector('#ubn').onclick = () => pickImage(900, d => { newBan = d; prev(); });
@@ -1788,21 +1711,19 @@ async function settings(pg) {
         const bdv = { d: +B.querySelector('#bd').dataset.v, m: +B.querySelector('#bm').dataset.v, y: +B.querySelector('#by').dataset.v, vis: B.querySelector('#bv').dataset.v };
         if (!dn || dn.length > 20) return toast(t('e1'));
         if (!/^[a-z0-9_\-!]{1,9}$/.test(un)) return toast(t('e2'));
-        const now = new Date(), bd = new Date(bdv.y, bdv.m - 1, bdv.d);
-        let age = now.getFullYear() - bd.getFullYear();
-        if (now.getMonth() < bd.getMonth() || (now.getMonth() === bd.getMonth() && now.getDate() < bd.getDate())) age--;
+        const now = new Date(), bdt = new Date(bdv.y, bdv.m - 1, bdv.d);
+        let age = now.getFullYear() - bdt.getFullYear();
+        if (now.getMonth() < bdt.getMonth() || (now.getMonth() === bdt.getMonth() && now.getDate() < bdt.getDate())) age--;
         if (age < 14) return toast(t('birthdayMin'));
         btn.disabled = true;
         try {
           let u = me.u;
           if (un !== me.u) { if (await renameUser(me.u, un) === 'taken') { btn.disabled = false; return toast(t('e8')); } u = un; }
-          const up = { displayName: dn, lastName: ln, bio, birthday: bdv };
-          await db.ref('users/' + u).update(up);
-          if (pc === null) await db.ref('userColors/' + u).remove();
-          else await db.ref('userColors/' + u).set(pc);
+          await db.ref('users/' + u).update({ displayName: dn, lastName: ln, bio, birthday: bdv });
+          if (pc === null) await db.ref('userColors/' + u).remove(); else await db.ref('userColors/' + u).set(pc);
           await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1], img: newBan || null });
-          if (newAv) await db.ref('userAvatars/' + u).set(newAv);
-          else await db.ref('userAvatars/' + u).remove();
+          if (newAv) await db.ref('userAvatars/' + u).set(newAv); else await db.ref('userAvatars/' + u).remove();
+          if (u !== me.u) { db.ref('userAvatars/' + me.u).remove(); db.ref('userColors/' + me.u).remove(); db.ref('userBanners/' + me.u).remove(); }
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
             try { const l = JSON.parse(localStorage.getItem('mg_last') || 'null'); if (l && l.u === me.u) localStorage.setItem('mg_last', JSON.stringify({ dn, u })); } catch (x) {}
             sessionStorage.setItem('mg_auto', JSON.stringify({ dn, u }));
@@ -1813,7 +1734,7 @@ async function settings(pg) {
           X.lastName = ln;
           X.birthday = bdv;
           lastNames.set(me.u, ln);
-          toast(t('saved'));
+          toast(t('save'));
           show('main');
         } catch (x) { console.error(x); toast(t('failed')); btn.disabled = false; }
       };
@@ -1871,12 +1792,7 @@ async function settings(pg) {
       hd(t('appearance'), 1);
       B.innerHTML =
         '<div class="sh">' + E(t('theme')) + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + '</div>' +
-        '<div class="sh">Color Theme</div>' +
-        '<div class="grp">' +
-            ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => 
-                rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)
-            ).join('') +
-        '</div>' +
+        '<div class="sh">Color</div><div class="grp">' + ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)).join('') + '</div>' +
         '<div class="sh">' + E(t('scale')) + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
         '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('bl', t('blurUi'), blurOn()) + '</div>' +
         '<div class="sh">' + E(t('hdrBlur')) + '</div>' + dd('hb', BLO, String(hdrBlur())) +
@@ -1982,7 +1898,7 @@ async function panel() {
     closeDD();
     B.scrollTop = 0;
     hd(t('admin'));
-    B.innerHTML = '<button class="b d" id="cg">' + E(t('clearGlobal')) + '</button><input class="fld" id="uq" placeholder="' + E(t('searchU')) + '" autocomplete="off" style="margin-top:8px"><div class="grp" id="ul"></div>';
+    B.innerHTML = '<button class="b d" id="cg">' + E(t('clearGlobal')) + '</button><input class="fld" id="uq" placeholder="' + E(t('searchU')) + '" autocomplete="off"><div class="grp" id="ul"></div>';
     const draw = () => {
       const q = B.querySelector('#uq').value.trim().toLowerCase();
       const a = US.filter(x => x.u !== me.u && (!q || x.u.includes(q) || x.n.toLowerCase().includes(q))).slice(0, 60);
@@ -2018,13 +1934,12 @@ async function panel() {
       h += '<div class="grp"><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('reasonIs')) + '</small>' + E(b.reason || '') + '</span></div><div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('until')) + '</small>' + E(b.until ? fdate(b.until) : t('permanent')) + '</span></div>' + (b.byName ? '<div class="nav" style="cursor:default"><span><small class="hint" style="display:block">' + E(t('byName')) + '</small>' + esc(b.byName) + '</span></div>' : '') + '</div><button class="b g" id="ub">' + E(t('unbanAct')) + '</button>';
     } else if (can) {
       const reasons = lang() === 'ru' ? BAN_REASONS_RU : BAN_REASONS_EN;
-      const reasonOpts = reasons.map(r => [r, r]);
       const admOpts = allAdmins.map(a => [a, nm(a)]);
-      h += '<div class="sh">' + E(t('reasonIs')) + '</div>' + dd('br', reasonOpts, reasons[0]) + '<input class="fld" id="rs" maxlength="200" placeholder="' + E(t('reasonP')) + '" style="margin-top:8px">' +
+      h += '<div class="sh">' + E(t('reasonIs')) + '</div>' + dd('br', reasons.map(r => [r, r]), reasons[0]) + '<input class="fld" id="rs" maxlength="200" placeholder="' + E(t('reasonP')) + '">' +
         '<div class="sh">' + E(t('banAs')) + '</div>' + dd('bi', admOpts, me.u) +
-        '<div class="row" style="margin-top:8px"><input class="fld" id="cv" inputmode="numeric" maxlength="3" value="1">' + dd('cu', [[60, t('unMin')], [3600, t('unHour')], [86400, t('unDay')]], 86400) + '</div>' +
-        '<div class="grp" style="margin-top:8px">' + ck('fv', t('forever'), false) + '</div>' +
-        '<button class="b d" id="bn" style="margin-top:8px">' + E(t('banUser')) + '</button>';
+        '<div class="row"><input class="fld" id="cv" inputmode="numeric" maxlength="3" value="1">' + dd('cu', [[60, t('unMin')], [3600, t('unHour')], [86400, t('unDay')]], 86400) + '</div>' +
+        '<div class="grp">' + ck('fv', t('forever'), false) + '</div>' +
+        '<button class="b d" id="bn">' + E(t('banUser')) + '</button>';
     }
     B.innerHTML = h;
     B.querySelectorAll('[data-st]').forEach(x => x.onclick = async () => {
@@ -2057,8 +1972,7 @@ async function panel() {
   B.oninput = e => { if (e.target.id === 'cv') e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3); };
   B.onchange = e => {
     if (e.target.name === 'fv') {
-      const c = B.querySelector('#cv');
-      const d = B.querySelector('#cu');
+      const c = B.querySelector('#cv'), d = B.querySelector('#cu');
       c.disabled = e.target.checked;
       d.style.opacity = e.target.checked ? .4 : 1;
       d.style.pointerEvents = e.target.checked ? 'none' : '';
@@ -2100,15 +2014,11 @@ $('kbtn').onclick = () => {
   const b = document.createElement('button');
   b.className = 'ib';
   b.id = 'plusb';
-  b.title = 'Create';
   b.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
   $('setb').before(b);
   b.onclick = e => {
     e.stopPropagation();
-    menuAt(b, [
-      [t('createGroup'), () => newGroup('group')], 
-      [t('createChannel'), () => newGroup('channel')]
-    ]);
+    menuAt(b, [[t('createGroup'), () => newGroup('group')], [t('createChannel'), () => newGroup('channel')]]);
   };
 })();
 
@@ -2142,11 +2052,8 @@ function watchG(p) {
     }
     GR[g] = v;
     names.set(p, v.title);
-    if (v.avatar && IMG.test(v.avatar)) AV[p] = v.avatar;
-    else delete AV[p];
-    side();
-    hdr();
-    comp();
+    if (v.avatar && IMG.test(v.avatar)) AV[p] = v.avatar; else delete AV[p];
+    side(); hdr(); comp();
   });
   on(db.ref('members/' + g), s => {
     const had = MB[g] && MB[g][me.u];
@@ -2157,25 +2064,20 @@ function watchG(p) {
       if (chat === p) open(globalDisabled ? me.u : 'global');
       if (!leaving.has(g) && GR[g]) toast(t('youWereRemoved') + ' "' + GR[g].title + '"');
     }
-    side();
-    hdr();
-    comp();
+    side(); hdr(); comp();
   });
 }
 
 async function newGroup(type) {
   const myGroups = Object.keys(GR).filter(g => GR[g].owner === me.u);
   const limit = (badges[me.u] === 'checked' || badges[me.u] === 'admin' || me.u === 'admin11') ? 5 : 1;
-  if (myGroups.length >= limit) {
-    toast(t(limit > 1 ? 'limitReachedPlural' : 'limitReached').replace('{n}', limit));
-    return;
-  }
+  if (myGroups.length >= limit) { toast(t(limit > 1 ? 'limitReachedPlural' : 'limitReached').replace('{n}', limit)); return; }
   const o = modal(
     '<h3>' + E(type === 'group' ? t('createGroup') : t('createChannel')) + '</h3>' +
     '<input class="fld" id="gti" maxlength="30" placeholder="' + E(t('enterTitle')) + '">' +
-    '<input class="fld" id="gn" maxlength="16" placeholder="name (a-z, 0-9, _ - !)">' +
+    '<input class="fld" id="gn" maxlength="16" placeholder="a-z, 0-9, _ - !">' +
     '<div class="hint" id="gh">@name_' + esc(me.u) + '</div>' +
-    '<textarea class="fld" id="gb" rows="2" maxlength="140" placeholder="Description"></textarea>' +
+    '<textarea class="fld" id="gb" rows="2" maxlength="140" placeholder="' + E(t('bioP')) + '"></textarea>' +
     '<button class="b" id="gc">' + E(t('save')) + '</button>'
   );
   const n = o.querySelector('#gn');
@@ -2193,7 +2095,7 @@ async function newGroup(type) {
       const r = await db.ref('groupNames/' + un).transaction(c => c === null ? g : undefined);
       if (!r.committed) { b.disabled = false; return toast(t('nameTaken')); }
       const up = {};
-      up['groups/' + g] = { title: ti, username: un, type: type, owner: me.u, bio: o.querySelector('#gb').value.trim(), at: Date.now() };
+      up['groups/' + g] = { title: ti, username: un, type, owner: me.u, bio: o.querySelector('#gb').value.trim(), at: Date.now() };
       up['members/' + g + '/' + me.u] = 'owner';
       up['userChats/' + me.u + '/g:' + g] = true;
       await db.ref().update(up);
@@ -2201,11 +2103,7 @@ async function newGroup(type) {
       o.remove();
       watchG('g:' + g);
       open('g:' + g, true);
-    } catch (x) {
-      console.error(x);
-      toast(t('failed'));
-      b.disabled = false;
-    }
+    } catch (x) { console.error(x); toast(t('failed')); b.disabled = false; }
   };
 }
 
@@ -2223,14 +2121,14 @@ async function groupInfo(g) {
     '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">' +
       avatar(p, 0, 1) +
       '<b style="margin-top:10px;font-size:18px">' + E(G.title) + '</b>' +
-      '<span class="hint">' + E(TN[G.type]) + ' · @' + esc(G.username) + ' · ' + us.length + '/' + limit + ' ' + (lang()==='ru'?'участников':'members') + '</span>' +
+      '<span class="hint">' + E(TN[G.type]) + ' · @' + esc(G.username) + ' · ' + us.length + '/' + limit + ' ' + (lang() === 'ru' ? 'участников' : 'members') + '</span>' +
     '</div>' +
     (G.bio ? '<div style="white-space:pre-wrap">' + E(G.bio) + '</div>' : '') +
     '<div class="grp">' + us.map(u => '<div class="bl" data-m="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + E(RN[mem[u]]) + '</span></div>').join('') + '</div>' +
-    (adm ? '<button class="b" id="iv">' + E(t('inviteLink')) + '</button><button class="b g" id="ed">' + E(t('editGroup')) + '</button>' : '') +
+    (adm ? '<button class="b" id="iv">' + E(t('inviteLink')) + '</button><button class="b g" id="ed">' + E(t('editGroup')) + '</button><button class="b g" id="pb">' + E(G.pub ? t('hideFromSearch') : t('makePublic')) + '</button>' : '') +
     '<button class="b g" id="lg">' + E(t('eventLog')) + '</button>' +
-    (r === 'owner' 
-      ? '<button class="b g" id="tr">' + E(t('transferOwnership')) + '</button><button class="b d" id="dl">' + E(t('deleteGroup')) + '</button>' 
+    (r === 'owner'
+      ? '<button class="b g" id="tr">' + E(t('transferOwnership')) + '</button><button class="b d" id="dl">' + E(t('deleteGroup')) + '</button>'
       : r ? '<button class="b d" id="lv">' + E(t('leaveGroup')) + '</button>' : '')
   );
   const q = s => o.querySelector(s);
@@ -2238,18 +2136,23 @@ async function groupInfo(g) {
     const u = x.dataset.m;
     if (u === me.u) return;
     o.remove();
-    if (r && RK[r] >= 2 && RK[mem[u]] < RK[r]) manage(g, u);
-    else profile(u);
+    if (r && RK[r] >= 2 && RK[mem[u]] < RK[r]) manage(g, u); else profile(u);
   });
   if (q('#iv')) q('#iv').onclick = () => { o.remove(); invite(g); };
   if (q('#ed')) q('#ed').onclick = () => { o.remove(); editG(g); };
+  if (q('#pb')) q('#pb').onclick = async () => {
+    const up = {};
+    up['publicGroups/' + G.username] = G.pub ? null : g;
+    up['groups/' + g + '/pub'] = !G.pub;
+    try { await db.ref().update(up); o.remove(); toast(G.pub ? t('hiddenFromSearch') : t('groupIsPublic')); } catch (x) { toast(t('failed')); }
+  };
   q('#lg').onclick = () => { o.remove(); glog(g); };
   if (q('#tr')) q('#tr').onclick = () => { o.remove(); transferOwnership(g); };
   if (q('#dl')) q('#dl').onclick = () => { o.remove(); delGroup(g); };
   if (q('#lv')) q('#lv').onclick = async () => {
     o.remove();
     leaving.add(g);
-    await db.ref('groupLog/' + g).push({ type: 'leave', by: me.u, target: null, extra: null, at: Date.now() });
+    await logEv(g, 'leave');
     await db.ref('members/' + g + '/' + me.u).remove();
     await db.ref('userChats/' + me.u + '/' + p).remove();
   };
@@ -2258,7 +2161,7 @@ async function groupInfo(g) {
 function transferOwnership(g) {
   const mem = MB[g] || {};
   const candidates = Object.keys(mem).filter(u => u !== me.u && RK[mem[u]] >= 2);
-  if (!candidates.length) return toast(lang()==='ru'?'Нет админов для передачи прав':'No admins to transfer to');
+  if (!candidates.length) return toast(lang() === 'ru' ? 'Нет админов для передачи прав' : 'No admins to transfer to');
   const o = modal(
     '<h3>' + E(t('selectNewOwner')) + '</h3>' +
     '<div class="grp">' + candidates.map(u => '<div class="bl" data-t="' + esc(u) + '" style="cursor:pointer"><span style="display:flex;align-items:center;gap:10px">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><span class="hint">' + E(RN[mem[u]]) + '</span></div>').join('') + '</div>'
@@ -2270,7 +2173,7 @@ function transferOwnership(g) {
       await db.ref('groups/' + g + '/owner').set(nu);
       await db.ref('members/' + g + '/' + nu).set('owner');
       await db.ref('members/' + g + '/' + me.u).set('admin');
-      await db.ref('groupLog/' + g).push({ type: 'transfer', by: me.u, target: nu, extra: null, at: Date.now() });
+      await logEv(g, 'transfer', nu);
       o.remove();
       toast(t('ownershipTransferred'));
       groupInfo(g);
@@ -2283,22 +2186,21 @@ function manage(g, u) {
   const tr = MB[g][u];
   const opts = ['admin', 'mod', 'member'].filter(x => x !== tr && RK[x] < RK[mr]);
   const o = modal(
-    '<h3>' + E(nm(u)) + '</h3>' +
-    '<div class="hint">' + E(RN[tr]) + '</div>' +
+    '<h3>' + E(nm(u)) + '</h3><div class="hint">' + E(RN[tr]) + '</div>' +
     opts.map(x => '<button class="b g" data-r="' + x + '">' + E(t('setRole')) + ': ' + E(RN[x]) + '</button>').join('') +
     '<button class="b d" id="k">' + E(t('kickMember')) + '</button>'
   );
   o.querySelectorAll('[data-r]').forEach(b => b.onclick = async () => {
     o.remove();
     await db.ref('members/' + g + '/' + u).set(b.dataset.r);
-    await db.ref('groupLog/' + g).push({ type: 'role', by: me.u, target: u, extra: b.dataset.r, at: Date.now() });
+    await logEv(g, 'role', u, b.dataset.r);
     toast(t('done'));
   });
   o.querySelector('#k').onclick = async () => {
     o.remove();
     await db.ref('members/' + g + '/' + u).remove();
     db.ref('userChats/' + u + '/g:' + g).remove().catch(() => {});
-    await db.ref('groupLog/' + g).push({ type: 'kick', by: me.u, target: u, extra: null, at: Date.now() });
+    await logEv(g, 'kick', u);
     toast(t('done'));
   };
 }
@@ -2321,7 +2223,7 @@ async function joinTok(tk) {
     const limit = groupLimit(g);
     if (Object.keys(mem).length >= limit) return toast(t('groupFull').replace('{n}', limit));
     await db.ref('members/' + g + '/' + me.u).set('member');
-    await db.ref('groupLog/' + g).push({ type: 'join', by: me.u, target: null, extra: null, at: Date.now() });
+    await logEv(g, 'join');
   }
   await db.ref('userChats/' + me.u + '/g:' + g).set(true);
   history.replaceState(null, '', location.pathname);
@@ -2358,59 +2260,9 @@ function editG(g) {
     try {
       await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: av || null, banner: bn || null });
       await db.ref('groupColors/' + g).set(col);
-      await db.ref('groupLog/' + g).push({ type: 'edit', by: me.u, target: null, extra: null, at: Date.now() });
+      await logEv(g, 'edit');
       o.remove();
-      toast(t('saved'));
-    } catch (e) { toast(t('failed')); }
-  };
-}
-  const q = s => o.querySelector(s);
-  let chosenColor = curColor;
-  let newAvatar = curAvatar;
-  let newBg = curBg;
-  q('#cbtn').onclick = () => {
-    const inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = 'image/*';
-    inp.onchange = () => {
-      const f = inp.files[0];
-      if (!f) return;
-      const r = new FileReader();
-      r.onload = () => { newAvatar = r.result; q('#cprev').src = r.result; q('#cprev').style.display = 'block'; };
-      r.readAsDataURL(f);
-    };
-    inp.click();
-  };
-  q('#cdel').onclick = () => { newAvatar = ''; q('#cprev').src = ''; q('#cprev').style.display = 'none'; };
-  q('#dbtn').onclick = () => {
-    const inp = document.createElement('input');
-    inp.type = 'file';
-    inp.accept = 'image/*';
-    inp.onchange = () => {
-      const f = inp.files[0];
-      if (!f) return;
-      const r = new FileReader();
-      r.onload = () => { newBg = r.result; q('#dprev').src = r.result; q('#dprev').style.display = 'block'; };
-      r.readAsDataURL(f);
-    };
-    inp.click();
-  };
-  q('#ddel').onclick = () => { newBg = ''; q('#dprev').src = ''; q('#dprev').style.display = 'none'; };
-  o.querySelectorAll('#swg i').forEach(el => el.onclick = () => {
-    chosenColor = +el.dataset.h;
-    o.querySelectorAll('#swg i').forEach(x => x.style.outline = 'none');
-    el.style.outline = '2px solid var(--t)';
-    el.style.outlineOffset = '2px';
-  });
-  q('#s').onclick = async () => {
-    const ti = q('#a').value.trim();
-    if (!ti) return toast(t('enterTitle'));
-    try {
-      await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: newAvatar || null, banner: newBg || null });
-      await db.ref('groupColors/' + g).set(chosenColor);
-      await db.ref('groupLog/' + g).push({ type: 'edit', by: me.u, target: null, extra: null, at: Date.now() });
-      o.remove();
-      toast(t('saved'));
+      toast(t('save'));
     } catch (e) { toast(t('failed')); }
   };
 }
@@ -2418,7 +2270,7 @@ function editG(g) {
 async function glog(g) {
   const v = (await db.ref('groupLog/' + g).limitToLast(50).once('value')).val() || {};
   const a = Object.values(v).sort((x, y) => y.at - x.at);
-  const o = modal(
+  modal(
     '<h3>' + E(t('eventLog')) + '</h3><div class="grp" style="max-height:50vh;overflow-y:auto">' +
     (a.map(x => '<div class="bl" style="display:block"><div>' + E(nm(x.by)) + ' ' + E(x.type) + (x.target ? ' ' + E(nm(x.target)) : '') + (x.extra ? ' · ' + E(x.extra) : '') + '</div><small class="hint">' + fdate(x.at) + '</small></div>').join('') || '<div class="hint" style="padding:12px 0">' + E(t('empty')) + '</div>') +
     '</div>'
@@ -2432,6 +2284,7 @@ async function delGroup(g) {
   up['groups/' + g] = null;
   up['members/' + g] = null;
   up['groupNames/' + G.username] = null;
+  up['publicGroups/' + G.username] = null;
   up['privateMessages/grp_' + g] = null;
   up['privatePins/grp_' + g] = null;
   up['groupLog/' + g] = null;
@@ -2448,6 +2301,7 @@ function fwd(m) {
     '</div>'
   );
   o.onclick = async e => {
+    if (e.target === o) return o.remove();
     const n = e.target.closest('[data-p]');
     if (!n) return;
     const p = n.dataset.p;
@@ -2456,7 +2310,9 @@ function fwd(m) {
       if ((await db.ref('blocks/' + p + '/' + me.u).once('value')).val()) return toast(t('restricted'));
     }
     o.remove();
-    await db.ref(pathFor(p)).push({ username: me.u, displayName: me.n, text: '↪ ' + (m.displayName || m.username) + '\n' + m.text, time: Date.now() });
+    const nm2 = { username: me.u, displayName: me.n, text: '↪ ' + (m.displayName || m.username) + (m.text ? '\n' + m.text : ''), time: Date.now() };
+    if (m.att) nm2.att = m.att;
+    await db.ref(pathFor(p)).push(nm2);
     if (!isG(p) && p !== me.u) {
       db.ref('userChats/' + me.u + '/' + p).set(true);
       db.ref('userChats/' + p + '/' + me.u).set(true);
@@ -2472,76 +2328,7 @@ function paintMe() {
   else { m.textContent = ini(me.u); m.style.cssText = avStyle(me.u); }
 }
 
-function profLink() {
-  const o = modal(
-    '<h3>Avatar and link</h3>' +
-    '<input class="fld" id="a" placeholder="Avatar URL (https)" value="' + esc(AV[me.u] || '') + '">' +
-    '<input class="fld" id="l" placeholder="Profile link (https)" value="' + esc(LK[me.u] || '') + '">' +
-    '<button class="b" id="s">Save</button>'
-  );
-  o.querySelector('#s').onclick = async () => {
-    const a = o.querySelector('#a').value.trim();
-    const l = o.querySelector('#l').value.trim();
-    if ((a && !IMG.test(a)) || (l && !IMG.test(l))) return toast('Invalid link');
-    try {
-      await db.ref('userAvatars/' + me.u).set(a || null);
-      await db.ref('userLinks/' + me.u).set(l || null);
-      o.remove();
-      toast(t('saved'));
-    } catch (e) { toast(t('failed')); }
-  };
-}
-
-async function contacts() {
-  const ks = Object.keys(CT);
-  await Promise.all(ks.filter(u => !names.has(u)).map(async u => { const v = (await db.ref('users/' + u + '/displayName').once('value')).val(); if (v) names.set(u, v); }));
-  const o = modal(
-    '<h3>Contacts</h3>' +
-    '<div class="grp">' + (ks.map(u => '<div class="bl"><span data-o="' + esc(u) + '" style="display:flex;align-items:center;gap:10px;cursor:pointer;flex:1">' + avatar(u) + '<span>' + E(nm(u)) + '</span></span><button class="ib" data-d="' + esc(u) + '"><svg viewBox="0 0 24 24">' + IC.x + '</svg></button></div>').join('') || '<div class="hint" style="padding:12px 0">Empty</div>') + '</div>' +
-    '<div class="row"><input class="fld" id="n" maxlength="9" placeholder="username"><button class="b" id="a" style="flex:0 0 auto">+</button></div>'
-  );
-  o.onclick = async e => {
-    const op = e.target.closest('[data-o]');
-    const dl = e.target.closest('[data-d]');
-    if (op) { o.remove(); return open(op.dataset.o, true); }
-    if (dl) { await db.ref('contacts/' + me.u + '/' + dl.dataset.d).remove(); o.remove(); return setTimeout(contacts, 150); }
-    if (e.target.closest('#a')) {
-      const u = o.querySelector('#n').value.trim().toLowerCase().replace(/^@/, '');
-      if (!u || u === me.u) return;
-      const v = (await db.ref('users/' + u).once('value')).val();
-      if (!v) return toast(t('noUser'));
-      names.set(u, v.displayName || u);
-      await db.ref('contacts/' + me.u + '/' + u).set(true);
-      o.remove();
-      setTimeout(contacts, 150);
-    }
-  };
-}
-
 const accs = () => { try { return JSON.parse(localStorage.getItem('mg_accs') || '[]'); } catch (e) { return []; } };
-
-function accounts() {
-  const a = accs();
-  const o = modal(
-    '<h3>Accounts</h3><div class="grp">' +
-    a.map(x => '<div class="bl"><span data-s="' + esc(x.u) + '" style="cursor:pointer;flex:1">' + esc(x.dn) + ' <span class="hint">@' + esc(x.u) + (x.u === me.u ? ' · current' : '') + '</span></span>' + (x.u === me.u ? '' : '<button class="ib" data-d="' + esc(x.u) + '"><svg viewBox="0 0 24 24">' + IC.x + '</svg></button>') + '</div>').join('') +
-    '</div><button class="b g" id="ad">Add account</button>'
-  );
-  o.onclick = async e => {
-    const s = e.target.closest('[data-s]');
-    const d = e.target.closest('[data-d]');
-    if (d) { localStorage.setItem('mg_accs', JSON.stringify(accs().filter(x => x.u !== d.dataset.d))); o.remove(); return accounts(); }
-    if (e.target.closest('#ad')) { o.remove(); return $('exitb').click(); }
-    if (s) {
-      const x = accs().find(y => y.u === s.dataset.s);
-      if (!x || x.u === me.u) return;
-      try { await db.ref('onlineUsers/' + me.u).remove(); } catch (er) {}
-      refs.forEach(r => r.off());
-      sessionStorage.setItem('mg_auto', JSON.stringify({ dn: x.dn, u: x.u }));
-      location.reload();
-    }
-  };
-}
 
 function boot(dn, u) {
   const a = accs().filter(x => x.u !== u);
@@ -2552,12 +2339,8 @@ function boot(dn, u) {
     AV = {};
     for (const k in v) if (IMG.test(v[k])) AV[k] = v[k];
     for (const g in GR) if (GR[g].avatar && IMG.test(GR[g].avatar)) AV['g:' + g] = GR[g].avatar;
-    paintMe();
-    side();
-    render();
-    hdr();
+    paintMe(); side(); render(); hdr();
   });
-  on(db.ref('userColors'), paintMe);
   on(db.ref('userLinks'), s => { LK = s.val() || {}; });
   on(db.ref('contacts/' + u), s => { CT = s.val() || {}; });
   on(db.ref('userChats/' + u), s => Object.keys(s.val() || {}).filter(isG).forEach(watchG));
@@ -2573,14 +2356,14 @@ async function pubFind(q) {
   if (pq === q) { pubRes = r.filter(Boolean); side(); }
 }
 const _side2 = side;
-side = function() {
+side = function () {
   _side2();
   if (!me) return;
   const q = $('q').value.trim().toLowerCase().replace(/^@/, '');
   if (q.length < 2) { pubRes = []; pq = ''; return; }
   if (q !== pq) pubFind(q);
   const rows = pubRes.filter(x => !idx.has('g:' + x.g));
-  if (rows.length) $('list').insertAdjacentHTML('beforeend', '<div class="sec">Public groups</div>' + rows.map(x => '<div class="nav" data-pg="' + esc(x.g) + '"><div class="av">#</div><span><b style="display:block">' + E(x.G.title) + '</b><small class="hint">' + E(TN[x.G.type]) + ' · @' + esc(x.un) + '</small></span></div>').join(''));
+  if (rows.length) $('list').insertAdjacentHTML('beforeend', '<div class="sec">' + (lang() === 'ru' ? 'Публичные группы' : 'Public groups') + '</div>' + rows.map(x => '<div class="nav" data-pg="' + esc(x.g) + '"><div class="av">#</div><span><b style="display:block">' + E(x.G.title) + '</b><small class="hint">' + E(TN[x.G.type]) + ' · @' + esc(x.un) + '</small></span></div>').join(''));
 };
 $('q').oninput = side;
 $('list').addEventListener('click', async e => {
@@ -2593,7 +2376,7 @@ $('list').addEventListener('click', async e => {
       const limit = groupLimit(g);
       if (Object.keys(mem).length >= limit) return toast(t('groupFull').replace('{n}', limit));
       await db.ref('members/' + g + '/' + me.u).set('member');
-      await db.ref('groupLog/' + g).push({ type: 'join', by: me.u, target: null, extra: null, at: Date.now() });
+      await logEv(g, 'join');
     }
     await db.ref('userChats/' + me.u + '/g:' + g).set(true);
     $('q').value = '';
@@ -2601,25 +2384,6 @@ $('list').addEventListener('click', async e => {
     open('g:' + g, true);
   } catch (x) { toast(t('failedToJoin')); }
 });
-const _gi = groupInfo;
-groupInfo = async function(g) {
-  await _gi(g);
-  const G = GR[g];
-  const r = myRole(g);
-  if (!G || !r || RK[r] < 2) return;
-  const md = [...document.querySelectorAll('.ov .md')].pop();
-  if (!md) return;
-  const b = document.createElement('button');
-  b.className = 'b g';
-  b.innerHTML = E(G.pub ? t('hideFromSearch') : t('makePublic'));
-  b.onclick = async () => {
-    const up = {};
-    up['publicGroups/' + G.username] = G.pub ? null : g;
-    up['groups/' + g + '/pub'] = !G.pub;
-    try { await db.ref().update(up); md.parentElement.remove(); toast(G.pub ? t('hiddenFromSearch') : t('groupIsPublic')); } catch (x) { toast(t('failed')); }
-  };
-  md.insertBefore(b, md.querySelector('#lg'));
-};
 
 try {
   const a = JSON.parse(sessionStorage.getItem('mg_auto') || 'null');
