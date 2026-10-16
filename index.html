@@ -319,6 +319,64 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 @keyframes up { from { opacity: 0; transform: translateY(16px) scale(.98); } }
 @keyframes pop { from { opacity: 0; transform: scale(.92); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+
+/* Material 3 Expressive: structure */
+:root[data-ui-style="material3"] { --tone: color-mix(in srgb, var(--btn) 7%, var(--p)); --tone2: color-mix(in srgb, var(--btn) 13%, var(--p)); --tone3: color-mix(in srgb, var(--btn) 20%, var(--p)); }
+:root[data-ui-style="material3"] body, :root[data-ui-style="material3"] #main { background: var(--bg); }
+:root[data-ui-style="material3"] #side { background: var(--tone); padding: 16px 12px; }
+:root[data-ui-style="material3"] #hdr { top: 0; left: 0; right: 0; height: 64px; border-radius: 0 0 28px 28px; background: var(--tone); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; padding: 0 12px 0 8px; }
+:root[data-ui-style="material3"] #hdr .t b { font-size: 18px; font-weight: 500; }
+:root[data-ui-style="material3"] #msgs { padding-top: 84px; }
+:root[data-ui-style="material3"] #msgs.pp { padding-top: 124px; }
+:root[data-ui-style="material3"] #pinbar, :root[data-ui-style="material3"] .warnbar { top: 76px; background: var(--tone2); border: 0; border-radius: 20px; backdrop-filter: none; }
+:root[data-ui-style="material3"] #rbar { background: var(--tone2); border: 0; border-radius: 20px; backdrop-filter: none; }
+:root[data-ui-style="material3"] .pill { background: var(--tone2); backdrop-filter: none; box-shadow: none; padding: 6px 6px 6px 20px; }
+:root[data-ui-style="material3"] #send { width: 48px; height: 48px; border-radius: 16px; background: var(--btn); color: var(--btnt); }
+:root[data-ui-style="material3"] #send:hover { border-radius: 24px; opacity: 1; }
+:root[data-ui-style="material3"] #attach { width: 44px; height: 44px; }
+:root[data-ui-style="material3"] .ot { background: var(--tone3); box-shadow: none; }
+:root[data-ui-style="material3"] .day span, :root[data-ui-style="material3"] .sys span { background: var(--tone2); border-radius: 999px; padding: 5px 14px; }
+:root[data-ui-style="material3"] .it:hover, :root[data-ui-style="material3"] .nav:hover { background: var(--h1); }
+:root[data-ui-style="material3"] .it.on { background: var(--tone3); }
+:root[data-ui-style="material3"] .nav { border-radius: 28px; padding: 14px 12px; margin: 2px 0; transition: background .2s var(--ease), border-radius .3s var(--spring); }
+:root[data-ui-style="material3"] .sec { font-weight: 500; letter-spacing: .5px; }
+:root[data-ui-style="material3"] .grp, :root[data-ui-style="material3"] .info, :root[data-ui-style="material3"] .ulist, :root[data-ui-style="material3"] .kbox { background: var(--tone2); }
+:root[data-ui-style="material3"] .fld { background: var(--tone3); }
+:root[data-ui-style="material3"] .card, :root[data-ui-style="material3"] .md { background: var(--tone); backdrop-filter: none; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+:root[data-ui-style="material3"] .md h3, :root[data-ui-style="material3"] .sth b { font-size: 24px; font-weight: 400; line-height: 1.3; }
+:root[data-ui-style="material3"] .card h2 { font-weight: 500; font-size: 28px; }
+:root[data-ui-style="material3"] .md > .row { justify-content: flex-end; gap: 8px; }
+:root[data-ui-style="material3"] .md > .row > * { flex: 0 0 auto; }
+:root[data-ui-style="material3"] .md > .row .b.g { background: transparent; color: var(--btn); padding: 10px 16px; }
+:root[data-ui-style="material3"] .md > .row .b.g:hover { background: var(--h1); }
+:root[data-ui-style="material3"] .b.g { background: var(--tone3); color: var(--t); }
+:root[data-ui-style="material3"] .ctx, :root[data-ui-style="material3"] .ddl { background: var(--tone2); backdrop-filter: none; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+:root[data-ui-style="material3"] .ctx div, :root[data-ui-style="material3"] .ddl div { padding: 12px 20px; }
+:root[data-ui-style="material3"] .toast { background: var(--tone3); backdrop-filter: none; }
+:root[data-ui-style="material3"] .av.big { box-shadow: none; }
+:root[data-ui-style="material3"] .rip { position: absolute; border-radius: 50%; background: currentColor; opacity: .18; transform: scale(0); pointer-events: none; animation: rip .55s var(--ease) forwards; }
+@keyframes rip { to { transform: scale(1); opacity: 0; } }
+@media (max-width: 768px) { :root[data-ui-style="material3"] #side { border-radius: 0 28px 28px 0; background: var(--tone); backdrop-filter: none; } }
+
+/* Material Web tokens: colors come from the chosen palette */
+:root[data-ui-style="material3"] {
+  --md-sys-color-primary: var(--btn); --md-sys-color-on-primary: var(--btnt);
+  --md-sys-color-primary-container: var(--tone3); --md-sys-color-on-primary-container: var(--t);
+  --md-sys-color-secondary-container: var(--tone3); --md-sys-color-on-secondary-container: var(--t);
+  --md-sys-color-surface: var(--tone); --md-sys-color-surface-variant: var(--tone3);
+  --md-sys-color-surface-container-highest: var(--tone3);
+  --md-sys-color-on-surface: var(--t); --md-sys-color-on-surface-variant: var(--m);
+  --md-sys-color-outline: var(--fb); --md-sys-color-outline-variant: var(--gb);
+  --md-sys-color-error: var(--d); --md-sys-color-on-error: #fff;
+  --md-ref-typeface-brand: Roboto, "Google Sans", system-ui, sans-serif;
+  --md-ref-typeface-plain: Roboto, "Google Sans", system-ui, sans-serif;
+}
+md-filled-text-field, md-slider { display: flex; width: 100%; }
+md-filled-button, md-filled-tonal-button, md-text-button { flex-shrink: 0; white-space: nowrap; }
+md-icon-button { flex-shrink: 0; --md-icon-button-icon-color: var(--m); --md-icon-button-hover-icon-color: var(--t); --md-icon-button-icon-size: 22px; }
+md-icon-button svg { width: 22px; height: 22px; }
+md-switch, md-radio { flex-shrink: 0; }
+.ban md-icon-button { --md-icon-button-icon-color: #fff; --md-icon-button-hover-icon-color: #fff; }
 </style>
 </head>
 <body>
@@ -1896,7 +1954,7 @@ async function settings(pg) {
     if (['bd', 'bm', 'by', 'bv'].includes(n)) dirty = true;
     if (n === 'th') { localStorage.setItem('mg_theme', i.value); applyTheme(); }
     else if (n === 'ct') { localStorage.setItem('mg_color_theme', i.value); applyTheme(); }
-    else if (n === 'us') { localStorage.setItem('mg_ui_style', i.value); applyTheme(); applyRadius(); show('look'); }
+    else if (n === 'us') { localStorage.setItem('mg_ui_style', i.value); applyTheme(); applyRadius(); m3Sync(); show('look'); }
     else if (n === 'hf') { localStorage.setItem('mg_h', i.value); render(); }
     else if (n === 'zs') { localStorage.setItem('mg_scale', i.value); applyScale(); }
     else if (n === 'sm') localStorage.setItem('mg_send', i.value);
@@ -2494,6 +2552,106 @@ function pickImage(size, cb, quality) {
   };
   input.click();
 }
+
+document.addEventListener('pointerdown', e => {
+  if (document.documentElement.dataset.uiStyle !== 'material3') return;
+  const el = e.target.closest('.b, .ib, .it, .nav, .rd');
+  if (!el) return;
+  const r = el.getBoundingClientRect(), d = Math.max(r.width, r.height) * 2;
+  const c = document.createElement('span');
+  c.className = 'rip';
+  c.style.cssText = 'width:' + d + 'px;height:' + d + 'px;left:' + (e.clientX - r.left - d / 2) + 'px;top:' + (e.clientY - r.top - d / 2) + 'px';
+  if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+  el.style.overflow = 'hidden';
+  el.appendChild(c);
+  setTimeout(() => c.remove(), 600);
+}, { passive: true });
+
+/* Material Web: real md-* components while Material 3 is selected */
+const M3 = { loaded: false, obs: null };
+const m3On = () => document.documentElement.dataset.uiStyle === 'material3';
+function m3Load() {
+  if (M3.loaded) return;
+  M3.loaded = true;
+  const l = document.createElement('link');
+  l.rel = 'stylesheet';
+  l.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap';
+  document.head.appendChild(l);
+  import('https://esm.run/@material/web/all.js').catch(() => { M3.loaded = false; });
+}
+const M3_SEL = 'button.b, button.ib, input.sw2, input.fld, textarea.fld, input[type=range]';
+const M3_EV = ['onclick', 'oninput', 'onchange', 'onkeydown', 'onfocus', 'onblur'];
+function m3Swap(o) {
+  if (o._m3 || o.classList.contains('ddb') || o.tagName === 'MD-FILLED-TEXT-FIELD') return;
+  let n;
+  const tag = o.tagName, ty = (o.getAttribute('type') || '').toLowerCase();
+  if (tag === 'BUTTON' && o.classList.contains('b')) {
+    const txt = o.classList.contains('g') && o.parentElement && o.parentElement.matches('.md > .row');
+    n = document.createElement(txt ? 'md-text-button' : o.classList.contains('g') ? 'md-filled-tonal-button' : 'md-filled-button');
+    if (o.classList.contains('d')) n.style.cssText = '--md-filled-button-container-color:var(--d);--md-filled-button-label-text-color:#fff';
+  } else if (tag === 'BUTTON' && o.classList.contains('ib')) n = document.createElement('md-icon-button');
+  else if (tag === 'BUTTON') return;
+  else if (ty === 'checkbox') n = document.createElement('md-switch');
+  else if (ty === 'radio') n = document.createElement('md-radio');
+  else if (ty === 'range') n = document.createElement('md-slider');
+  else n = document.createElement('md-filled-text-field');
+  const keep = o.classList.contains('ib') ? ['ib'] : [];
+  for (const a of o.attributes) {
+    if (['class', 'checked', 'placeholder', 'rows', 'maxlength', 'type'].includes(a.name) && !(a.name === 'type' && n.localName === 'md-filled-text-field' && ty !== 'textarea')) continue;
+    n.setAttribute(a.name, a.value);
+  }
+  if (keep.length) n.className = keep.join(' ');
+  n.setAttribute('data-m3', '1');
+  M3_EV.forEach(k => { if (o[k]) n[k] = o[k]; });
+  if (n.localName === 'md-switch') {
+    n.selected = o.checked;
+    Object.defineProperty(n, 'checked', { get: () => n.selected, set: v => { n.selected = v; }, configurable: true });
+  } else if (n.localName === 'md-radio') n.checked = o.checked;
+  else if (n.localName === 'md-slider') { n.min = o.min; n.max = o.max; n.value = o.value; }
+  else if (n.localName === 'md-filled-text-field') {
+    n.label = o.getAttribute('placeholder') || '';
+    if (tag === 'TEXTAREA') { n.type = 'textarea'; n.rows = o.rows || 3; }
+    if (o.maxLength > 0) n.maxLength = o.maxLength;
+    n.value = o.value;
+  } else { n.disabled = o.disabled; while (o.firstChild) n.appendChild(o.firstChild); }
+  n._orig = o; o._m3 = n;
+  o.replaceWith(n);
+}
+function m3Up(root) {
+  if (!root || root.nodeType !== 1) return;
+  const l = [];
+  if (root.matches(M3_SEL)) l.push(root);
+  root.querySelectorAll(M3_SEL).forEach(e => l.push(e));
+  l.forEach(m3Swap);
+}
+function m3Revert() {
+  document.querySelectorAll('[data-m3]').forEach(n => {
+    const o = n._orig;
+    if (!o) return;
+    const ln = n.localName;
+    if (ln === 'md-switch') o.checked = n.selected;
+    else if (ln === 'md-radio') o.checked = n.checked;
+    else if (ln === 'md-slider' || ln === 'md-filled-text-field') o.value = n.value;
+    else { o.disabled = !!n.disabled; while (n.firstChild) o.appendChild(n.firstChild); }
+    M3_EV.forEach(k => { if (n[k]) o[k] = n[k]; });
+    o._m3 = null;
+    n.replaceWith(o);
+  });
+}
+function m3Sync() {
+  if (m3On()) {
+    m3Load();
+    m3Up(document.body);
+    if (!M3.obs) {
+      M3.obs = new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(m3Up)));
+    }
+    M3.obs.observe(document.body, { childList: true, subtree: true });
+  } else {
+    if (M3.obs) M3.obs.disconnect();
+    m3Revert();
+  }
+}
+m3Sync();
 </script>
 </body>
 </html>
