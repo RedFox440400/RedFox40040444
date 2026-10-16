@@ -371,7 +371,9 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
   --md-ref-typeface-brand: Roboto, "Google Sans", system-ui, sans-serif;
   --md-ref-typeface-plain: Roboto, "Google Sans", system-ui, sans-serif;
 }
-md-filled-text-field, md-slider { display: flex; width: 100%; }
+md-outlined-text-field, md-slider { display: flex; width: 100%; }
+md-outlined-select { display: flex; width: 100%; }
+md-filled-icon-button { flex-shrink: 0; --md-filled-icon-button-container-width: 48px; --md-filled-icon-button-container-height: 48px; }
 md-filled-button, md-filled-tonal-button, md-text-button { flex-shrink: 0; white-space: nowrap; }
 md-icon-button { flex-shrink: 0; --md-icon-button-icon-color: var(--m); --md-icon-button-hover-icon-color: var(--t); --md-icon-button-icon-size: 22px; }
 md-icon-button svg { width: 22px; height: 22px; }
@@ -1750,6 +1752,8 @@ const BLO = [['75', '75%'], ['100', '100%'], ['125', '125%']];
 async function settings(pg) {
   let X = (await db.ref('users/' + me.u).once('value')).val() || {};
   let dirty = false;
+  let draft = {};
+  const keep = () => { const g = id => B.querySelector('#' + id); ['an', 'aln', 'au', 'bio'].forEach(k => { if (g(k)) draft[k] = g(k).value; }); ['bd', 'bm', 'by', 'bv'].forEach(k => { if (g(k)) draft[k] = g(k).dataset.v; }); };
   const o = modal('<div class="sth"></div><div class="sb"></div>', 'st');
   const H = o.querySelector('.sth');
   const B = o.querySelector('.sb');
@@ -1795,35 +1799,35 @@ async function settings(pg) {
       const months = (lang() === 'ru' ? MONTHS_RU : MONTHS_EN).map((m, i) => [i + 1, m.charAt(0).toUpperCase() + m.slice(1)]);
       const years = [];
       for (let y = curY - 14; y >= 1900; y--) years.push([y, y]);
-      const avBtn = AV[me.u]
+      const avBtn = newAv
         ? '<button class="b g" id="dav">' + E(t('removeAvatar')) + '</button>'
         : '<button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button>';
-      const banBtn = (banners[me.u] && banners[me.u].img)
+      const banBtn = newBan
         ? '<button class="b g" id="dbn">' + E(t('removeBanner')) + '</button>'
         : '<button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button>';
       B.innerHTML =
         '<div style="display:flex;justify-content:center" id="pv"></div>' +
         '<div style="display:flex;justify-content:center;gap:10px">' + avBtn + banBtn + '</div>' +
-        '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
-        '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(X.lastName || '') + '"></div>' +
-        '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
+        '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(draft.an != null ? draft.an : me.n) + '"></div>' +
+        '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(draft.aln != null ? draft.aln : (X.lastName || '')) + '"></div>' +
+        '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(draft.au != null ? draft.au : me.u) + '"></div>' +
         '<div class="hint">' + E(t('userHint')) + '</div>' +
-        '<div><span class="lb">' + E(t('bio')) + '</span><textarea class="fld" id="bio" rows="3" maxlength="140" placeholder="' + E(t('bioP')) + '">' + esc(X.bio || '') + '</textarea></div>' +
+        '<div><span class="lb">' + E(t('bio')) + '</span><textarea class="fld" id="bio" rows="3" maxlength="140" placeholder="' + E(t('bioP')) + '">' + esc(draft.bio != null ? draft.bio : (X.bio || '')) + '</textarea></div>' +
         '<div><span class="lb">' + E(t('birthday')) + '</span>' +
-          '<div class="row">' + dd('bd', days, bd.d) + dd('bm', months, bd.m) + dd('by', years, bd.y) + '</div>' +
+          '<div class="row">' + dd('bd', days, draft.bd != null ? draft.bd : bd.d) + dd('bm', months, draft.bm != null ? draft.bm : bd.m) + dd('by', years, draft.by != null ? draft.by : bd.y) + '</div>' +
         '</div>' +
         '<div class="hint">' + E(t('birthdayMin')) + '</div>' +
-        '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
+        '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], draft.bv || (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
       const uav = B.querySelector('#uav');
-      if (uav) uav.onclick = () => pickImage(256, d => { newAv = d; dirty = true; show('account'); });
+      if (uav) uav.onclick = () => pickImage(256, d => { keep(); newAv = d; dirty = true; show('account'); }, 0.85, true);
       const dav = B.querySelector('#dav');
-      if (dav) dav.onclick = () => { newAv = ''; dirty = true; show('account'); };
+      if (dav) dav.onclick = () => { keep(); newAv = ''; dirty = true; show('account'); };
       const ubn = B.querySelector('#ubn');
-      if (ubn) ubn.onclick = () => pickImage(900, d => { newBan = d; dirty = true; show('account'); });
+      if (ubn) ubn.onclick = () => pickImage(900, d => { keep(); newBan = d; dirty = true; show('account'); });
       const dbn = B.querySelector('#dbn');
-      if (dbn) dbn.onclick = () => { newBan = ''; dirty = true; show('account'); };
+      if (dbn) dbn.onclick = () => { keep(); newBan = ''; dirty = true; show('account'); };
       B.querySelector('#sv').onclick = async e => {
         const btn = e.currentTarget;
         const dn = B.querySelector('#an').value.trim();
@@ -2366,28 +2370,25 @@ function editG(g) {
     '<h3>' + E(t('editGroup')) + '</h3>' +
     '<input class="fld" id="a" maxlength="30" value="' + esc(G.title) + '" placeholder="' + E(t('enterTitle')) + '">' +
     '<textarea class="fld" id="b" rows="3" maxlength="140" placeholder="' + E(t('bioP')) + '">' + esc(G.bio || '') + '</textarea>' +
-    '<div class="row"><button class="b g" id="ua">' + E(t('uploadAvatar')) + '</button><button class="b g" id="da">' + E(t('removeAvatar')) + '</button></div>' +
-    '<div class="row"><button class="b g" id="ub">' + E(t('uploadBanner')) + '</button><button class="b g" id="db2">' + E(t('removeBanner')) + '</button></div>' +
-    '<div class="sw" id="swg">' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)' + (h === col ? ';outline:2px solid var(--t);outline-offset:2px' : '') + '"></i>').join('') + '</div>' +
+    '<div class="row" id="gbt"></div>' +
     '<button class="b" id="s">' + E(t('save')) + '</button>'
   );
   const q = s => o.querySelector(s);
-  q('#ua').onclick = () => pickImage(256, d => { av = d; toast(t('done')); });
-  q('#da').onclick = () => { av = ''; toast(t('done')); };
-  q('#ub').onclick = () => pickImage(900, d => { bn = d; toast(t('done')); });
-  q('#db2').onclick = () => { bn = ''; toast(t('done')); };
-  o.querySelectorAll('#swg i').forEach(el => el.onclick = () => {
-    col = +el.dataset.h;
-    o.querySelectorAll('#swg i').forEach(x => x.style.outline = 'none');
-    el.style.outline = '2px solid var(--t)';
-    el.style.outlineOffset = '2px';
-  });
+  const gb = () => {
+    q('#gbt').innerHTML = (av ? '<button class="b g" id="da">' + E(t('removeAvatar')) + '</button>' : '<button class="b g" id="ua">' + E(t('uploadAvatar')) + '</button>') +
+      (bn ? '<button class="b g" id="db2">' + E(t('removeBanner')) + '</button>' : '<button class="b g" id="ub">' + E(t('uploadBanner')) + '</button>');
+    const f = (id, fn) => { const e = q('#' + id); if (e) e.onclick = fn; };
+    f('ua', () => pickImage(256, d => { av = d; gb(); }, 0.85, true));
+    f('da', () => { av = ''; gb(); });
+    f('ub', () => pickImage(900, d => { bn = d; gb(); }));
+    f('db2', () => { bn = ''; gb(); });
+  };
+  gb();
   q('#s').onclick = async () => {
     const ti = q('#a').value.trim();
     if (!ti) return toast(t('enterTitle'));
     try {
       await db.ref('groups/' + g).update({ title: ti, bio: q('#b').value.trim(), avatar: av || null, banner: bn || null });
-      await db.ref('groupColors/' + g).set(col);
       await logEv(g, 'edit');
       o.remove();
       toast(t('save'));
@@ -2527,29 +2528,46 @@ function viewImg(src) {
   document.body.appendChild(o);
 }
 
-function pickImage(size, cb, quality) {
+function pickImage(size, cb, quality, square) {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
-  input.onchange = e => {
-    const file = e.target.files[0];
+  input.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0;width:1px;height:1px';
+  document.body.appendChild(input);
+  const done = () => setTimeout(() => input.remove(), 0);
+  input.onchange = async e => {
+    const file = e.target.files && e.target.files[0];
+    done();
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ratio = Math.min(size / img.width, size / img.height, 1);
-        canvas.width = img.width * ratio;
-        canvas.height = img.height * ratio;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        cb(canvas.toDataURL('image/jpeg', quality || 0.85));
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
+    try {
+      let src, w, h;
+      if (window.createImageBitmap) {
+        src = await createImageBitmap(file, { imageOrientation: 'from-image' });
+        w = src.width; h = src.height;
+      } else {
+        src = await new Promise((ok, no) => {
+          const im = new Image(), u = URL.createObjectURL(file);
+          im.onload = () => { URL.revokeObjectURL(u); ok(im); };
+          im.onerror = no;
+          im.src = u;
+        });
+        w = src.naturalWidth; h = src.naturalHeight;
+      }
+      let sx = 0, sy = 0, sw = w, sh = h;
+      if (square) { const m = Math.min(w, h); sx = (w - m) / 2; sy = (h - m) / 2; sw = sh = m; }
+      const k = Math.min(size / sw, size / sh, 1);
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, Math.round(sw * k));
+      c.height = Math.max(1, Math.round(sh * k));
+      const x = c.getContext('2d');
+      x.fillStyle = '#fff';
+      x.fillRect(0, 0, c.width, c.height);
+      x.drawImage(src, sx, sy, sw, sh, 0, 0, c.width, c.height);
+      if (src.close) src.close();
+      cb(c.toDataURL('image/jpeg', quality || 0.85));
+    } catch (err) { console.error(err); toast(t('failed')); }
   };
+  input.addEventListener('cancel', done);
   input.click();
 }
 
@@ -2579,25 +2597,51 @@ function m3Load() {
   document.head.appendChild(l);
   import('https://esm.run/@material/web/all.js').catch(() => { M3.loaded = false; });
 }
-const M3_SEL = 'button.b, button.ib, input.sw2, input.fld, textarea.fld, input[type=range]';
+const M3_SEL = 'button.b, button.ib, input.sw2, input.fld, textarea.fld, input[type=range], div.dd';
 const M3_EV = ['onclick', 'oninput', 'onchange', 'onkeydown', 'onfocus', 'onblur'];
 function m3Swap(o) {
   if (o._m3 || o.classList.contains('ddb') || o.tagName === 'MD-FILLED-TEXT-FIELD') return;
+  if (o.tagName === 'DIV') {
+    const sel = document.createElement('md-outlined-select');
+    sel.setAttribute('data-m3', '1');
+    [...o.querySelectorAll('.ddl > div')].forEach(x => {
+      const op = document.createElement('md-select-option');
+      op.value = x.dataset.v;
+      if (x.dataset.v === o.dataset.v) op.selected = true;
+      const hl = document.createElement('div');
+      hl.slot = 'headline';
+      hl.textContent = x.textContent;
+      op.appendChild(hl);
+      sel.appendChild(op);
+    });
+    sel.addEventListener('change', e => {
+      e.stopPropagation();
+      o.dataset.v = sel.value;
+      const sp = o.querySelector('.ddb span'), cur = o.querySelector('.ddl div[data-v="' + sel.value + '"]');
+      if (sp && cur) sp.textContent = cur.textContent;
+      o.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    sel._orig = o; o._m3 = sel;
+    o.style.display = 'none';
+    o.after(sel);
+    return;
+  }
   let n;
   const tag = o.tagName, ty = (o.getAttribute('type') || '').toLowerCase();
   if (tag === 'BUTTON' && o.classList.contains('b')) {
     const txt = o.classList.contains('g') && o.parentElement && o.parentElement.matches('.md > .row');
     n = document.createElement(txt ? 'md-text-button' : o.classList.contains('g') ? 'md-filled-tonal-button' : 'md-filled-button');
     if (o.classList.contains('d')) n.style.cssText = '--md-filled-button-container-color:var(--d);--md-filled-button-label-text-color:#fff';
-  } else if (tag === 'BUTTON' && o.classList.contains('ib')) n = document.createElement('md-icon-button');
+  } else if (tag === 'BUTTON' && o.id === 'send') n = document.createElement('md-filled-icon-button');
+  else if (tag === 'BUTTON' && o.classList.contains('ib')) n = document.createElement('md-icon-button');
   else if (tag === 'BUTTON') return;
   else if (ty === 'checkbox') n = document.createElement('md-switch');
   else if (ty === 'radio') n = document.createElement('md-radio');
   else if (ty === 'range') n = document.createElement('md-slider');
-  else n = document.createElement('md-filled-text-field');
+  else n = document.createElement('md-outlined-text-field');
   const keep = o.classList.contains('ib') ? ['ib'] : [];
   for (const a of o.attributes) {
-    if (['class', 'checked', 'placeholder', 'rows', 'maxlength', 'type'].includes(a.name) && !(a.name === 'type' && n.localName === 'md-filled-text-field' && ty !== 'textarea')) continue;
+    if (['class', 'checked', 'placeholder', 'rows', 'maxlength', 'type'].includes(a.name) && !(a.name === 'type' && n.localName === 'md-outlined-text-field' && ty !== 'textarea')) continue;
     n.setAttribute(a.name, a.value);
   }
   if (keep.length) n.className = keep.join(' ');
@@ -2608,7 +2652,7 @@ function m3Swap(o) {
     Object.defineProperty(n, 'checked', { get: () => n.selected, set: v => { n.selected = v; }, configurable: true });
   } else if (n.localName === 'md-radio') n.checked = o.checked;
   else if (n.localName === 'md-slider') { n.min = o.min; n.max = o.max; n.value = o.value; }
-  else if (n.localName === 'md-filled-text-field') {
+  else if (n.localName === 'md-outlined-text-field') {
     n.label = o.getAttribute('placeholder') || '';
     if (tag === 'TEXTAREA') { n.type = 'textarea'; n.rows = o.rows || 3; }
     if (o.maxLength > 0) n.maxLength = o.maxLength;
@@ -2629,9 +2673,10 @@ function m3Revert() {
     const o = n._orig;
     if (!o) return;
     const ln = n.localName;
+    if (ln === 'md-outlined-select') { o.style.display = ''; o._m3 = null; n.remove(); return; }
     if (ln === 'md-switch') o.checked = n.selected;
     else if (ln === 'md-radio') o.checked = n.checked;
-    else if (ln === 'md-slider' || ln === 'md-filled-text-field') o.value = n.value;
+    else if (ln === 'md-slider' || ln === 'md-outlined-text-field') o.value = n.value;
     else { o.disabled = !!n.disabled; while (n.firstChild) o.appendChild(n.firstChild); }
     M3_EV.forEach(k => { if (n[k]) o[k] = n[k]; });
     o._m3 = null;
