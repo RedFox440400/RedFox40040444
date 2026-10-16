@@ -37,10 +37,17 @@
 :root[data-color-theme="sunset"] { --mine: #f57c00; --btnt: #fff; --av: #f57c00; }
 :root[data-color-theme="purple"] { --mine: #7b1fa2; --btnt: #fff; --av: #7b1fa2; }
 :root[data-color-theme="monochrome"] { --mine: #555; --btnt: #fff; --av: #555; }
-:root[data-color-theme="material3"] { --mine: #6750a4; --btnt: #fff; --av: #6750a4; --r: 28px; --rt: 8px; }
-:root[data-ui-style="material3"] { --r: 28px; --rt: 8px; --btn: #6750a4; --btnt: #fff; }
-:root[data-ui-style="material3"][data-theme=light] { --btn: #6750a4; --btnt: #fff; }
-:root[data-ui-style="custom"] { --mine: var(--custom-accent, #e5534b); }
+
+/* Material 3 Expressive */
+:root[data-ui-style="material3"] {
+  --r: 28px; --rt: 8px; --btn: #6750a4; --btnt: #fff; --g: rgba(103,80,164,.12);
+  --mine: #6750a4; --send-bg: #6750a4; --send-fg: #fff;
+  --av: #6750a4;
+}
+:root[data-ui-style="material3"][data-theme=light] {
+  --btn: #6750a4; --btnt: #fff; --mine: #6750a4; --send-bg: #6750a4; --send-fg: #fff;
+  --av: #6750a4;
+}
 
 :root[data-blur=off] { --gl: var(--p); --gl2: var(--p); }
 :root[data-anim=off] * { animation: none !important; transition: none !important; }
@@ -60,6 +67,10 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .b:disabled { opacity: .4; cursor: default; }
 .b.g { background: var(--g); color: var(--t); }
 .b.d { background: var(--d); color: #fff; }
+/* Ensure contrast for white buttons */
+.b[style*="background:#fff"], .b[style*="background: #fff"], .b[style*="background:white"], .b[style*="background: white"] { color: #000 !important; }
+:root[data-ui-style="material3"] .b { border-radius: 20px; }
+:root[data-ui-style="material3"] .ib { border-radius: 50%; }
 .fld { width: 100%; padding: 13px 15px; background: var(--fld); border: 1px solid var(--l); border-radius: 14px; transition: border-color .15s; }
 .fld:focus { border-color: var(--fb); }
 textarea.fld { resize: none; display: block; line-height: 1.4; }
@@ -254,6 +265,19 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 .img-modal { position: fixed; inset: 0; background: #000000e0; display: flex; align-items: center; justify-content: center; z-index: 100000; cursor: zoom-out; }
 .img-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
 .img-modal .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; }
+
+/* Material 3 Expressive enhancements */
+:root[data-ui-style="material3"] #hdr { border-radius: 20px; }
+:root[data-ui-style="material3"] .pill { border-radius: 32px; }
+:root[data-ui-style="material3"] .it { border-radius: 24px; }
+:root[data-ui-style="material3"] .m { border-radius: 20px; }
+:root[data-ui-style="material3"] .m.me { border-bottom-right-radius: 6px; }
+:root[data-ui-style="material3"] .m.ot { border-bottom-left-radius: 6px; }
+:root[data-ui-style="material3"] .grp { border-radius: 20px; }
+:root[data-ui-style="material3"] .fld { border-radius: 12px; }
+:root[data-ui-style="material3"] .md { border-radius: 28px; }
+:root[data-ui-style="material3"] .ctx { border-radius: 16px; }
+:root[data-ui-style="material3"] .toast { border-radius: 16px; }
 </style>
 </head>
 <body>
@@ -307,7 +331,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
     <div id="comp">
       <div id="rbar" class="hide"><span></span><button class="ib" style="width:30px;height:30px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="pill" id="pill">
-        <button class="ib" id="attach" title="Attach"><svg viewBox="0 0 24 24"><path d="M21 12.5l-8.5 8.5a5 5 0 01-7-7L14 5.5a3.5 3.5 0 015 5L10.5 19a2 2 0 01-3-3l8-8"/></svg></button>
         <div id="inp" contenteditable="true" data-p="message"></div>
         <button class="ib" id="send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
@@ -317,7 +340,7 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 </div>
 
 <script>
-const APP_VERSION = '2.0';
+const APP_VERSION = '2.1';
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -426,7 +449,7 @@ const L = {
     showLastSeen: 'Show last seen time', funcs: 'Functions', radius: 'Message rounding', preview: 'Preview',
     securityTab: 'Security', autoDelAcc: 'Auto-delete account if inactive', y1: '1 year', y2: '2 years',
     never: 'Never', msgDel: 'Message auto-delete', m5: '5 min', h1: '1 hour', m6: '6 months', y5: '5 years',
-    onlineWho: 'Who can see me online', onlineAll: 'Everyone', onlineChat: 'Only those I ever wrote to',
+    onlineWho: 'Who can see me online', onlineAll: 'Everyone', onlineChat: 'Only those I wrote to',
     needKey: 'Enter your current key to confirm', needPass: 'Enter your current password to confirm',
     wrongKey: 'Wrong key', wrongPass: 'Wrong password', passwordSet: 'Set password',
     passwordRemove: 'Remove password', blacklist: 'Blacklist', blurUi: 'Interface blur',
@@ -466,11 +489,12 @@ const L = {
     deleteForAllP: 'It will disappear for all participants.', limitReached: 'You can create only {n} group/channel',
     limitReachedPlural: 'You can create only {n} groups/channels',
     myChannels: 'My channels',
-    attach: 'Attach photo', photoOnlyAdmin: 'Only admins can send photos to global chat',
-    photoNotAllowed: 'Photos are not allowed in this chat', uploadFailed: 'Upload failed',
-    uiStyle: 'UI Style', redfoxStyle: 'RedFox (default)', material3Style: 'Material 3 Expressive',
-    customStyle: 'Custom (beta)', customAccent: 'Accent color', betaFeatures: 'Beta features',
-    betaFeaturesS: 'Show experimental features', registrationDate: 'Registration date'
+    photoNotAllowed: 'Photos are not allowed in this chat',
+    uiStyle: 'Interface style', redfoxStyle: 'RedFox (default)', material3Style: 'Material 3 Expressive',
+    registrationDate: 'Registration date', unsavedChanges: 'Unsaved changes',
+    unsavedChangesText: 'You have unsaved changes. Do you want to save them before closing?',
+    saveAndClose: 'Save and Close', disableWarnings: 'Disable warning dialogs',
+    disableWarningsS: 'Do not show confirmation dialogs before closing'
   },
   ru: {
     dname: 'Отображаемое имя', dnp: 'Ваше имя', uname: 'Имя пользователя', unp: 'a-z, 0-9, _ - !',
@@ -577,11 +601,12 @@ const L = {
     deleteForAllP: 'Оно исчезнет у всех участников.', limitReached: 'Вы можете создать только {n} группу/канал',
     limitReachedPlural: 'Вы можете создать только {n} групп/каналов',
     myChannels: 'Мои каналы',
-    attach: 'Прикрепить фото', photoOnlyAdmin: 'Только админы могут отправлять фото в общий чат',
-    photoNotAllowed: 'Фото запрещены в этом чате', uploadFailed: 'Не удалось загрузить',
+    photoNotAllowed: 'Фото запрещены в этом чате',
     uiStyle: 'Стиль интерфейса', redfoxStyle: 'RedFox (по умолчанию)', material3Style: 'Material 3 Expressive',
-    customStyle: 'Кастомный (бета)', customAccent: 'Акцентный цвет', betaFeatures: 'Бета-функции',
-    betaFeaturesS: 'Показывать экспериментальные функции', registrationDate: 'Дата регистрации'
+    registrationDate: 'Дата регистрации', unsavedChanges: 'Несохранённые изменения',
+    unsavedChangesText: 'У вас есть несохранённые изменения. Сохранить их перед закрытием?',
+    saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
+    disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием'
   }
 };
 
@@ -595,7 +620,6 @@ function applyLang() {
   document.querySelectorAll('[data-p]').forEach(e => e.placeholder = t(e.dataset.p));
   $('setb').title = t('settings');
   $('admb').title = t('admin');
-  $('attach').title = t('attach');
   $('ver').textContent = APP_VERSION;
 }
 
@@ -621,8 +645,7 @@ const hdrBlur = () => +(localStorage.getItem('mg_hdrblur') || 100);
 const sideBlur = () => +(localStorage.getItem('mg_sideblur') || 100);
 const colorTheme = () => localStorage.getItem('mg_color_theme') || 'monochrome';
 const uiStyle = () => localStorage.getItem('mg_ui_style') || 'redfox';
-const customAccent = () => localStorage.getItem('mg_custom_accent') || '#e5534b';
-const betaFeatures = () => localStorage.getItem('mg_beta') === '1';
+const warningsDisabled = () => localStorage.getItem('mg_warn_disabled') === '1';
 
 function applyBlur() {
   const r = document.documentElement;
@@ -633,20 +656,16 @@ function applyBlur() {
 }
 function applyRadius() {
   const v = radius();
+  if (uiStyle() === 'material3') return;
   document.documentElement.style.setProperty('--r', Math.round(v * 18 / 100) + 'px');
   document.documentElement.style.setProperty('--rt', Math.round(v * 4 / 100) + 'px');
 }
 function applyTheme() {
   document.documentElement.dataset.theme = theme();
-  document.documentElement.dataset.colorTheme = colorTheme();
   document.documentElement.dataset.uiStyle = uiStyle();
-  document.documentElement.style.setProperty('--custom-accent', customAccent());
+  document.documentElement.dataset.colorTheme = colorTheme();
   if (uiStyle() === 'material3') {
     document.documentElement.dataset.colorTheme = 'material3';
-  } else if (uiStyle() === 'custom') {
-    document.documentElement.dataset.colorTheme = 'custom';
-  } else {
-    document.documentElement.dataset.colorTheme = colorTheme();
   }
   const c = document.querySelector('.h-captcha');
   if (c) c.dataset.theme = 'dark';
@@ -671,7 +690,7 @@ const RED_BADGE = '<span class="vb" data-bt="admin"><svg viewBox="0 0 24 24"><pa
 const badge = u => { const b = badges[u]; if (!b) return ''; if (b === 'admin') return RED_BADGE; if (b === 'checked') return BLUE_BADGE; return ''; };
 
 const MAX = 35;
-let colors = {}, banners = {}, lsInfo = {}, keyMode = false, bans = {}, banEl = null, me = null, chat = 'global', C = { global: [] }, names = new Map(), lastNames = new Map(), online = new Map(), blocked = new Set(), badges = {}, lastRead = {}, cleared = {}, idx = new Set(), locl = new Set(), att = {}, refs = [], reply = null, editing = null, seen = new Set(), pin = null, typing = false, typRef = null, lastT = 0, autoDel = 0, capTok = null, mineNew = false, writtenTo = new Set();
+let colors = {}, banners = {}, lsInfo = {}, keyMode = false, bans = {}, banEl = null, me = null, chat = 'global', C = { global: [] }, names = new Map(), lastNames = new Map(), online = new Map(), blocked = new Set(), badges = {}, lastRead = {}, cleared = {}, idx = new Set(), locl = new Set(), att = {}, refs = [], reply = null, editing = null, seen = new Set(), pin = null, typing = false, typRef = null, lastT = 0, autoDel = 0, capTok = null, mineNew = false;
 let globalDisabled = false, addToGroupsPolicy = 'nobody', mutedUntil = 0;
 let AV = {}, GR = {}, MB = {}, LK = {}, CT = {}, grpKnown = new Set(), leaving = new Set();
 let grpColors = {}, grpBanners = {};
@@ -718,6 +737,7 @@ function modal(h, cls) {
 }
 function ask(ti, p, ok, danger) {
   return new Promise(r => {
+    if (warningsDisabled()) return r(true);
     const o = modal('<h3>' + ti + '</h3><p>' + p + '</p><div class="row"><button class="b g" id="n">' + t('cancel') + '</button><button class="b ' + (danger ? 'd' : '') + '" id="y">' + ok + '</button></div>');
     o.querySelector('#n').onclick = () => { o.remove(); r(false); };
     o.querySelector('#y').onclick = () => { o.remove(); r(true); };
@@ -740,20 +760,26 @@ const room = p => p.startsWith('g:') ? 'grp_' + p.slice(2) : 'private_' + [me.u,
 const pathFor = p => p === 'global' ? 'messages/' : 'privateMessages/' + room(p) + '/';
 const K = k => 'mg_' + k + '_' + (me ? me.u : '');
 const save = () => { localStorage.setItem(K('lr'), JSON.stringify(lastRead)); localStorage.setItem(K('cl'), JSON.stringify(cleared)); };
+
+/* Deterministic hue from username */
 const hh = u => { let h = 7; for (const c of String(u)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+
+/* Get controlled two-tone pair for a hue: darker + plain */
+function huePair(h) {
+  return { dark: h, plain: (h + 35) % 360, sat: 42, light: 38 };
+}
+
 const hue = u => colors[u] != null ? colors[u] : hh(u);
-const avStyle = u => 'background:hsl(' + hue(u) + ' 42% 38%);color:#fff';
+const avStyle = u => { const h = hue(u); return 'background:hsl(' + h + ' 42% 38%);color:#fff'; };
+
 function bannerColors(u) {
-  const b = banners[u];
-  if (b && typeof b === 'object') { const a = +b.a || 0; return [a, +b.b || (a + 45) % 360]; }
   const h = hh(u);
-  return [h, (h + 45) % 360];
+  const p = huePair(h);
+  return [p.dark, p.plain];
 }
 const banStyle = u => {
-  const bi = banners[u];
-  if (bi && bi.img && IMG.test(bi.img)) return "background:center/cover url('" + esc(bi.img) + "')";
   const [a, b] = bannerColors(u);
-  return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
+  return 'background:radial-gradient(circle at 25% 15%,hsl(' + a + ' 45% 45%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 42% 32%),hsl(' + b + ' 40% 22%))';
 };
 
 const avatar = (u, dot, big) => {
@@ -926,7 +952,6 @@ function listen(p) {
       const m = { id: c.key, ...c.val() };
       a.push(m);
       if (m.username === p && m.displayName) names.set(p, m.displayName);
-      if (m.username === me.u) writtenTo.add(p);
     });
     C[p] = a;
     if (lastRead[p] === undefined || chat === p) markRead(p);
@@ -989,7 +1014,7 @@ function open(p, fromList) {
   pin = null;
   typing = false;
   if (typRef) { typRef.off(); typRef = null; }
-  if (p !== 'global' && !isG(p) && p !== me.u) {
+  if (p !== 'global' && !isG(p)) {
     listen(p);
     markRead(p);
     db.ref('users/' + p).once('value').then(s => { const v = s.val() || {}; lsInfo[p] = { ts: v.lastSeen, show: v.showLastSeen }; if (chat === p) hdr(); });
@@ -1054,7 +1079,7 @@ function showWarn() {
 
 function hdr() {
   if (!me) return;
-  $('ht').innerHTML = chat === 'global' ? E(t('global')) : isG(chat) ? E(nm(chat)) + badge(chat) : E(nm(chat)) + badge(chat);
+  $('ht').innerHTML = chat === 'global' ? E(t('global')) : E(nm(chat)) + badge(chat);
   $('hs').innerHTML = chat === 'global'
     ? online.size + ' ' + E(t('online'))
     : isG(chat)
@@ -1281,7 +1306,6 @@ async function send() {
     const p = chat;
     if (p !== me.u) {
       locl.delete(p);
-      writtenTo.add(p);
       db.ref('userChats/' + me.u + '/' + p).set(true);
       db.ref('userChats/' + p + '/' + me.u).set(true);
     }
@@ -1317,7 +1341,6 @@ async function cmd(x0) {
   return true;
 }
 $('send').onclick = send;
-$('attach').onclick = () => toast(t('photoNotAllowed'));
 $('inp').onkeydown = e => {
   if (e.key !== 'Enter' || e.isComposing) return;
   const ctrl = e.ctrlKey || e.metaKey;
@@ -1630,13 +1653,12 @@ const BLO = [['75', '75%'], ['100', '100%'], ['125', '125%']];
 
 async function settings(pg) {
   let X = (await db.ref('users/' + me.u).once('value')).val() || {};
+  let dirty = false;
   const o = modal('<div class="sth"></div><div class="sb"></div>', 'st');
   const H = o.querySelector('.sth');
   const B = o.querySelector('.sb');
   const oc = new MutationObserver(() => { if (!o.isConnected) { closeDD(); oc.disconnect(); } });
   oc.observe(document.body, { childList: true });
-  let pc = colors[me.u] != null ? colors[me.u] : null;
-  let pbg = bannerColors(me.u);
   let newAv = AV[me.u] || '', newBan = (banners[me.u] && banners[me.u].img) || '';
   const hd = (ti, back) => {
     H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + E(ti) + '</b>';
@@ -1644,12 +1666,11 @@ async function settings(pg) {
   };
   const nav = (p, ti, v) => '<div class="nav" data-pg="' + p + '"><span>' + E(ti) + '</span><em>' + E(v) + '</em>' + CH + '</div>';
   const prev = () => {
-    const h = pc !== null ? pc : hh(me.u);
-    const [a, b] = pbg;
+    const h = colors[me.u] != null ? colors[me.u] : hh(me.u);
     const n = ((B.querySelector('#an') || {}).value || me.n).trim();
     const e = B.querySelector('#pv');
     if (e) {
-      const bg = newBan ? "center/cover url('" + newBan + "')" : 'radial-gradient(circle at 25% 15%,hsl(' + a + ' 60% 58%),transparent 62%),linear-gradient(160deg,hsl(' + a + ' 50% 40%),hsl(' + b + ' 45% 22%))';
+      const bg = newBan ? "center/cover url('" + newBan + "')" : banStyle(me.u);
       e.style.cssText = 'background:' + bg + ';border-radius:20px;padding:22px;display:flex;justify-content:center';
       e.innerHTML = '<div class="av big" style="' + (newAv ? "background:center/cover url('" + newAv + "')" : 'background:hsl(' + h + ' 42% 38%);color:#fff') + '">' + (newAv ? '' : esc(n.charAt(0).toUpperCase())) + '</div>';
     }
@@ -1669,10 +1690,15 @@ async function settings(pg) {
       const months = (lang() === 'ru' ? MONTHS_RU : MONTHS_EN).map((m, i) => [i + 1, m.charAt(0).toUpperCase() + m.slice(1)]);
       const years = [];
       for (let y = curY - 14; y >= 1900; y--) years.push([y, y]);
+      const avBtn = AV[me.u]
+        ? '<button class="b g" id="dav">' + E(t('removeAvatar')) + '</button>'
+        : '<button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button>';
+      const banBtn = (banners[me.u] && banners[me.u].img)
+        ? '<button class="b g" id="dbn">' + E(t('removeBanner')) + '</button>'
+        : '<button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button>';
       B.innerHTML =
         '<div style="display:flex;justify-content:center" id="pv"></div>' +
-        '<div style="display:flex;justify-content:center;gap:10px"><button class="b g" id="uav">' + E(t('uploadAvatar')) + '</button><button class="b g" id="dav">' + E(t('removeAvatar')) + '</button></div>' +
-        '<div style="display:flex;justify-content:center;gap:10px"><button class="b g" id="ubn">' + E(t('uploadBanner')) + '</button><button class="b g" id="dbn">' + E(t('removeBanner')) + '</button></div>' +
+        '<div style="display:flex;justify-content:center;gap:10px">' + avBtn + banBtn + '</div>' +
         '<div><span class="lb">' + E(t('nameL')) + '</span><input class="fld" id="an" maxlength="20" value="' + esc(me.n) + '"></div>' +
         '<div><span class="lb">' + E(t('lastName')) + '</span><input class="fld" id="aln" maxlength="20" placeholder="' + E(t('lastNameP')) + '" value="' + esc(X.lastName || '') + '"></div>' +
         '<div><span class="lb">' + E(t('userL')) + '</span><input class="fld" id="au" maxlength="9" value="' + esc(me.u) + '"></div>' +
@@ -1683,14 +1709,16 @@ async function settings(pg) {
         '</div>' +
         '<div class="hint">' + E(t('birthdayMin')) + '</div>' +
         '<div><span class="lb">' + E(t('birthdayVis')) + '</span>' + dd('bv', [['all', t('visAll')], ['chat', t('visChat')], ['me', t('visMe')]], (X.birthday && X.birthday.vis === 'pick' ? 'me' : X.birthday && X.birthday.vis) || 'all') + '</div>' +
-        '<div><span class="lb">' + E(t('color')) + '</span><div class="sw" id="sw"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 42% 38%)"></i>').join('') + '</div></div>' +
-        '<div><span class="lb">' + E(t('bannerColor')) + '</span><div class="sh" style="margin-top:-4px">' + E(t('bannerTop')) + '</div><div class="sw" id="swa"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 50% 40%)"></i>').join('') + '</div><div class="sh">' + E(t('bannerBottom')) + '</div><div class="sw" id="swb"><i class="au" data-h="a">' + E(t('colorAuto')) + '</i>' + HUES.map(h => '<i data-h="' + h + '" style="background:hsl(' + h + ' 45% 22%)"></i>').join('') + '</div></div>' +
         '<button class="b" id="sv">' + E(t('save')) + '</button>';
       prev();
-      B.querySelector('#uav').onclick = () => pickImage(256, d => { newAv = d; prev(); });
-      B.querySelector('#dav').onclick = () => { newAv = ''; prev(); };
-      B.querySelector('#ubn').onclick = () => pickImage(900, d => { newBan = d; prev(); });
-      B.querySelector('#dbn').onclick = () => { newBan = ''; prev(); };
+      const uav = B.querySelector('#uav');
+      if (uav) uav.onclick = () => pickImage(256, d => { newAv = d; dirty = true; show('account'); });
+      const dav = B.querySelector('#dav');
+      if (dav) dav.onclick = () => { newAv = ''; dirty = true; show('account'); };
+      const ubn = B.querySelector('#ubn');
+      if (ubn) ubn.onclick = () => pickImage(900, d => { newBan = d; dirty = true; show('account'); });
+      const dbn = B.querySelector('#dbn');
+      if (dbn) dbn.onclick = () => { newBan = ''; dirty = true; show('account'); };
       B.querySelector('#sv').onclick = async e => {
         const btn = e.currentTarget;
         const dn = B.querySelector('#an').value.trim();
@@ -1709,10 +1737,9 @@ async function settings(pg) {
           let u = me.u;
           if (un !== me.u) { if (await renameUser(me.u, un) === 'taken') { btn.disabled = false; return toast(t('e8')); } u = un; }
           await db.ref('users/' + u).update({ displayName: dn, lastName: ln, bio, birthday: bdv });
-          if (pc === null) await db.ref('userColors/' + u).remove(); else await db.ref('userColors/' + u).set(pc);
-          await db.ref('userBanners/' + u).set({ a: pbg[0], b: pbg[1], img: newBan || null });
           if (newAv) await db.ref('userAvatars/' + u).set(newAv); else await db.ref('userAvatars/' + u).remove();
-          if (u !== me.u) { db.ref('userAvatars/' + me.u).remove(); db.ref('userColors/' + me.u).remove(); db.ref('userBanners/' + me.u).remove(); }
+          await db.ref('userBanners/' + u).set({ img: newBan || null });
+          if (u !== me.u) { db.ref('userAvatars/' + me.u).remove(); db.ref('userBanners/' + me.u).remove(); }
           if (u !== me.u || dn !== me.n || ln !== (X.lastName || '')) {
             try { const l = JSON.parse(localStorage.getItem('mg_last') || 'null'); if (l && l.u === me.u) localStorage.setItem('mg_last', JSON.stringify({ dn, u })); } catch (x) {}
             sessionStorage.setItem('mg_auto', JSON.stringify({ dn, u }));
@@ -1723,6 +1750,7 @@ async function settings(pg) {
           X.lastName = ln;
           X.birthday = bdv;
           lastNames.set(me.u, ln);
+          dirty = false;
           toast(t('save'));
           show('main');
         } catch (x) { console.error(x); toast(t('failed')); btn.disabled = false; }
@@ -1780,10 +1808,9 @@ async function settings(pg) {
     } else if (p === 'look') {
       hd(t('appearance'), 1);
       B.innerHTML =
-        '<div class="sh">' + E(t('uiStyle')) + '</div><div class="grp">' + rd('us', 'redfox', t('redfoxStyle'), uiStyle() === 'redfox') + rd('us', 'material3', t('material3Style'), uiStyle() === 'material3') + rd('us', 'custom', t('customStyle'), uiStyle() === 'custom') + '</div>' +
-        (uiStyle() === 'custom' ? '<div class="sh">' + E(t('customAccent')) + '</div><div class="grp" style="padding:14px"><input type="color" id="ca" value="' + customAccent() + '" style="width:100%;height:50px;border:none;border-radius:12px;background:none;cursor:pointer"></div>' : '') +
+        '<div class="sh">' + E(t('uiStyle')) + '</div><div class="grp">' + rd('us', 'redfox', t('redfoxStyle'), uiStyle() === 'redfox') + rd('us', 'material3', t('material3Style'), uiStyle() === 'material3') + '</div>' +
         '<div class="sh">' + E(t('theme')) + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + '</div>' +
-        '<div class="sh">Color</div><div class="grp">' + ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)).join('') + '</div>' +
+        '<div class="sh">' + E(t('color')) + '</div><div class="grp">' + ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)).join('') + '</div>' +
         '<div class="sh">' + E(t('scale')) + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
         '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('bl', t('blurUi'), blurOn()) + '</div>' +
         '<div class="sh">' + E(t('hdrBlur')) + '</div>' + dd('hb', BLO, String(hdrBlur())) +
@@ -1803,20 +1830,13 @@ async function settings(pg) {
       B.innerHTML =
         '<div class="sh">' + E(t('timeFmt')) + '</div><div class="grp">' + rd('hf', '12', t('h12'), h12()) + rd('hf', '24', t('h24'), !h12()) + '</div>' +
         '<div class="sh">' + E(t('kbd')) + '</div><div class="grp">' + rd('sm', 'enter', t('sendEnter'), sendMode() === 'enter', t('sendEnterS')) + rd('sm', 'ctrl', t('sendCtrl'), sendMode() === 'ctrl', t('sendCtrlS')) + ck('ar', t('autoRep'), autoRep(), t('autoRepS')) + '</div>' +
-        '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('anim', t('animUi'), animOn()) + '</div>' +
-        '<div class="sh">' + E(t('betaFeatures')) + '</div><div class="grp">' + ck('beta', t('betaFeatures'), betaFeatures(), t('betaFeaturesS')) + '</div>' +
+        '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('anim', t('animUi'), animOn()) + ck('wd', t('disableWarnings'), warningsDisabled(), t('disableWarningsS')) + '</div>' +
         '<div class="sh">' + E(t('language')) + '</div><div class="grp">' + rd('lg', 'en', 'English', lang() === 'en') + rd('lg', 'ru', 'Русский', lang() === 'ru') + '</div>';
     }
   }
   B.onclick = e => {
     const n = e.target.closest('[data-pg]');
     if (n) return show(n.dataset.pg);
-    const s = e.target.closest('#sw i');
-    if (s) { pc = s.dataset.h === 'a' ? null : +s.dataset.h; prev(); }
-    const s2 = e.target.closest('#swa i');
-    if (s2) { pbg[0] = s2.dataset.h === 'a' ? hh(me.u) : +s2.dataset.h; prev(); }
-    const s3 = e.target.closest('#swb i');
-    if (s3) { pbg[1] = s3.dataset.h === 'a' ? (hh(me.u) + 45) % 360 : +s3.dataset.h; prev(); }
   };
   B.oninput = e => {
     if (e.target.id === 'an') prev();
@@ -1827,19 +1847,18 @@ async function settings(pg) {
     const n = i.name || i.id;
     if (n === 'th') { localStorage.setItem('mg_theme', i.value); applyTheme(); }
     else if (n === 'ct') { localStorage.setItem('mg_color_theme', i.value); applyTheme(); }
-    else if (n === 'us') { localStorage.setItem('mg_ui_style', i.value); applyTheme(); show('look'); }
-    else if (n === 'ca') { localStorage.setItem('mg_custom_accent', i.value); applyTheme(); }
+    else if (n === 'us') { localStorage.setItem('mg_ui_style', i.value); applyTheme(); applyRadius(); show('look'); }
     else if (n === 'hf') { localStorage.setItem('mg_h', i.value); render(); }
     else if (n === 'zs') { localStorage.setItem('mg_scale', i.value); applyScale(); }
     else if (n === 'sm') localStorage.setItem('mg_send', i.value);
     else if (n === 'ar') localStorage.setItem('mg_ar', i.checked ? '1' : '0');
     else if (n === 'anim') { localStorage.setItem('mg_anim', i.checked ? '1' : '0'); applyAnim(); }
+    else if (n === 'wd') { localStorage.setItem('mg_warn_disabled', i.checked ? '1' : '0'); }
     else if (n === 'bl') { localStorage.setItem('mg_blur', i.checked ? '1' : '0'); applyBlur(); }
     else if (n === 'hb') { localStorage.setItem('mg_hdrblur', i.dataset.v); applyBlur(); }
     else if (n === 'sbl') { localStorage.setItem('mg_sideblur', i.dataset.v); applyBlur(); }
     else if (n === 'lg') { localStorage.setItem('mg_lang', i.value); applyLang(); hdr(); side(); render(); show('funcs'); }
     else if (n === 'adm') { autoDel = +i.dataset.v; localStorage.setItem(K('ad'), autoDel); }
-    else if (n === 'beta') { localStorage.setItem('mg_beta', i.checked ? '1' : '0'); }
   };
   show(pg || 'main');
 }
