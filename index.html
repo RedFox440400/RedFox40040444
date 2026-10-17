@@ -439,6 +439,62 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 :root:not([data-ui-style="material3"]) .b.g:hover { background: var(--hv3); box-shadow: inset 0 0 0 1px var(--gb); transform: none; }
 .sb .row .b { flex: 1; padding: 12px 10px; font-size: 13px; }
 .sb .row { gap: 8px; }
+
+/* Жидкое стекло */
+:root {
+  --glass: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.03) 62%), color-mix(in srgb, var(--p) 46%, transparent);
+  --glassS: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.02) 62%), color-mix(in srgb, var(--p) 80%, transparent);
+  --gsh: inset 0 1px 0 rgba(255,255,255,.22), inset 0 0 0 1px rgba(255,255,255,.07), 0 14px 40px rgba(0,0,0,.34);
+  --gblur: blur(calc(var(--blur) * 1.2)) saturate(190%);
+  --spring: cubic-bezier(.2,.9,.25,1.15);
+}
+:root[data-theme=light] {
+  --glass: linear-gradient(145deg, rgba(255,255,255,.8), rgba(255,255,255,.35) 62%), color-mix(in srgb, var(--p) 40%, transparent);
+  --glassS: linear-gradient(145deg, rgba(255,255,255,.9), rgba(255,255,255,.6) 62%), color-mix(in srgb, var(--p) 85%, transparent);
+  --gsh: inset 0 1px 0 rgba(255,255,255,.9), inset 0 0 0 1px rgba(0,0,0,.05), 0 14px 36px rgba(20,24,30,.16);
+}
+:root[data-blur=off] { --glass: var(--p); --glassS: var(--p); }
+#hdr > .ib, #hpill, .pill, #rbar, #pinbar, .warnbar, .ctx, .ddl, .toast, #down {
+  background: var(--glass); border: 0; box-shadow: var(--gsh); backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur);
+}
+.md, .card { background: var(--glassS); border: 0; box-shadow: var(--gsh); backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur); }
+.ov { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+:root[data-blur=off] .ov { backdrop-filter: none; }
+@keyframes springIn { from { opacity: 0; transform: translateY(18px) scale(.93); } }
+@keyframes ctxIn { from { opacity: 0; transform: scale(.82); } }
+.md, .card { animation: springIn .42s var(--spring) both; }
+.ctx { animation: ctxIn .3s var(--spring) both; }
+.ddl { animation: ctxIn .22s var(--spring) both; }
+.toast { border-radius: 16px; padding: 12px 20px; }
+#hdr { top: max(14px, env(safe-area-inset-top)); left: 14px; right: 14px; gap: 10px; }
+#hdr > * { animation: down .5s var(--spring) both; }
+#hdr > .ib { width: 52px; height: 52px; }
+#hpill { height: 52px; border-radius: 26px; padding: 0 18px 0 6px; gap: 12px; overflow: hidden; flex-wrap: nowrap; flex-direction: row; }
+#hav .av { width: 42px; height: 42px; flex-shrink: 0; }
+#hpill .t b { font-size: 17px; }
+#msgs { padding-top: 84px; }
+#msgs.pp { padding-top: 130px; }
+#pinbar, .warnbar { top: 78px; border-radius: 20px; }
+#comp { left: 14px; right: 14px; gap: 8px; }
+.pill { min-height: 56px; border-radius: 28px; padding: 7px 7px 7px 20px; }
+#rbar { border-radius: 20px; padding: 9px 8px 9px 16px; }
+#inp { font-size: 16px; }
+.it { padding: 11px 12px; border-radius: 20px; }
+.it:hover { background: var(--h1); transform: translateX(2px); }
+.it.on { background: linear-gradient(135deg, var(--tint), transparent), var(--h1); }
+.av { box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+#login { background: radial-gradient(700px 420px at 15% -10%, color-mix(in srgb, var(--btn) 16%, transparent), transparent), radial-gradient(600px 400px at 100% 110%, color-mix(in srgb, var(--btn) 12%, transparent), transparent); }
+@media (max-width: 768px) { #side { background: var(--glassS); backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur); box-shadow: var(--gsh); border-right: 0; } }
+/* Меню сообщения */
+.ctx { min-width: 240px; border-radius: 28px; padding: 8px; }
+.ctx div { display: flex; align-items: center; gap: 16px; padding: 13px 16px; font-size: 16px; border-radius: 20px; }
+.ctx div:active { transform: scale(.97); }
+.ctx div svg { width: 22px; height: 22px; flex-shrink: 0; }
+.ctx .dd svg { color: var(--d); }
+.ctx .tm { display: block; padding: 8px 16px 10px; font-size: 12px; border-bottom: 0; }
+.md .col { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.md .col .b { width: 100%; padding: 14px; font-size: 14px; border-radius: 16px; }
+.b.d { box-shadow: 0 4px 14px color-mix(in srgb, var(--d) 40%, transparent); }
 </style>
 </head>
 <body>
@@ -664,7 +720,7 @@ const L = {
     unsavedChangesText: 'У вас есть несохранённые изменения. Сохранить их перед закрытием?',
     saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
     disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием',
-    uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
+    discard: 'Не сохранять', uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
   }
 };
 
@@ -1287,7 +1343,7 @@ function ctx(e, m) {
   const mine = m.username === me.u;
   const menu = document.createElement('div');
   menu.className = 'ctx';
-  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = E(x); if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
+  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = micon(x) + '<span>' + E(x) + '</span>'; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
   menu.innerHTML = '<div class="tm">' + new Date(m.time).toLocaleString(loc(), { hour12: h12() }) + '</div>';
   add(t('reply'), () => setBar('reply', m));
   add(t('copy'), () => { navigator.clipboard && navigator.clipboard.writeText(m.text).then(() => toast(t('copied'))); });
@@ -1302,6 +1358,7 @@ function ctx(e, m) {
   const r = menu.getBoundingClientRect();
   menu.style.left = Math.max(8, Math.min(e.clientX, innerWidth - r.width - 8)) + 'px';
   menu.style.top = Math.max(8, Math.min(e.clientY, innerHeight - r.height - 8)) + 'px';
+  menu.style.transformOrigin = Math.max(0, e.clientX - parseFloat(menu.style.left)) + 'px ' + Math.max(0, e.clientY - parseFloat(menu.style.top)) + 'px';
   setTimeout(() => document.addEventListener('click', function f() { menu.remove(); document.removeEventListener('click', f); }), 0);
 }
 
@@ -1448,7 +1505,7 @@ $('mb').onclick = e => {
   const p = chat;
   const menu = document.createElement('div');
   menu.className = 'ctx';
-  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = E(x); if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
+  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = micon(x) + '<span>' + E(x) + '</span>'; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
   add(t('profile'), () => profile(p));
   add(t('clearH'), async () => { if (await ask(t('clearQ'), t('clearP'), t('clear'), 1)) { cleared[p] = Date.now(); save(); render(); side(); } });
   add(t('delChat'), async () => { if (await ask(t('delChatQ'), t('delChatP'), t('del'), 1)) { cleared[p] = Date.now(); save(); locl.delete(p); idx.delete(p); db.ref('userChats/' + me.u + '/' + p).remove(); open(globalDisabled ? me.u : 'global'); } });
@@ -1746,9 +1803,10 @@ async function settings(pg) {
   const guard = go => {
     if (!dirty) return go();
     if (warningsDisabled()) { dirty = false; return go(); }
-    const w = modal('<h3>' + E(t('unsavedChanges')) + '</h3><p>' + E(t('unsavedChangesText')) + '</p><div class="row"><button class="b g" id="wc">' + E(t('cancel')) + '</button><button class="b" id="ws">' + E(t('saveAndClose')) + '</button></div>');
+    const w = modal('<h3>' + E(t('unsavedChanges')) + '</h3><p>' + E(t('unsavedChangesText')) + '</p><div class="col"><button class="b" id="ws">' + E(t('save')) + '</button><button class="b g" id="wd">' + E(t('discard')) + '</button><button class="b g" id="wc">' + E(t('cancel')) + '</button></div>');
     w.style.zIndex = 99995;
     w.querySelector('#wc').onclick = () => w.remove();
+    w.querySelector('#wd').onclick = () => { w.remove(); dirty = false; draft = {}; newAv = AV[me.u] || ''; newBan = (banners[me.u] && banners[me.u].img) || ''; go(); };
     w.querySelector('#ws').onclick = () => { w.remove(); const sv = B.querySelector('#sv'); if (sv) sv.click(); };
   };
   o.onclick = e => { if (e.target === o) guard(() => o.remove()); };
@@ -2814,6 +2872,22 @@ hdr = function () {
   hav.innerHTML = chat === 'global' ? '<div class="av">#</div>' : avatar(chat);
 };
 if (me) hdr();
+
+function micon(l) {
+  const P = {
+    reply: '<path d="M9 14l-5-5 5-5"/><path d="M4 9h11a5 5 0 015 5v3"/>',
+    copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6a2 2 0 012-2h9"/>',
+    forward: '<path d="M15 14l5-5-5-5"/><path d="M20 9H9a5 5 0 00-5 5v3"/>',
+    pin: '<path d="M12 16v6M8 3h8l-1.2 6.5L18 13H6l3.2-3.5z"/>',
+    unpin: '<path d="M12 16v6M8 3h8l-1.2 6.5L18 13H6l3.2-3.5zM4 4l16 16"/>',
+    edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+    del: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/>'
+  };
+  P.deleteForAll = P.del;
+  for (const k in P) if (t(k) === l) return '<svg viewBox="0 0 24 24">' + P[k] + '</svg>';
+  return '';
+}
+$('inp').setAttribute('data-p', t('message'));
 </script>
 </body>
 </html>
