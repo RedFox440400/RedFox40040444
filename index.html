@@ -406,10 +406,39 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .me .lk { color: #fff; }
 #down { position: absolute; right: 16px; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 4; width: 42px; height: 42px; background: var(--gl2); border: 1px solid var(--gb); color: var(--t); box-shadow: 0 4px 14px #0003; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: pop .18s var(--ease) both; }
 #down i { position: absolute; top: -7px; right: -3px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--btn); color: var(--btnt); font: 600 11px/20px inherit; font-style: normal; text-align: center; }
-#emp { background: var(--gl2); border: 1px solid var(--gb); border-radius: 18px; padding: 8px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; box-shadow: 0 8px 28px #0004; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: down .15s var(--ease) both; }
-#emp span { font-size: 22px; line-height: 1; padding: 7px 0; text-align: center; border-radius: 10px; cursor: pointer; transition: background .15s, transform .15s; }
-#emp span:hover { background: var(--hv2); transform: scale(1.15); }
-@media (max-width: 400px) { #emp { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 400px) { 
+/* Форма сообщений с хвостиком */
+.m { display: flow-root; }
+.m.tail { contain: layout; }
+.me.tail, .ot.tail { position: relative; }
+.me.tail { border-bottom-right-radius: 0; margin-right: 8px; }
+.ot.tail { border-bottom-left-radius: 0; margin-left: 8px; }
+.me.tail::before, .ot.tail::before { content: ''; position: absolute; bottom: 0; width: 20px; height: 20px; background: inherit; }
+.me.tail::before { right: -8px; border-bottom-left-radius: 15px; }
+.ot.tail::before { left: -8px; border-bottom-right-radius: 15px; }
+.me.tail::after, .ot.tail::after { content: ''; position: absolute; bottom: 0; width: 26px; height: 20px; background: var(--bg); clear: none; }
+.me.tail::after { right: -26px; border-bottom-left-radius: 10px; }
+.ot.tail::after { left: -26px; border-bottom-right-radius: 10px; }
+.m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
+/* Кнопка «вниз» с размытием фона */
+#down { background: color-mix(in srgb, var(--p) 45%, transparent); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
+/* Шапка чата */
+#hav { flex-shrink: 0; }
+#hav .av { width: 40px; height: 40px; font-size: 16px; }
+#hdr { background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; gap: 8px; pointer-events: none; }
+#hdr > * { pointer-events: auto; }
+#hdr > .ib, #hpill { background: color-mix(in srgb, var(--p) 55%, transparent); color: var(--t); border: 1px solid var(--gb); backdrop-filter: blur(18px) saturate(170%); -webkit-backdrop-filter: blur(18px) saturate(170%); box-shadow: 0 4px 18px #00000014; }
+:root[data-blur=off] #hdr > .ib, :root[data-blur=off] #hpill { background: var(--p); }
+#hdr > .ib { width: 50px; height: 50px; }
+#hpill { flex: 1; min-width: 0; height: 50px; border-radius: 25px; display: flex; align-items: center; gap: 10px; padding: 0 16px 0 5px; cursor: pointer; transition: transform .15s var(--ease); }
+#hpill:active { transform: scale(.99); }
+#hpill .t { flex: 1; min-width: 0; padding: 0; }
+#hpill .t b { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#hpill .t small { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+:root:not([data-ui-style="material3"]) .b.g { background: var(--hv2); box-shadow: inset 0 0 0 1px var(--gb); }
+:root:not([data-ui-style="material3"]) .b.g:hover { background: var(--hv3); box-shadow: inset 0 0 0 1px var(--gb); transform: none; }
+.sb .row .b { flex: 1; padding: 12px 10px; font-size: 13px; }
+.sb .row { gap: 8px; }
 </style>
 </head>
 <body>
@@ -634,7 +663,8 @@ const L = {
     registrationDate: 'Дата регистрации', unsavedChanges: 'Несохранённые изменения',
     unsavedChangesText: 'У вас есть несохранённые изменения. Сохранить их перед закрытием?',
     saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
-    disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием'
+    disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием',
+    uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
   }
 };
 
@@ -672,7 +702,7 @@ const blurOn = () => localStorage.getItem('mg_blur') !== '0';
 const hdrBlur = () => +(localStorage.getItem('mg_hdrblur') || 100);
 const sideBlur = () => +(localStorage.getItem('mg_sideblur') || 100);
 const colorTheme = () => localStorage.getItem('mg_color_theme') || 'monochrome';
-const uiStyle = () => localStorage.getItem('mg_ui_style') || 'redfox';
+const uiStyle = () => 'redfox';
 const warningsDisabled = () => localStorage.getItem('mg_warn_disabled') === '1';
 
 function applyBlur() {
@@ -912,6 +942,7 @@ async function login() {
     if (oldPass.exists()) await db.ref('users/' + u + '/passHash').remove();
 
     localStorage.setItem('mg_pass_' + u, pw);
+    localStorage.removeItem('mg_out');
     sessionStorage.setItem('mg_pass_' + u, pw);
     start(dn, u, user.uid);
   } catch (e) {
@@ -963,7 +994,17 @@ function start(dn, u, uid, auto) {
   setInterval(expire, 5000);
   open(globalDisabled ? me.u : 'global');
   boot(dn, u);
-  setTimeout(hideLoader, 800);
+  whenReady(u);
+}
+function whenReady(u) {
+  const data = Promise.all([
+    db.ref('messages').orderByChild('time').limitToLast(MAX).once('value'),
+    db.ref('userChats/' + u).once('value'),
+    db.ref('bans').once('value'),
+    db.ref('userBadges').once('value')
+  ]).catch(() => {});
+  Promise.race([data, new Promise(r => setTimeout(r, 7000))])
+    .then(() => requestAnimationFrame(() => requestAnimationFrame(hideLoader)));
 }
 
 function on(ref, fn) { ref.on('value', fn); refs.push(ref); }
@@ -985,15 +1026,20 @@ function listen(p) {
   });
 }
 async function legacyScan() {
-  const v = (await db.ref('privateMessages').once('value')).val() || {};
-  for (const id in v) {
-    const r = id.replace('private_', '');
-    let p = null;
-    if (r.startsWith(me.u + '_')) p = r.slice(me.u.length + 1);
-    else if (r.endsWith('_' + me.u)) p = r.slice(0, -me.u.length - 1);
-    if (p && p !== me.u) { names.set(p, names.get(p) || p); db.ref('userChats/' + me.u + '/' + p).set(true); }
-  }
-  localStorage.setItem(K('scan'), '1');
+  try {
+    const tk = await auth.currentUser.getIdToken();
+    const r = await fetch(firebase.app().options.databaseURL + '/privateMessages.json?shallow=true&auth=' + tk);
+    const v = await r.json();
+    if (!v || v.error) return;
+    for (const id in v) {
+      const q = id.replace('private_', '');
+      let p = null;
+      if (q.startsWith(me.u + '_')) p = q.slice(me.u.length + 1);
+      else if (q.endsWith('_' + me.u)) p = q.slice(0, -me.u.length - 1);
+      if (p && p !== me.u) { names.set(p, names.get(p) || p); db.ref('userChats/' + me.u + '/' + p).set(true); }
+    }
+    localStorage.setItem(K('scan'), '1');
+  } catch (e) {}
 }
 const plist = () => new Set([...idx, ...locl]);
 function visible(list, p) { const now = Date.now(), c = cleared[p] || 0; return (list || []).filter(m => !(m.expireAt && m.expireAt <= now) && m.time > c && !blocked.has(m.username)); }
@@ -1173,7 +1219,7 @@ function render(init) {
       rp + attHtml +
       (m.text ? '<span>' + fmt(m.text) + '</span>' : '') +
       (m.isButton && okLink(m.buttonLink) ? '<div class="bt" data-link="' + esc(m.buttonLink) + '">' + esc(m.buttonText) + '</div>' : '') +
-      '<small>' + (m.edited ? '✎ ' : '') + hm(m.time) + '</small></div>';
+      '<small>' + (m.edited ? '✎ ' : '') + hm(m.time) + (mine ? chk() : '') + '</small></div>';
   });
   box.innerHTML = h || '<div class="empty">' + E(t('empty')) + '</div>';
   if (scroll) {
@@ -1688,12 +1734,14 @@ async function settings(pg) {
   const o = modal('<div class="sth"></div><div class="sb"></div>', 'st');
   const H = o.querySelector('.sth');
   const B = o.querySelector('.sb');
-  const oc = new MutationObserver(() => { if (!o.isConnected) { closeDD(); oc.disconnect(); } });
+  const bu = e => { if (dirty && !warningsDisabled()) { e.preventDefault(); e.returnValue = ''; } };
+  window.addEventListener('beforeunload', bu);
+  const oc = new MutationObserver(() => { if (!o.isConnected) { closeDD(); oc.disconnect(); window.removeEventListener('beforeunload', bu); } });
   oc.observe(document.body, { childList: true });
   let newAv = AV[me.u] || '', newBan = (banners[me.u] && banners[me.u].img) || '';
   const hd = (ti, back) => {
     H.innerHTML = '<button class="ib" id="bk"><svg viewBox="0 0 24 24">' + (back ? '<path d="M15 6l-6 6 6 6"/>' : IC.x) + '</svg></button><b>' + E(ti) + '</b>';
-    H.querySelector('#bk').onclick = back ? () => guard(() => show('main')) : () => o.remove();
+    H.querySelector('#bk').onclick = back ? () => guard(() => show('main')) : () => guard(() => o.remove());
   };
   const guard = go => {
     if (!dirty) return go();
@@ -1848,7 +1896,7 @@ async function settings(pg) {
     } else if (p === 'look') {
       hd(t('appearance'), 1);
       B.innerHTML =
-        '<div class="sh">' + E(t('uiStyle')) + '</div><div class="grp">' + rd('us', 'redfox', t('redfoxStyle'), uiStyle() === 'redfox') + rd('us', 'material3', t('material3Style'), uiStyle() === 'material3') + '</div>' +
+        
         '<div class="sh">' + E(t('theme')) + '</div><div class="grp">' + rd('th', 'light', t('light'), theme() === 'light') + rd('th', 'dark', t('dark'), theme() === 'dark') + '</div>' +
         '<div class="sh">' + E(t('color')) + '</div><div class="grp">' + ['redfox', 'ocean', 'forest', 'sunset', 'purple', 'monochrome'].map(ct => rd('ct', ct, ct.charAt(0).toUpperCase() + ct.slice(1), colorTheme() === ct)).join('') + '</div>' +
         '<div class="sh">' + E(t('scale')) + '</div><div class="grp">' + ['75', '100', '125'].map(v => rd('zs', v, v + '%', scale() === v)).join('') + '</div>' +
@@ -1889,7 +1937,6 @@ async function settings(pg) {
     if (['bd', 'bm', 'by', 'bv'].includes(n)) dirty = true;
     if (n === 'th') { localStorage.setItem('mg_theme', i.value); applyTheme(); }
     else if (n === 'ct') { localStorage.setItem('mg_color_theme', i.value); applyTheme(); }
-    else if (n === 'us') { localStorage.setItem('mg_ui_style', i.value); applyTheme(); applyRadius(); m3Sync(); show('look'); }
     else if (n === 'hf') { localStorage.setItem('mg_h', i.value); render(); }
     else if (n === 'zs') { localStorage.setItem('mg_scale', i.value); applyScale(); }
     else if (n === 'sm') localStorage.setItem('mg_send', i.value);
@@ -2048,6 +2095,8 @@ $('exitb').onclick = async () => {
   try { await db.ref('onlineUsers/' + me.u).remove(); await db.ref('users/' + me.u + '/lastSeen').set(Date.now()); } catch (e) {}
   refs.forEach(r => r.off());
   try { await auth.signOut(); } catch (e) {}
+  localStorage.setItem('mg_out', '1');
+  localStorage.removeItem('mg_pass_' + me.u);
   location.reload();
 };
 
@@ -2447,8 +2496,24 @@ $('list').addEventListener('click', async e => {
 try {
   const a = JSON.parse(sessionStorage.getItem('mg_auto') || 'null');
   if (a) { sessionStorage.removeItem('mg_auto'); start(a.dn, a.u, null, 1); }
-  else { hideLoader(); }
+  else autoLogin().then(ok => { if (!ok) hideLoader(); });
 } catch (e) { console.error(e); hideLoader(); }
+
+// Если устройство помнит аккаунт, входим сразу, без капчи и пароля
+async function autoLogin() {
+  try {
+    if (localStorage.getItem('mg_out')) return false;
+    const l = JSON.parse(localStorage.getItem('mg_last') || 'null');
+    const pw = l && localStorage.getItem('mg_pass_' + l.u);
+    if (!pw) return false;
+    let user = await new Promise(r => { const off = auth.onAuthStateChanged(x => { off(); r(x); }); });
+    if (!user || user.email !== l.u + AUTH_DOMAIN) user = (await auth.signInWithEmailAndPassword(l.u + AUTH_DOMAIN, pw)).user;
+    const x = (await db.ref('users/' + l.u).once('value')).val();
+    if (!x || (x.uid && x.uid !== user.uid)) return false;
+    start(x.displayName || l.dn, l.u, user.uid, 1);
+    return true;
+  } catch (e) { console.error(e); return false; }
+}
 
 function viewImg(src) {
   const o = document.createElement('div');
@@ -2660,29 +2725,22 @@ $('msgs').addEventListener('scroll', () => {
   updDown();
 });
 down.onclick = () => { newCnt = 0; $('msgs').scrollTo({ top: $('msgs').scrollHeight, behavior: 'smooth' }); };
-const _render = render;
-render = function (init) { _render(init); updDown(); };
-
-// Панель эмодзи
-const emp = document.createElement('div');
-emp.id = 'emp'; emp.className = 'hide';
-emp.innerHTML = '😀 😂 🥹 😍 😘 😎 🤔 😢 😭 😡 👍 👎 👏 🙏 💪 🔥 ❤️ 💔 🎉 ✨ 👀 🤝 😴 🤯 🥳 😅 🙈 💯 ✅ ❌ 🦊 ☕'.split(' ').map(x => '<span>' + x + '</span>').join('');
-$('comp').insertBefore(emp, $('pill'));
-const emb = document.createElement('button');
-emb.className = 'ib'; emb.id = 'emb'; emb.title = 'Эмодзи';
-emb.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/></svg>';
-$('pill').insertBefore(emb, $('inp'));
-const toggleEmp = v => emp.classList.toggle('hide', v === undefined ? !emp.classList.contains('hide') : !v);
-emb.onmousedown = e => e.preventDefault();
-emb.onclick = () => toggleEmp();
-emp.onmousedown = e => e.preventDefault();
-emp.onclick = e => {
-  const sp = e.target.closest('span');
-  if (!sp) return;
-  $('inp').focus();
-  document.execCommand('insertText', false, sp.textContent);
+const _render = render, _side = side;
+let _rq = 0, _sq = 0;
+render = function (init) {
+  if (init) { _render(init); updDown(); return; }
+  if (_rq) return;
+  _rq = requestAnimationFrame(() => { _rq = 0; _render(); updDown(); });
 };
-$('send').addEventListener('click', () => toggleEmp(false));
+side = function () {
+  if (_sq) return;
+  _sq = requestAnimationFrame(() => { _sq = 0; _side(); });
+};
+
+// Отбрасывать «залежавшиеся» клики, накопленные пока страница была занята
+document.addEventListener('click', e => {
+  if (e.isTrusted && performance.now() - e.timeStamp > 400) { e.stopPropagation(); e.preventDefault(); }
+}, true);
 
 // Вставка только простого текста
 $('inp').addEventListener('paste', e => {
@@ -2693,8 +2751,7 @@ $('inp').addEventListener('paste', e => {
 // Esc: закрыть панель или отменить ответ/правку
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  if (!emp.classList.contains('hide')) toggleEmp(false);
-  else if (reply || editing) cancelReply();
+  if (reply || editing) cancelReply();
 });
 
 // Черновики по чатам
@@ -2736,6 +2793,27 @@ setInterval(() => {
   });
   box.addEventListener('click', e => { if (sw) { e.stopPropagation(); sw = false; } }, true);
 })();
+
+function chk() { return '<svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
+
+// Шапка: аватар чата и стрелка назад
+const hav = document.createElement('div');
+hav.id = 'hav';
+$('hdr').insertBefore(hav, $('hdr').querySelector('.t'));
+$('menubtn').innerHTML = '<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>';
+const hpill = document.createElement('div');
+hpill.id = 'hpill';
+$('hdr').insertBefore(hpill, $('mb'));
+hpill.append(hav, $('hdr').querySelector('.t'));
+$('ht').parentElement.onclick = null;
+hpill.onclick = () => { if (isG(chat)) groupInfo(gid_(chat)); else if (chat !== 'global') profile(chat); };
+const _hdr = hdr;
+hdr = function () {
+  _hdr();
+  if (!me) return;
+  hav.innerHTML = chat === 'global' ? '<div class="av">#</div>' : avatar(chat);
+};
+if (me) hdr();
 </script>
 </body>
 </html>
