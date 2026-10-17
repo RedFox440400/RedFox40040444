@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -379,6 +379,37 @@ md-icon-button { flex-shrink: 0; --md-icon-button-icon-color: var(--m); --md-ico
 md-icon-button svg { width: 22px; height: 22px; }
 md-switch, md-radio { flex-shrink: 0; }
 .ban md-icon-button { --md-icon-button-icon-color: #fff; --md-icon-button-hover-icon-color: #fff; }
+
+/* Оформление */
+:root { --acc: var(--btn); --tint: color-mix(in srgb, var(--btn) 16%, transparent); }
+button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
+.fld:focus { box-shadow: 0 0 0 3px var(--tint); }
+:root:not([data-ui-style="material3"]) .b { border-radius: 12px; font-weight: 500; padding: 11px 18px; transition: background .2s var(--ease), transform .15s var(--ease), box-shadow .2s var(--ease), opacity .2s; }
+:root:not([data-ui-style="material3"]) .b:hover { opacity: 1; box-shadow: 0 2px 10px #0003; transform: translateY(-1px); }
+:root:not([data-ui-style="material3"]) .b:active { transform: scale(.97); box-shadow: none; }
+:root:not([data-ui-style="material3"]) .b.g:hover { background: var(--hv3); box-shadow: none; }
+:root:not([data-ui-style="material3"]) .ib:hover { background: var(--hv2); }
+:root:not([data-ui-style="material3"]) #send { width: 40px; height: 40px; box-shadow: 0 2px 8px #0003; transition: transform .2s var(--spring), opacity .2s; }
+:root:not([data-ui-style="material3"]) #send:hover { opacity: 1; transform: scale(1.06); }
+:root:not([data-ui-style="material3"]) #send:active { transform: scale(.9); }
+:root:not([data-ui-style="material3"]) .pill { padding-left: 8px; transition: box-shadow .2s var(--ease); }
+:root:not([data-ui-style="material3"]) .pill:focus-within { box-shadow: 0 0 0 3px var(--tint), 0 4px 18px #00000014; }
+:root:not([data-ui-style="material3"]) .m { box-shadow: 0 1px 1px #0000001a; }
+:root:not([data-ui-style="material3"]) .it { border-radius: 14px; }
+:root:not([data-ui-style="material3"]) .it.on { background: var(--tint); }
+.card { border-radius: 24px; }
+.cnt { min-width: 20px; text-align: center; }
+.m code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: #00000026; padding: 1px 5px; border-radius: 5px; }
+.m s { opacity: .8; }
+.lk { color: #6ab3f3; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+:root[data-theme=light] .ot .lk { color: #1a73e8; }
+.me .lk { color: #fff; }
+#down { position: absolute; right: 16px; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 4; width: 42px; height: 42px; background: var(--gl2); border: 1px solid var(--gb); color: var(--t); box-shadow: 0 4px 14px #0003; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: pop .18s var(--ease) both; }
+#down i { position: absolute; top: -7px; right: -3px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--btn); color: var(--btnt); font: 600 11px/20px inherit; font-style: normal; text-align: center; }
+#emp { background: var(--gl2); border: 1px solid var(--gb); border-radius: 18px; padding: 8px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; box-shadow: 0 8px 28px #0004; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: down .15s var(--ease) both; }
+#emp span { font-size: 22px; line-height: 1; padding: 7px 0; text-align: center; border-radius: 10px; cursor: pointer; transition: background .15s, transform .15s; }
+#emp span:hover { background: var(--hv2); transform: scale(1.15); }
+@media (max-width: 400px) { #emp { grid-template-columns: repeat(6, 1fr); } }
 </style>
 </head>
 <body>
@@ -441,7 +472,8 @@ md-switch, md-radio { flex-shrink: 0; }
 </div>
 
 <script>
-const APP_VERSION = '2.1';
+const APP_VERSION = '2.2';
+let newCnt = 0;
 
 firebase.initializeApp({
   apiKey: "AIzaSyDToZ-f-5s27tbiAR8J_dq1RyDSIMHFKv8",
@@ -492,111 +524,6 @@ async function bindUid(username, uid) {
 }
 
 const L = {
-  en: {
-    dname: 'Display name', dnp: 'Your name', uname: 'Username', unp: 'a-z, 0-9, _ - !',
-    signin: 'Sign in', search: 'Search', message: 'Message', youBlocked: 'You blocked this user', unblock: 'Unblock',
-    e1: 'Name must be 1 to 20 characters', e2: 'Username: a-z, 0-9, _ - ! (up to 9 characters)',
-    e3: 'Complete the captcha', e4: 'This username belongs to a different name', e5: 'Wrong password',
-    e6: 'Cannot reach the server', password: 'Password', protectedT: 'This account is password protected',
-    cancel: 'Cancel', global: 'Global chat', online: 'online', chats: 'Chats', results: 'Results',
-    nobody: 'Nobody found', onlineSec: 'Online', blockedTag: 'blocked', typing: 'typing…', offline: 'offline',
-    empty: 'No messages yet', today: 'Today', yesterday: 'Yesterday', pinned: 'Pinned: ', pinnedT: 'Pinned',
-    unpinnedT: 'Unpinned', noPinUser: 'This user does not allow pinning their messages',
-    notFound: 'Message not found', reply: 'Reply', copy: 'Copy', copied: 'Copied', pin: 'Pin', unpin: 'Unpin',
-    edit: 'Edit', del: 'Delete', editing: 'Editing: ', delQ: 'Delete message?',
-    noUndo: 'This action cannot be undone.', deleted: 'Deleted',
-    verifiedOnly: 'Only verified users can send buttons in the global chat',
-    btnFmt: 'Format: .Buttons button text, message text, https://link',
-    unblockFirst: 'Unblock this user first', restricted: 'This user has restricted messages from you',
-    openLink: 'Open link?', open: 'Open', done: 'Done', noUser: 'User not found', blockQ: 'Block ',
-    blockP: 'You will not see their messages and they cannot write to you.', block: 'Block',
-    userBlocked: 'User blocked', userUnblocked: 'User unblocked', profile: 'Profile',
-    clearH: 'Clear history', clearQ: 'Clear history?', clearP: 'Messages will disappear only for you.',
-    clear: 'Clear', delChat: 'Delete chat', delChatQ: 'Delete chat?',
-    delChatP: 'The chat and its history will be removed from your list.',
-    followers: 'Followers', following: 'Following', follow: 'Follow', unfollow: 'Unfollow',
-    message2: 'Message', editProfile: 'Edit profile', joined: 'Joined ', lastSeen: 'last seen recently',
-    failed: 'Action failed', about: 'About', noBio: 'No description', settings: 'Settings',
-    bio: 'About you', bioP: 'Write a short description', pwRemoved: 'Password removed',
-    pwMin: 'Password: min. 4 characters', theme: 'Theme', light: 'Light', dark: 'Dark', auto: 'Auto',
-    timeFmt: 'Time format', h12: '12-hour', h24: '24-hour', sendEnter: 'Send with Enter',
-    sendEnterS: 'New line with Shift + Enter', sendCtrl: 'Send with Ctrl+Enter', sendCtrlS: 'New line with Enter',
-    autoRep: 'Auto-replace text', autoRepS: 'Converts -- , << and >> while typing',
-    autoDel: 'Auto-delete messages', off: 'Off', d1: '1 day', w1: '1 week', m1: '1 month', unMin: 'min',
-    unHour: 'hours', unDay: 'days', autoDelS: 'Applies to messages sent from now on in private chats.',
-    language: 'Language', privacy: 'Privacy', noPin: 'Prevent pinning my messages', noBlocked: 'No blocked users',
-    save: 'Save', saved: 'Saved messages', byKey: 'Sign in with key', back: 'Back', keyL: 'Login key',
-    keyP: 'Enter key', e7: 'Invalid key', e8: 'This username is taken', account: 'Account',
-    nameL: 'Name', userL: 'Username', userHint: 'Changing the username moves your chats to the new one.',
-    color: 'Avatar color', colorAuto: 'A', loginKey: 'Login key', keyOn: 'Set', keyNone: 'Not set',
-    keyCreate: 'Create key', keyRemove: 'Remove key', keyRemoved: 'Key removed', keyT: 'Your login key',
-    keyD: 'Use it on the sign-in screen. Up to 5 characters.', keyAnother: 'Generate another',
-    keyApply: 'Apply', keyExit: 'Exit', keySaved: 'Key saved',
-    keyTaken: 'This key is already taken. Try another.', keyCopy: 'Copy', appearance: 'Appearance',
-    scale: 'Interface scale', admin: 'Admin panel', searchU: 'Search users', ban: 'Ban', banUser: 'Ban user',
-    unbanAct: 'Unban', banned: 'Banned', reasonP: 'Reason for the ban', youBanned: 'You are banned',
-    reasonIs: 'Reason', until: 'Until', permanent: 'Permanently', forever: 'Forever',
-    userBannedT: 'User banned', userUnbannedT: 'User unbanned', needReason: 'Enter a reason',
-    verification: 'Verification', verifyAct: 'Verify', unverify: 'Remove verification',
-    makeAdmin: 'Make admin', removeAdmin: 'Remove admin', stVerified: 'Verified', stAdmin: 'Admin',
-    stNone: 'Not verified', statusUpd: 'Status updated', signOut: 'Sign out',
-    verifiedMsg: 'This account is verified', adminMsg: 'This account is an administrator',
-    clearGlobal: 'Clear global chat', clearGlobalQ: 'Clear global chat?',
-    clearGlobalP: 'All messages in the global chat will be deleted for everyone. This cannot be undone.',
-    globalCleared: 'Global chat cleared', noRights: 'You do not have permission', lastName: 'Last name',
-    lastNameP: 'Optional', birthday: 'Date of birth', birthdayMin: 'Minimum age: 14 years',
-    birthdayVis: 'Who can see my date of birth', visAll: 'Everyone', visChat: 'Only those with a chat',
-    visPick: 'Choose users', visMe: 'Only me', friends: 'friends', lastSeenT: 'Last seen',
-    showLastSeen: 'Show last seen time', funcs: 'Functions', radius: 'Message rounding', preview: 'Preview',
-    securityTab: 'Security', autoDelAcc: 'Auto-delete account if inactive', y1: '1 year', y2: '2 years',
-    never: 'Never', msgDel: 'Message auto-delete', m5: '5 min', h1: '1 hour', m6: '6 months', y5: '5 years',
-    onlineWho: 'Who can see me online', onlineAll: 'Everyone', onlineChat: 'Only those I wrote to',
-    needKey: 'Enter your current key to confirm', needPass: 'Enter your current password to confirm',
-    wrongKey: 'Wrong key', wrongPass: 'Wrong password', passwordSet: 'Set password',
-    passwordRemove: 'Remove password', blacklist: 'Blacklist', blurUi: 'Interface blur',
-    hdrBlur: 'Chat header blur', sideBlur: 'Sidebar blur', byName: 'Banned by', banAs: 'Ban on behalf of',
-    hi: 'Hello! 👋', seenToday: 'last seen today at', seenYest: 'last seen yesterday at',
-    seenOn: 'last seen', seenAt: 'at', seenLong: 'last seen long ago', animUi: 'Animations',
-    effects: 'Effects', kbd: 'Keyboard', bannerColor: 'Banner color', bannerTop: 'Top-left color',
-    bannerBottom: 'Bottom-right color', how: 'How are you?', agoM: 'min ago', agoH: 'h ago', agoD: 'd ago',
-    disableGlobal: 'Disable global chat', disableGlobalS: 'Hide global chat from the sidebar',
-    addToGroups: 'Who can add me to groups', addToGroupsNobody: 'Nobody',
-    addToGroupsChat: 'Only those I wrote to', addToGroupsAll: 'Everyone',
-    warn: 'Never follow links from strangers.', ignore: 'Ignore', leaveGroup: 'Leave group',
-    bannedMsg: 'This message cannot be displayed.', moreDetails: 'More details..',
-    accountUnavailable: 'Account is unavailable', unavailableDesc: 'Unavailable',
-    accountUnavailableInfo: 'This account is banned. All messages are inactive.',
-    matWarning: 'Profanity and insults are prohibited in the global chat. You have been muted for {n}.',
-    matMuted: 'You have been muted for {n}', seconds: 'seconds', minute: 'minute', minutes: 'minutes',
-    zeroSeconds: '0 seconds', savedShort: 'S',
-    groupFull: 'Group is full ({n} members max)',
-    pwdMin: 'Password: min. 6 characters', pwdWrong: 'Wrong password',
-    createGroup: 'Create group', createChannel: 'Create channel',
-    transferOwnership: 'Transfer ownership', selectNewOwner: 'Select new owner',
-    ownershipTransferred: 'Ownership transferred',
-    groupAvatar: 'Group avatar', groupBackground: 'Group background', groupColor: 'Group color',
-    editGroup: 'Edit group',
-    deleteGroup: 'Delete group', deleteGroupQ: 'Delete group?',
-    deleteGroupP: 'The group and all its history will be permanently deleted for everyone.',
-    groupDeleted: 'Group deleted', inviteLink: 'Invite link', eventLog: 'Event log',
-    makePublic: 'Make public', hideFromSearch: 'Hide from search', groupIsPublic: 'Group is public',
-    hiddenFromSearch: 'Hidden from search', failedToJoin: 'Failed to join', nameTaken: 'Name taken',
-    enterTitle: 'Enter a title', nameRules: 'Name: a-z, 0-9, _ - !', inviteCopy: 'Copy',
-    invitation: 'Invitation', invalidLink: 'Invalid link', groupNotFound: 'Group not found',
-    youWereRemoved: 'You were removed from', onlyAdminsCanPost: 'Only admins can post',
-    youAreNotMember: 'You are not a member', setRole: 'Set role',
-    kickMember: 'Kick member',
-    forward: 'Forward', deleteForAll: 'Delete for all', deleteForAllQ: 'Delete message for everyone?',
-    deleteForAllP: 'It will disappear for all participants.', limitReached: 'You can create only {n} group/channel',
-    limitReachedPlural: 'You can create only {n} groups/channels',
-    myChannels: 'My channels',
-    photoNotAllowed: 'Photos are not allowed in this chat',
-    uiStyle: 'Interface style', redfoxStyle: 'RedFox (default)', material3Style: 'Material 3 Expressive',
-    registrationDate: 'Registration date', unsavedChanges: 'Unsaved changes',
-    unsavedChangesText: 'You have unsaved changes. Do you want to save them before closing?',
-    saveAndClose: 'Save and Close', disableWarnings: 'Disable warning dialogs',
-    disableWarningsS: 'Do not show confirmation dialogs before closing'
-  },
   ru: {
     dname: 'Отображаемое имя', dnp: 'Ваше имя', uname: 'Имя пользователя', unp: 'a-z, 0-9, _ - !',
     signin: 'Войти', search: 'Поиск', message: 'Сообщение', youBlocked: 'Вы заблокировали пользователя',
@@ -711,9 +638,9 @@ const L = {
   }
 };
 
-const lang = () => localStorage.getItem('mg_lang') || 'en';
+const lang = () => 'ru';
 const loc = () => lang() === 'ru' ? 'ru-RU' : 'en-US';
-const t = k => (L[lang()] && L[lang()][k]) || L.en[k] || k;
+const t = k => L.ru[k] || k;
 
 function applyLang() {
   document.documentElement.lang = lang();
@@ -1222,6 +1149,7 @@ function render(init) {
     const mine = m.username === me.u;
     const isNew = !init && !seen.has(m.id);
     seen.add(m.id);
+    if (isNew && !mine) newCnt++;
     if (isNew && mine && mineNew) { scroll = true; mineNew = false; }
     const banned = bans[m.username] && (bans[m.username].until === 0 || bans[m.username].until > Date.now());
     let rp = '';
@@ -1243,12 +1171,13 @@ function render(init) {
     h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '">' +
       (!mine && first && chat === 'global' ? '<div class="sn" data-u="' + esc(m.username) + '">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
       rp + attHtml +
-      (m.text ? '<span>' + E(m.text) + '</span>' : '') +
+      (m.text ? '<span>' + fmt(m.text) + '</span>' : '') +
       (m.isButton && okLink(m.buttonLink) ? '<div class="bt" data-link="' + esc(m.buttonLink) + '">' + esc(m.buttonText) + '</div>' : '') +
       '<small>' + (m.edited ? '✎ ' : '') + hm(m.time) + '</small></div>';
   });
   box.innerHTML = h || '<div class="empty">' + E(t('empty')) + '</div>';
   if (scroll) {
+    newCnt = 0;
     requestAnimationFrame(() => {
       box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
     });
@@ -1288,6 +1217,8 @@ $('msgs').onclick = e => {
   if (bi) return bannedInfo(bi.dataset.bannedInfo);
   const att = e.target.closest('.att');
   if (att) return viewImg(att.dataset.full);
+  const lk = e.target.closest('.lk');
+  if (lk) return linkAsk(lk.dataset.link);
   const bt = e.target.closest('.bt');
   if (bt) return linkAsk(bt.dataset.link);
   const n = e.target.closest('.sn');
@@ -1454,7 +1385,7 @@ $('inp').oninput = () => {
   }
   const html = i.innerHTML;
   const replaced = html.replace(EMO, m => { const c = [...m].map(x => x.codePointAt(0).toString(16).padStart(4, '0')).join('-'); return '<img class="em" alt="' + m + '" draggable="false" data-c="' + c + '" data-n="0" src="' + eurl(c, 0) + '">'; });
-  if (replaced !== html) { i.innerHTML = replaced; }
+  if (replaced !== html) { i.innerHTML = replaced; const r = document.createRange(); r.selectNodeContents(i); r.collapse(false); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
   fit();
   if (chat === 'global' || !me || isG(chat)) return;
   if (Date.now() - lastT > 2000) { lastT = Date.now(); db.ref('typing/' + room(chat) + '/' + me.u).set(Date.now()); }
@@ -1940,7 +1871,7 @@ async function settings(pg) {
         '<div class="sh">' + E(t('timeFmt')) + '</div><div class="grp">' + rd('hf', '12', t('h12'), h12()) + rd('hf', '24', t('h24'), !h12()) + '</div>' +
         '<div class="sh">' + E(t('kbd')) + '</div><div class="grp">' + rd('sm', 'enter', t('sendEnter'), sendMode() === 'enter', t('sendEnterS')) + rd('sm', 'ctrl', t('sendCtrl'), sendMode() === 'ctrl', t('sendCtrlS')) + ck('ar', t('autoRep'), autoRep(), t('autoRepS')) + '</div>' +
         '<div class="sh">' + E(t('effects')) + '</div><div class="grp">' + ck('anim', t('animUi'), animOn()) + ck('wd', t('disableWarnings'), warningsDisabled(), t('disableWarningsS')) + '</div>' +
-        '<div class="sh">' + E(t('language')) + '</div><div class="grp">' + rd('lg', 'en', 'English', lang() === 'en') + rd('lg', 'ru', 'Русский', lang() === 'ru') + '</div>';
+        '';
     }
   }
   B.onclick = e => {
@@ -1968,7 +1899,6 @@ async function settings(pg) {
     else if (n === 'bl') { localStorage.setItem('mg_blur', i.checked ? '1' : '0'); applyBlur(); }
     else if (n === 'hb') { localStorage.setItem('mg_hdrblur', i.dataset.v); applyBlur(); }
     else if (n === 'sbl') { localStorage.setItem('mg_sideblur', i.dataset.v); applyBlur(); }
-    else if (n === 'lg') { localStorage.setItem('mg_lang', i.value); applyLang(); hdr(); side(); render(); show('funcs'); }
     else if (n === 'adm') { autoDel = +i.dataset.v; localStorage.setItem(K('ad'), autoDel); }
   };
   show(pg || 'main');
@@ -2697,6 +2627,115 @@ function m3Sync() {
   }
 }
 m3Sync();
+
+// Форматирование: **жирный**, __курсив__, ~~зачёркнутый~~, `код`, ссылки
+function fmt(s) {
+  const keep = [];
+  const hold = h => '\u0000' + (keep.push(h) - 1) + '\u0000';
+  let x = esc(s);
+  x = x.replace(/`([^`\n]+)`/g, (_, c) => hold('<code>' + c + '</code>'));
+  x = x.replace(/https?:\/\/[\x21-\x7E]+/g, u => {
+    const m = u.match(/[.,;:!?)\]]+$/), tail = m ? m[0] : '', l = u.slice(0, u.length - tail.length);
+    return hold('<span class="lk" data-link="' + l + '">' + l + '</span>') + tail;
+  });
+  x = x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/__(.+?)__/g, '<i>$1</i>').replace(/~~(.+?)~~/g, '<s>$1</s>');
+  return emo(x.replace(/\u0000(\d+)\u0000/g, (_, i) => keep[i]));
+}
+
+// Кнопка «вниз» со счётчиком новых сообщений
+const down = document.createElement('button');
+down.id = 'down'; down.className = 'ib hide'; down.title = 'Вниз';
+down.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg><i></i>';
+$('main').appendChild(down);
+function updDown() {
+  const b = $('msgs');
+  down.classList.toggle('hide', b.scrollHeight - b.scrollTop - b.clientHeight < 300);
+  const i = down.querySelector('i');
+  i.textContent = newCnt > 99 ? '99+' : newCnt;
+  i.style.display = newCnt ? '' : 'none';
+}
+$('msgs').addEventListener('scroll', () => {
+  const b = $('msgs');
+  if (b.scrollHeight - b.scrollTop - b.clientHeight < 80) newCnt = 0;
+  updDown();
+});
+down.onclick = () => { newCnt = 0; $('msgs').scrollTo({ top: $('msgs').scrollHeight, behavior: 'smooth' }); };
+const _render = render;
+render = function (init) { _render(init); updDown(); };
+
+// Панель эмодзи
+const emp = document.createElement('div');
+emp.id = 'emp'; emp.className = 'hide';
+emp.innerHTML = '😀 😂 🥹 😍 😘 😎 🤔 😢 😭 😡 👍 👎 👏 🙏 💪 🔥 ❤️ 💔 🎉 ✨ 👀 🤝 😴 🤯 🥳 😅 🙈 💯 ✅ ❌ 🦊 ☕'.split(' ').map(x => '<span>' + x + '</span>').join('');
+$('comp').insertBefore(emp, $('pill'));
+const emb = document.createElement('button');
+emb.className = 'ib'; emb.id = 'emb'; emb.title = 'Эмодзи';
+emb.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9.5h.01M15 9.5h.01"/></svg>';
+$('pill').insertBefore(emb, $('inp'));
+const toggleEmp = v => emp.classList.toggle('hide', v === undefined ? !emp.classList.contains('hide') : !v);
+emb.onmousedown = e => e.preventDefault();
+emb.onclick = () => toggleEmp();
+emp.onmousedown = e => e.preventDefault();
+emp.onclick = e => {
+  const sp = e.target.closest('span');
+  if (!sp) return;
+  $('inp').focus();
+  document.execCommand('insertText', false, sp.textContent);
+};
+$('send').addEventListener('click', () => toggleEmp(false));
+
+// Вставка только простого текста
+$('inp').addEventListener('paste', e => {
+  e.preventDefault();
+  document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
+});
+
+// Esc: закрыть панель или отменить ответ/правку
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!emp.classList.contains('hide')) toggleEmp(false);
+  else if (reply || editing) cancelReply();
+});
+
+// Черновики по чатам
+let _dc = null;
+setInterval(() => {
+  const inp = $('inp');
+  if (!inp || !me || editing) return;
+  if (_dc !== chat) {
+    try {
+      if (_dc !== null) { const old = inp.innerText.trim(); old ? localStorage.setItem('mg_d_' + _dc, inp.innerText) : localStorage.removeItem('mg_d_' + _dc); }
+      inp.innerText = localStorage.getItem('mg_d_' + chat) || '';
+    } catch (e) {}
+    _dc = chat; fit(); return;
+  }
+  try { const v = inp.innerText.trim(); v ? localStorage.setItem('mg_d_' + chat, inp.innerText) : localStorage.removeItem('mg_d_' + chat); } catch (e) {}
+}, 400);
+
+// Свайп влево по сообщению — ответить
+(() => {
+  let sx = 0, sy = 0, dx = 0, el = null, sw = false;
+  const box = $('msgs');
+  box.addEventListener('touchstart', e => {
+    el = e.target.closest('.m');
+    if (!el || el.dataset.banned) { el = null; return; }
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY; dx = 0;
+  }, { passive: true });
+  box.addEventListener('touchmove', e => {
+    if (!el) return;
+    dx = e.touches[0].clientX - sx;
+    if (Math.abs(e.touches[0].clientY - sy) > 24 && dx > -20) { el.style.transform = ''; el = null; return; }
+    if (dx < -10) el.style.transform = 'translateX(' + Math.max(dx, -70) + 'px)';
+  }, { passive: true });
+  box.addEventListener('touchend', () => {
+    if (!el) return;
+    const m = (C[chat] || []).find(x => x.id === el.dataset.id);
+    el.style.transform = '';
+    if (dx < -60 && m) { sw = true; setBar('reply', m); navigator.vibrate && navigator.vibrate(8); setTimeout(() => sw = false, 400); }
+    el = null;
+  });
+  box.addEventListener('click', e => { if (sw) { e.stopPropagation(); sw = false; } }, true);
+})();
 </script>
 </body>
 </html>
