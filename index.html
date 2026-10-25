@@ -509,34 +509,6 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .av:active { transform: scale(0.88); box-shadow: 0 0 0 2px var(--tint); }
 button, .it, .nav, .av { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .ban .av:active { transform: scale(0.9); }
-
-/* исправления пузырей */
-.m, .m.tail { contain: none; }
-.m small { float: none; align-self: flex-end; }
-.m img.att { width: min(260px, 64vw); max-width: none; height: auto; min-height: 80px; background: var(--hv2); align-self: stretch; }
-
-/* стили пузырей */
-.m[data-bs]:not([data-bs="def"])::before, .m[data-bs]:not([data-bs="def"])::after { display: none; }
-.m[data-bs]:not([data-bs="def"]) { border-radius: var(--r) !important; margin-left: 0; margin-right: 0; }
-[data-bs] small, [data-bs] small .ck { color: inherit !important; stroke: currentColor !important; opacity: .65; }
-[data-bs="ink"]    { background: #000; color: #fff; box-shadow: inset 0 0 0 2px #fff; }
-[data-bs="sun"]    { background: linear-gradient(135deg, #ff9a2e, #ff5a1f); color: #fff; }
-[data-bs="ice"]    { background: #c4ecf7; color: #0f2a35; box-shadow: inset 0 0 0 2px #2b7fff; }
-[data-bs="rose"]   { background: #ffd3e4; color: #5a1030; }
-[data-bs="lemon"]  { background: #fff3a8; color: #4a3d00; }
-[data-bs="mint"]   { background: #c9f2d9; color: #0d3b22; }
-[data-bs="violet"] { background: linear-gradient(135deg, #8a6bff, #5b3df5); color: #fff; }
-[data-bs="paper"]  { background: #fff; color: #111; box-shadow: inset 0 0 0 1px #d8d8d8; }
-
-.bsm { width: 100%; max-width: 420px; max-height: 90vh; display: flex; flex-direction: column; background: var(--glassS); box-shadow: var(--gsh); border-radius: 28px; overflow: hidden; animation: springIn .4s var(--spring) both; }
-.bsh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px; }
-.bsh b { flex: 1; text-align: center; font-size: 15px; }
-.bspv { display: flex; flex-direction: column; gap: 8px; padding: 18px 16px; background: var(--bg); }
-.bspv .m { cursor: default; }
-.bsg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 16px; overflow-y: auto; }
-.bsi { border: 0; background: var(--hv); border-radius: 18px; padding: 16px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; color: var(--t); font-size: 12px; }
-.bsi.on { outline: 2px solid var(--t); }
-.bsi .m { align-self: auto; max-width: none; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -601,6 +573,168 @@ button, .it, .nav, .av { -webkit-tap-highlight-color: transparent; touch-action:
   </section>
 </div>
 
+<script>
+/* ====== BUBBLES.JS (декор в углах, 9-slice) ====== */
+let myBubble = 'def';
+
+const svgUrl = body => 'url("data:image/svg+xml,' + encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'>" + body + '</svg>') + '")';
+
+const zoom = (cx, cy, k, ox, oy, inner) =>
+  "<g transform='translate(" + cx + ' ' + cy + ') scale(' + k + ') translate(' + (-ox) + ' ' + (-oy) + ")'>" + inner + '</g>';
+
+const plate = (fill, stroke, w) =>
+  "<rect x='15' y='15' width='50' height='50' rx='14' fill='" + fill + "' stroke='" + stroke + "' stroke-width='" + (w || 2) + "'/>";
+
+const butterfly = (x, y, s, c) =>
+  "<g transform='translate(" + x + ' ' + y + ') scale(' + s + ")'>" +
+  "<g fill='" + c + "' stroke='#b0306a' stroke-width='.9'>" +
+  "<ellipse cx='-5' cy='-3' rx='5' ry='3.8' transform='rotate(-25 -5 -3)'/>" +
+  "<ellipse cx='5' cy='-3' rx='5' ry='3.8' transform='rotate(25 5 -3)'/>" +
+  "<ellipse cx='-4' cy='4' rx='3.4' ry='2.8'/><ellipse cx='4' cy='4' rx='3.4' ry='2.8'/></g>" +
+  "<path d='M0 -5V7M0 -5Q-2 -8 -4 -8M0 -5Q2 -8 4 -8' stroke='#5a1030' stroke-width='1.4' fill='none' stroke-linecap='round'/></g>";
+
+const flake = (x, y, s) =>
+  "<g transform='translate(" + x + ' ' + y + ') scale(' + s + ")' stroke='#4db3e6' stroke-width='1.7' stroke-linecap='round' fill='none'>" +
+  "<path d='M-7 0H7M-3.5 -6.06L3.5 6.06M-3.5 6.06L3.5 -6.06'/></g>";
+
+const star = (x, y, s) =>
+  "<path transform='translate(" + x + ' ' + y + ') scale(' + s + ")' d='M0-6L1.8-1.9L6-1.5L2.8 1.2L3.8 5.5L0 3.2L-3.8 5.5L-2.8 1.2L-6-1.5L-1.8-1.9Z' fill='#ffd84d' stroke='#e0a800' stroke-width='.8' stroke-linejoin='round'/>";
+
+const spider =
+  "<g stroke='#fff' stroke-width='1.3' fill='none' stroke-linecap='round'>" +
+  "<path d='M68 69L60 65M68 69L59 69M68 69L60 74M68 69L63 78M68 69L76 65M68 69L77 69M68 69L76 74M68 69L73 78'/></g>" +
+  "<circle cx='68' cy='70' r='3.6' fill='#fff'/><circle cx='68' cy='65.6' r='2.2' fill='#fff'/>";
+
+const web =
+  "<g stroke='#fff' stroke-width='1.1' fill='none' stroke-linecap='round'>" +
+  "<path d='M16 16L1 1M16 16L1 10M16 16L10 1M16 16L1 19M16 16L19 1'/>" +
+  "<path d='M7.75 17.65Q9.5 9.5 17.65 7.75M4 18.4Q5.5 5.5 18.4 4'/></g>";
+
+const ghostBody =
+  "<path d='M30 15H50Q65 15 65 30V46Q65 61 50 61Q45 67 40 61T30 61Q15 61 15 46V30Q15 15 30 15Z' fill='#fff' stroke='#c9ced6' stroke-width='1.6' stroke-linejoin='round'/>";
+const miniGhost =
+  "<path d='M60 19V10Q60 3 66 3Q72 3 72 10V19L69 16.5L66 19L63 16.5Z' fill='#fff' stroke='#9aa0a8' stroke-width='1.2' stroke-linejoin='round'/>" +
+  "<circle cx='64' cy='10' r='1.3' fill='#222'/><circle cx='68' cy='10' r='1.3' fill='#222'/>";
+
+const pumpkinStem =
+  "<path d='M21 17Q19 8 25 4L29 7Q25 9 26 17Z' fill='#5fa12f' stroke='#2f5a12' stroke-width='1.2' stroke-linejoin='round'/>" +
+  "<path d='M27 13Q29 9 28 3' fill='none' stroke='#5fa12f' stroke-width='1.6' stroke-linecap='round'/>";
+
+const frog =
+  "<ellipse cx='66' cy='15' rx='11' ry='7' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
+  "<circle cx='60' cy='8' r='4' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
+  "<circle cx='72' cy='8' r='4' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
+  "<circle cx='60' cy='8' r='2.6' fill='#fff'/><circle cx='72' cy='8' r='2.6' fill='#fff'/>" +
+  "<circle cx='60.4' cy='8.2' r='1.3' fill='#111'/><circle cx='71.6' cy='8.2' r='1.3' fill='#111'/>" +
+  "<path d='M60 17Q66 21 72 17' fill='none' stroke='#2f6e1c' stroke-width='1.3' stroke-linecap='round'/>";
+
+const BUBBLES = [
+  { id: 'def', name: 'По умолчанию' },
+  { id: 'web', name: 'Паутина', fg: '#fff', art: plate('#000', '#fff', 2.2) + web + zoom(65, 66, 1.25, 68, 69, spider) },
+  { id: 'pumpkin', name: 'Тыква', fg: '#3b1a00', art: plate('#ff8a1f', '#7a3b00') + zoom(24, 12, 1.2, 25, 12, pumpkinStem) },
+  { id: 'ghost', name: 'Призрак', fg: '#111', art: ghostBody + zoom(66, 11, 1.3, 66, 11, miniGhost) },
+  { id: 'butterfly', name: 'Бабочки', fg: '#5a1030', art: plate('#ffc9de', '#e45b94') + butterfly(65, 14, 1.3, '#ff6fa6') + butterfly(15, 66, 1.2, '#ff8fbb') },
+  { id: 'frog', name: 'Лягушка', fg: '#4a3d00', art: plate('#fff1a1', '#d6bf4e') + zoom(64, 14, 1.2, 66, 14, frog) },
+  { id: 'ice', name: 'Лёд', fg: '#0f2a35', art: plate('#c7efff', '#2f9bd6') + flake(13, 13, 1.3) + flake(66, 67, 1.3) + flake(68, 13, 0.9) },
+  { id: 'stars', name: 'Звёзды', fg: '#fff', art: plate('#6c4cf6', '#3b24b8') + star(65, 14, 1.6) + star(14, 66, 1.3) + star(13, 13, 0.8) }
+];
+
+const TAIL = 'url("data:image/svg+xml,' + encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14' preserveAspectRatio='none'><path d='M0 0V14H12C6 14 2 10 0 0Z'/></svg>") + '")';
+
+const bsAttr = id => id && id !== 'def' && BUBBLES.some(b => b.id === id) ? ' data-bs="' + id + '"' : '';
+
+(() => {
+  const css = `
+:root { --tail: ${TAIL}; }
+
+/* основа пузыря */
+.m { display: flex; flex-direction: column; position: relative; isolation: isolate; contain: none; min-width: 44px; }
+.m::after { content: none; }
+.m small { float: none; align-self: flex-end; margin: 3px 0 0 12px; }
+.me { margin-right: 10px; --bb: var(--mine); }
+.ot { margin-left: 10px; --bb: var(--oth); }
+.me small, .me small .ck { color: #000; stroke: #000; opacity: .7; }
+.m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
+.m img.att { width: min(260px, 64vw); max-width: none; height: auto; min-height: 80px; background: var(--hv2); align-self: stretch; }
+
+/* хвостик обычного пузыря */
+.m.tail:not([data-bs])::before { content: ''; position: absolute; bottom: 0; width: 12px; height: 14px; background: var(--bb); z-index: -1;
+  -webkit-mask: var(--tail) 0 0 / 100% 100% no-repeat; mask: var(--tail) 0 0 / 100% 100% no-repeat; }
+.me.tail:not([data-bs]) { border-bottom-right-radius: 3px; }
+.me.tail:not([data-bs])::before { right: -11px; }
+.ot.tail:not([data-bs]) { border-bottom-left-radius: 3px; }
+.ot.tail:not([data-bs])::before { left: -11px; transform: scaleX(-1); }
+
+/* оформленные пузыри */
+.m[data-bs] { background: none !important; box-shadow: none !important; border-radius: 0 !important; color: var(--fg);
+  margin: 16px 26px; padding: 8px 16px 6px; }
+.m[data-bs]::before { content: ''; position: absolute; inset: -18px; border: 36px solid transparent;
+  border-image: var(--bi) 30 fill / 36px round; z-index: -1; pointer-events: none; }
+.m[data-bs] small, .m[data-bs] small .ck { color: inherit; stroke: currentColor; opacity: .6; }
+.m[data-bs] .rp { color: inherit; border-color: currentColor; opacity: .8; }
+.m[data-bs] .rp b, .m[data-bs] .lk { color: inherit; }
+.m[data-bs] .bt { background: #0002; color: inherit; }
+${BUBBLES.filter(b => b.art).map(b => `.m[data-bs="${b.id}"] { --bi: ${svgUrl(b.art)}; --fg: ${b.fg}; }`).join('\n')}
+
+/* окно выбора */
+.bs-sheet { width: 100%; max-width: 420px; max-height: 90vh; display: flex; flex-direction: column; background: var(--glassS); box-shadow: var(--gsh);
+  backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur); border-radius: 28px; overflow: hidden; animation: springIn .4s var(--spring) both; }
+.bs-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px; }
+.bs-top b { flex: 1; text-align: center; font-size: 15px; }
+.bs-pv { display: flex; flex-direction: column; gap: 12px; padding: 18px 12px; background: var(--bg); }
+.bs-pv .m { cursor: default; }
+.bs-h { padding: 12px 18px; }
+.bs-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 14px 16px; overflow-y: auto; }
+.bs-i { border: 0; background: var(--hv); border-radius: 20px; padding: 6px 6px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; color: var(--t); font-size: 12px; }
+.bs-i.on { outline: 2px solid var(--t); }
+.bs-i .m { pointer-events: none; align-self: center; margin: 26px 22px 22px; min-width: 40px; }
+@media (max-width: 768px) { .bs-ov { align-items: flex-end; padding: 0; } .bs-sheet { max-width: none; border-radius: 28px 28px 0 0; } }
+`;
+  const s = document.createElement('style');
+  s.textContent = css;
+  document.head.appendChild(s);
+})();
+
+function bubbleStyle() {
+  let cur = myBubble;
+  const o = document.createElement('div');
+  o.className = 'ov bs-ov';
+  const time = () => hm(Date.now());
+  o.innerHTML =
+    '<div class="bs-sheet">' +
+      '<div class="bs-top"><button class="b g" id="bc">' + E(t('cancel')) + '</button><b>' + E(t('bubbleTitle')) + '</b><button class="b" id="bsv">' + E(t('save')) + '</button></div>' +
+      '<div class="bs-pv">' +
+        '<div class="m ot tail"><span>' + E(t('hi')) + '</span><small>' + time() + '</small></div>' +
+        '<div class="m me tail" id="bsp"><span>' + E(t('how')) + '</span><small>' + time() + chk() + '</small></div>' +
+      '</div>' +
+      '<div class="hint bs-h">' + E(t('bubbleHint')) + '</div>' +
+      '<div class="bs-g">' + BUBBLES.map(b => '<button class="bs-i" data-id="' + b.id + '"><span class="m me"' + bsAttr(b.id) + '>Aa</span>' + E(b.name) + '</button>').join('') + '</div>' +
+    '</div>';
+  document.body.appendChild(o);
+  const paint = () => {
+    const p = o.querySelector('#bsp');
+    cur === 'def' ? p.removeAttribute('data-bs') : p.setAttribute('data-bs', cur);
+    p.classList.toggle('tail', cur === 'def');
+    o.querySelectorAll('.bs-i').forEach(b => b.classList.toggle('on', b.dataset.id === cur));
+  };
+  paint();
+  o.onclick = e => {
+    if (e.target === o) return o.remove();
+    const b = e.target.closest('.bs-i');
+    if (b) { cur = b.dataset.id; paint(); }
+  };
+  o.querySelector('#bc').onclick = () => o.remove();
+  o.querySelector('#bsv').onclick = () => {
+    myBubble = cur;
+    localStorage.setItem(K('bs'), cur);
+    o.remove();
+    toast(t('done'));
+  };
+}
+/* ====== END BUBBLES.JS ====== */
+</script>
 <script>
 const APP_VERSION = '2.2';
 let newCnt = 0;
@@ -2502,42 +2636,6 @@ async function delGroup(g) {
   up['groupColors/' + g] = null;
   up['groupBanners/' + g] = null;
   try { await db.ref().update(up); toast(t('groupDeleted')); } catch (e) { toast(t('failed')); }
-}
-
-const BS = [['def', 'По умолчанию'], ['ink', 'Чёрный'], ['sun', 'Закат'], ['ice', 'Лёд'], ['rose', 'Роза'], ['lemon', 'Лимон'], ['mint', 'Мята'], ['violet', 'Фиолет'], ['paper', 'Бумага']];
-const bsAttr = id => id && id !== 'def' && BS.some(x => x[0] === id) ? ' data-bs="' + id + '"' : '';
-let myBubble = 'def';
-
-function bubbleStyle() {
-  let cur = myBubble;
-  const o = document.createElement('div');
-  o.className = 'ov';
-  o.innerHTML =
-    '<div class="bsm">' +
-      '<div class="bsh"><button class="b g" id="bc">' + E(t('cancel')) + '</button><b>' + E(t('bubbleTitle')) + '</b><button class="b" id="bsv">' + E(t('save')) + '</button></div>' +
-      '<div class="bspv"><div class="m me tail" id="bsp">' + E('Выглядит потрясающе!') + '</div></div>' +
-      '<div class="hint" style="padding:12px 16px">' + E(t('bubbleHint')) + '</div>' +
-      '<div class="bsg">' + BS.map(x => '<button class="bsi" data-id="' + x[0] + '"><span class="m me"' + bsAttr(x[0]) + '>Aa</span>' + E(x[1]) + '</button>').join('') + '</div>' +
-    '</div>';
-  document.body.appendChild(o);
-  const paint = () => {
-    const p = o.querySelector('#bsp');
-    cur !== 'def' ? p.setAttribute('data-bs', cur) : p.removeAttribute('data-bs');
-    o.querySelectorAll('.bsi').forEach(b => b.classList.toggle('on', b.dataset.id === cur));
-  };
-  paint();
-  o.onclick = e => {
-    if (e.target === o) return o.remove();
-    const b = e.target.closest('.bsi');
-    if (b) { cur = b.dataset.id; paint(); }
-  };
-  o.querySelector('#bc').onclick = () => o.remove();
-  o.querySelector('#bsv').onclick = () => {
-    myBubble = cur;
-    localStorage.setItem(K('bs'), cur);
-    o.remove();
-    toast(t('done'));
-  };
 }
 
 function fwd(m) {
