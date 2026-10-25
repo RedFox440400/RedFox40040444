@@ -301,7 +301,7 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 
 #msgs, #list, .sb, .md { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 #msgs { scroll-behavior: auto; }
-.m { contain: layout paint; }
+.m { contain: none; }
 .m.new { animation: slideUp .35s var(--ease) both; will-change: transform, opacity; }
 .card, .md { animation: up .32s var(--ease) both; }
 .ov { animation: fade .2s var(--ease) both; }
@@ -400,7 +400,7 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 /* ====== ИСПРАВЛЕННЫЙ БЛОК СООБЩЕНИЙ ====== */
 .m { display: flex; flex-direction: column; position: relative; isolation: isolate; }
 .m > span, .m > div, .m > small { position: relative; z-index: 2; }
-.m.tail { contain: layout; }
+.m.tail { contain: none; }
 .me.tail, .ot.tail { position: relative; }
 .me.tail { border-bottom-right-radius: 0; margin-right: 8px; }
 .ot.tail { border-bottom-left-radius: 0; margin-left: 8px; }
@@ -509,6 +509,34 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .av:active { transform: scale(0.88); box-shadow: 0 0 0 2px var(--tint); }
 button, .it, .nav, .av { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .ban .av:active { transform: scale(0.9); }
+
+/* исправления пузырей */
+.m, .m.tail { contain: none; }
+.m small { float: none; align-self: flex-end; }
+.m img.att { width: min(260px, 64vw); max-width: none; height: auto; min-height: 80px; background: var(--hv2); align-self: stretch; }
+
+/* стили пузырей */
+.m[data-bs]:not([data-bs="def"])::before, .m[data-bs]:not([data-bs="def"])::after { display: none; }
+.m[data-bs]:not([data-bs="def"]) { border-radius: var(--r) !important; margin-left: 0; margin-right: 0; }
+[data-bs] small, [data-bs] small .ck { color: inherit !important; stroke: currentColor !important; opacity: .65; }
+[data-bs="ink"]    { background: #000; color: #fff; box-shadow: inset 0 0 0 2px #fff; }
+[data-bs="sun"]    { background: linear-gradient(135deg, #ff9a2e, #ff5a1f); color: #fff; }
+[data-bs="ice"]    { background: #c4ecf7; color: #0f2a35; box-shadow: inset 0 0 0 2px #2b7fff; }
+[data-bs="rose"]   { background: #ffd3e4; color: #5a1030; }
+[data-bs="lemon"]  { background: #fff3a8; color: #4a3d00; }
+[data-bs="mint"]   { background: #c9f2d9; color: #0d3b22; }
+[data-bs="violet"] { background: linear-gradient(135deg, #8a6bff, #5b3df5); color: #fff; }
+[data-bs="paper"]  { background: #fff; color: #111; box-shadow: inset 0 0 0 1px #d8d8d8; }
+
+.bsm { width: 100%; max-width: 420px; max-height: 90vh; display: flex; flex-direction: column; background: var(--glassS); box-shadow: var(--gsh); border-radius: 28px; overflow: hidden; animation: springIn .4s var(--spring) both; }
+.bsh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px; }
+.bsh b { flex: 1; text-align: center; font-size: 15px; }
+.bspv { display: flex; flex-direction: column; gap: 8px; padding: 18px 16px; background: var(--bg); }
+.bspv .m { cursor: default; }
+.bsg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 16px 16px; overflow-y: auto; }
+.bsi { border: 0; background: var(--hv); border-radius: 18px; padding: 16px 8px 10px; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; color: var(--t); font-size: 12px; }
+.bsi.on { outline: 2px solid var(--t); }
+.bsi .m { align-self: auto; max-width: none; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -738,7 +766,9 @@ const L = {
     saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
     disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием',
     discard: 'Не сохранять', uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер',
-    createPassword: 'Создание пароля', createPasswordP: 'Придумайте пароль для нового аккаунта'
+    createPassword: 'Создание пароля', createPasswordP: 'Придумайте пароль для нового аккаунта',
+    bubbleStyle: 'Стиль пузыря', bubbleTitle: 'Выберите стиль пузыря',
+    bubbleHint: 'Пузырь применяется ко всем чатам. Он затрагивает только сообщения, отправленные вами после сохранения.'
   }
 };
 
@@ -1035,6 +1065,7 @@ function start(dn, u, uid, auto) {
     cleared = JSON.parse(localStorage.getItem(K('cl')) || '{}');
   } catch (e) {}
   autoDel = +localStorage.getItem(K('ad')) || 0;
+  myBubble = localStorage.getItem(K('bs')) || 'def';
   globalDisabled = localStorage.getItem(K('gd')) === '1';
   $('login').classList.add('hide');
   $('app').classList.remove('hide');
@@ -1276,7 +1307,7 @@ function render(init) {
     let rp = '';
     if (m.replyTo && !banned) {
       const o = all.find(x => x.id === m.replyTo);
-      rp = '<div class="rp" data-go="' + m.replyTo + '"><b>' + esc(o ? o.displayName : m.replyToSender || '') + '</b>' + (o ? E([...o.text].slice(0, 70).join('')) : '…') + '</div>';
+      rp = '<div class="rp" data-go="' + m.replyTo + '"><b>' + esc(o ? o.displayName : m.replyToSender || '') + '</b>' + (o ? E([...(o.text || '📷')].slice(0, 70).join('')) : '…') + '</div>';
     }
     if (banned) {
       h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + ' banned-msg" data-id="' + m.id + '" data-banned="1">' +
@@ -1289,7 +1320,7 @@ function render(init) {
     if (m.att) {
       attHtml = '<img class="att" src="' + esc(m.att) + '" data-full="' + esc(m.att) + '" alt="">';
     }
-    h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '">' +
+    h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '"' + bsAttr(m.bs) + '>' +
       (!mine && first && chat === 'global' ? '<div class="sn" data-u="' + esc(m.username) + '">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
       rp + attHtml +
       (m.text ? '<span>' + fmt(m.text) + '</span>' : '') +
@@ -1320,7 +1351,7 @@ function renderPin() {
   const m = pin && chat !== 'global' ? visible(C[chat], chat).find(x => x.id === pin) : null;
   const b = $('pinbar');
   b.classList.toggle('hide', !m);
-  if (m) b.querySelector('span').innerHTML = E(t('pinned') + m.text);
+  if (m) b.querySelector('span').innerHTML = E(t('pinned') + (m.text || '📷'));
 }
 $('pinbar').onclick = e => { if (e.target.closest('button')) unpin(); else if (pin) go(pin); };
 async function unpin() { await db.ref('privatePins/' + room(chat)).remove(); toast(t('unpinnedT')); }
@@ -1370,7 +1401,7 @@ function ctx(e, m) {
   const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = micon(x) + '<span>' + E(x) + '</span>'; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
   menu.innerHTML = '<div class="tm">' + new Date(m.time).toLocaleString(loc(), { hour12: h12() }) + '</div>';
   add(t('reply'), () => setBar('reply', m));
-  add(t('copy'), () => { navigator.clipboard && navigator.clipboard.writeText(m.text).then(() => toast(t('copied'))); });
+  add(t('copy'), () => { if (!m.text) return; navigator.clipboard && navigator.clipboard.writeText(m.text).then(() => toast(t('copied'))); });
   if (chat !== 'global') add(pin === m.id ? t('unpin') : t('pin'), () => pin === m.id ? unpin() : pinMsg(m));
   add(t('forward'), () => fwd(m));
   if (isG(chat) && canDel(chat) && m.username !== me.u) add(t('deleteForAll'), async () => { if (await ask(t('deleteForAllQ'), t('deleteForAllP'), t('del'), 1)) { await db.ref(pathFor(chat) + m.id).remove(); logEv(gid_(chat), 'del', m.username); } }, 'dd');
@@ -1390,9 +1421,9 @@ function fit() { const i = $('inp'); i.style.height = '38px'; i.style.height = M
 function setBar(kind, m) {
   cancelReply();
   if (kind === 'reply') reply = { id: m.id, name: m.displayName || m.username };
-  else { editing = m; $('inp').innerText = m.text; fit(); }
+  else { editing = m; $('inp').innerText = m.text || ''; fit(); }
   $('rbar').classList.remove('hide');
-  $('rbar').querySelector('span').innerHTML = E((kind === 'edit' ? t('editing') : m.displayName + ': ') + m.text);
+  $('rbar').querySelector('span').innerHTML = E((kind === 'edit' ? t('editing') : m.displayName + ': ') + (m.text || '📷'));
   $('inp').focus();
 }
 function cancelReply() { if (editing) { $('inp').innerText = ''; fit(); } reply = null; editing = null; $('rbar').classList.add('hide'); }
@@ -1449,6 +1480,7 @@ async function send() {
   }
   const m = { username: me.u, displayName: me.n, text: bp ? bp.msg : x, time: Date.now() };
   if (bp) { m.isButton = true; m.buttonText = bp.btn; m.buttonLink = bp.link; }
+  if (myBubble !== 'def') m.bs = myBubble;
   if (reply) { m.replyTo = reply.id; m.replyToSender = reply.name; }
   if (autoDel > 0 && chat !== 'global') m.expireAt = m.time + autoDel * 1000;
   clr();
@@ -1487,7 +1519,8 @@ $('attach').onclick = () => {
       displayName: me.n,
       text: '',
       att: dataUrl,
-      time: Date.now()
+      time: Date.now(),
+      ...(myBubble !== 'def' ? { bs: myBubble } : {})
     };
     if (autoDel > 0 && chat !== 'global') m.expireAt = m.time + autoDel * 1000;
 
@@ -1839,7 +1872,7 @@ async function settings(pg) {
     if (p === 'main') {
       hd(t('settings'));
       B.innerHTML = '<div class="nav" data-pg="account" style="padding:6px 0">' + avatar(me.u) + '<span><b style="display:block">' + esc(me.n) + '</b><small class="hint">@' + esc(me.u) + '</small></span>' + CH + '</div>' +
-        '<div class="grp">' + nav('sec', t('securityTab'), '') + nav('look', t('appearance'), t(theme())) + nav('funcs', t('funcs'), '') + '</div>';
+        '<div class="grp">' + nav('sec', t('securityTab'), '') + nav('look', t('appearance'), t(theme())) + nav('bubble', t('bubbleStyle'), '') + nav('funcs', t('funcs'), '') + '</div>';
     } else if (p === 'account') {
       hd(t('account'), 1);
       const bd = X.birthday || { d: 1, m: 1, y: 2000 };
@@ -1994,7 +2027,7 @@ async function settings(pg) {
   }
   B.onclick = e => {
     const n = e.target.closest('[data-pg]');
-    if (n) return show(n.dataset.pg);
+    if (n) return n.dataset.pg === 'bubble' ? bubbleStyle() : show(n.dataset.pg);
   };
   B.oninput = e => {
     if (e.target.id === 'an') prev();
@@ -2469,6 +2502,42 @@ async function delGroup(g) {
   up['groupColors/' + g] = null;
   up['groupBanners/' + g] = null;
   try { await db.ref().update(up); toast(t('groupDeleted')); } catch (e) { toast(t('failed')); }
+}
+
+const BS = [['def', 'По умолчанию'], ['ink', 'Чёрный'], ['sun', 'Закат'], ['ice', 'Лёд'], ['rose', 'Роза'], ['lemon', 'Лимон'], ['mint', 'Мята'], ['violet', 'Фиолет'], ['paper', 'Бумага']];
+const bsAttr = id => id && id !== 'def' && BS.some(x => x[0] === id) ? ' data-bs="' + id + '"' : '';
+let myBubble = 'def';
+
+function bubbleStyle() {
+  let cur = myBubble;
+  const o = document.createElement('div');
+  o.className = 'ov';
+  o.innerHTML =
+    '<div class="bsm">' +
+      '<div class="bsh"><button class="b g" id="bc">' + E(t('cancel')) + '</button><b>' + E(t('bubbleTitle')) + '</b><button class="b" id="bsv">' + E(t('save')) + '</button></div>' +
+      '<div class="bspv"><div class="m me tail" id="bsp">' + E('Выглядит потрясающе!') + '</div></div>' +
+      '<div class="hint" style="padding:12px 16px">' + E(t('bubbleHint')) + '</div>' +
+      '<div class="bsg">' + BS.map(x => '<button class="bsi" data-id="' + x[0] + '"><span class="m me"' + bsAttr(x[0]) + '>Aa</span>' + E(x[1]) + '</button>').join('') + '</div>' +
+    '</div>';
+  document.body.appendChild(o);
+  const paint = () => {
+    const p = o.querySelector('#bsp');
+    cur !== 'def' ? p.setAttribute('data-bs', cur) : p.removeAttribute('data-bs');
+    o.querySelectorAll('.bsi').forEach(b => b.classList.toggle('on', b.dataset.id === cur));
+  };
+  paint();
+  o.onclick = e => {
+    if (e.target === o) return o.remove();
+    const b = e.target.closest('.bsi');
+    if (b) { cur = b.dataset.id; paint(); }
+  };
+  o.querySelector('#bc').onclick = () => o.remove();
+  o.querySelector('#bsv').onclick = () => {
+    myBubble = cur;
+    localStorage.setItem(K('bs'), cur);
+    o.remove();
+    toast(t('done'));
+  };
 }
 
 function fwd(m) {
