@@ -397,43 +397,24 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 #down { position: absolute; right: 16px; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 4; width: 42px; height: 42px; background: var(--gl2); border: 1px solid var(--gb); color: var(--t); box-shadow: 0 4px 14px #0003; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: pop .18s var(--ease) both; }
 #down i { position: absolute; top: -7px; right: -3px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--btn); color: var(--btnt); font: 600 11px/20px inherit; font-style: normal; text-align: center; }
 
-/* ====== ИСПРАВЛЕННЫЙ БЛОК СООБЩЕНИЙ (п.1) ====== */
-.m { 
-  display: flex; 
-  flex-direction: column; 
-  position: relative; 
-  isolation: isolate;
-}
+/* ====== ИСПРАВЛЕННЫЙ БЛОК СООБЩЕНИЙ ====== */
+.m { display: flex; flex-direction: column; position: relative; isolation: isolate; }
 .m > span, .m > div, .m > small { position: relative; z-index: 2; }
 .m.tail { contain: layout; }
 .me.tail, .ot.tail { position: relative; }
 .me.tail { border-bottom-right-radius: 0; margin-right: 8px; }
 .ot.tail { border-bottom-left-radius: 0; margin-left: 8px; }
-
-.me.tail::before, .ot.tail::before { 
-  content: ''; 
-  position: absolute; 
-  bottom: 0; 
-  width: 20px; 
-  height: 20px; 
-  background: inherit; 
-  z-index: 1; 
-}
+.me.tail::before, .ot.tail::before { content: ''; position: absolute; bottom: 0; width: 20px; height: 20px; background: inherit; z-index: 1; }
 .me.tail::before { right: -8px; border-bottom-left-radius: 15px; }
 .ot.tail::before { left: -8px; border-bottom-right-radius: 15px; }
-
-.me.tail::after, .ot.tail::after { 
-  content: ''; 
-  position: absolute; 
-  bottom: 0; 
-  width: 26px; 
-  height: 20px; 
-  background: var(--bg); 
-  z-index: 0; 
-}
+.me.tail::after, .ot.tail::after { content: ''; position: absolute; bottom: 0; width: 26px; height: 20px; background: var(--bg); z-index: 0; }
 .me.tail::after { right: -26px; border-bottom-left-radius: 10px; }
 .ot.tail::after { left: -26px; border-bottom-right-radius: 10px; }
 .m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
+
+/* Чёрный цвет времени и галочек */
+.me small { color: #000 !important; opacity: 0.7; }
+.m small .ck { stroke: #000 !important; opacity: 0.7; }
 
 #down { background: color-mix(in srgb, var(--p) 45%, transparent); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
 #hav { flex-shrink: 0; }
@@ -504,33 +485,30 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .ctx .dd svg { color: var(--d); }
 .ctx .tm { display: block; padding: 8px 16px 10px; font-size: 12px; border-bottom: 0; }
 
-/* ====== ИСПРАВЛЕНИЕ МОДАЛКИ (п.4) ====== */
+/* Модалка несохранённых изменений */
 .md .col { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 .md .col .b { width: 100%; padding: 14px; font-size: 14px; border-radius: 16px; justify-content: center; }
 .b.d { box-shadow: 0 4px 14px color-mix(in srgb, var(--d) 40%, transparent); }
 
-/* ====== УЛУЧШЕНИЕ ПОЛЯ ВВОДА (п.2, п.3) ====== */
-#pill {
-  background: var(--gl);
-  border: 1px solid var(--gb);
-  padding: 6px 8px 6px 16px;
-  align-items: center;
-}
+/* Поле ввода */
+#pill { background: var(--gl); border: 1px solid var(--gb); padding: 6px 8px 6px 16px; align-items: center; }
 #inp { padding: 8px 4px; max-height: 140px; }
-#attach {
-  width: 40px; height: 40px; color: var(--m);
-  transition: color .2s, transform .2s;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: none; border: 0; cursor: pointer;
-}
+#attach { width: 40px; height: 40px; color: var(--m); transition: color .2s, transform .2s; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; }
 #attach:hover { color: var(--t); transform: rotate(15deg); }
-#send {
-  width: 40px; height: 40px; margin-left: 4px; border-radius: 50%;
-  background: var(--btn); color: var(--btnt);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
+#send { width: 40px; height: 40px; margin-left: 4px; border-radius: 50%; background: var(--btn); color: var(--btnt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 #send svg { width: 20px; height: 20px; stroke-width: 2.5; }
+
+/* Плавные анимации */
+.av, .it, .nav, .bl, .rd, .ib, .b, .ddb, #hpill, #msgs .m {
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  will-change: transform;
+}
+.av:active, .it:active, .nav:active, .bl:active, .rd:active, .ib:active, .b:active, .ddb:active, #hpill:active, #msgs .m:active {
+  transform: scale(0.95);
+}
+.av:active { transform: scale(0.88); box-shadow: 0 0 0 2px var(--tint); }
+button, .it, .nav, .av { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.ban .av:active { transform: scale(0.9); }
 </style>
 </head>
 <body>
@@ -759,7 +737,8 @@ const L = {
     unsavedChangesText: 'У вас есть несохранённые изменения. Сохранить их перед закрытием?',
     saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
     disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием',
-    discard: 'Не сохранять', uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер'
+    discard: 'Не сохранять', uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер',
+    createPassword: 'Создание пароля', createPasswordP: 'Придумайте пароль для нового аккаунта'
   }
 };
 
@@ -949,11 +928,13 @@ const lerr = x => { $('lerr').textContent = x; };
 function showLoader() { $('loader').classList.remove('hide'); }
 function hideLoader() { $('loader').classList.add('hide'); }
 
-function askPass() {
+function askPass(isNew) {
   return new Promise(r => {
+    const title = isNew ? t('createPassword') : t('password');
+    const subtitle = isNew ? t('createPasswordP') : t('protectedT');
     const o = modal(
-      '<h3>' + t('password') + '</h3>' +
-      '<p>' + t('protectedT') + '</p>' +
+      '<h3>' + title + '</h3>' +
+      '<p>' + subtitle + '</p>' +
       '<input class="fld" id="pw" type="password" maxlength="50">' +
       '<div class="row">' +
       '<button class="b g" id="n">' + t('cancel') + '</button>' +
@@ -1005,7 +986,8 @@ async function login() {
   lerr('');
   $('lbtn').disabled = true;
   try {
-    const pw = await askPass();
+    const exists = (await db.ref('users/' + u).once('value')).exists();
+    const pw = await askPass(!exists);
     if (pw === null) { $('lbtn').disabled = false; return; }
     if (pw.length < 6) { lerr(t('pwdMin')); $('lbtn').disabled = false; return; }
     showLoader();
@@ -1267,6 +1249,9 @@ function comp() {
   $('blk').classList.toggle('hide', !b);
   $('unb').classList.remove('hide');
   $('blk').querySelector('span').innerHTML = E(t('youBlocked'));
+  // Скрываем кнопку прикрепления в глобальном чате
+  const attachBtn = $('attach');
+  if (attachBtn) attachBtn.classList.toggle('hide', chat === 'global' || isG(chat));
 }
 
 function render(init) {
@@ -1368,7 +1353,12 @@ $('msgs').onclick = e => {
 };
 
 function bannedInfo(u) {
-  modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px"><div class="ir">' + ico('info', '#6b7280') + '<div><b>' + E(t('accountUnavailable')) + '</b><small>@' + esc(u) + '</small></div></div><div class="ir">' + ico('info', '#6b7280') + '<div>' + E(t('accountUnavailableInfo')) + '<small>' + E(t('unavailableDesc')) + '</small></div></div></div></div>');
+  modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px">' +
+    '<div style="display:flex;justify-content:center;padding:20px 0 10px"><div class="av big" style="width:92px;height:92px;font-size:38px;background:#555;color:#aaa;box-shadow:0 0 0 4px #ffffff40">?</div></div>' +
+    '<div style="text-align:center;margin-bottom:12px"><b style="font-size:18px">' + E(t('accountUnavailable')) + '</b><div class="hint">@' + esc(u) + '</div></div>' +
+    '<div class="ir" style="justify-content:center;border-top:0;padding-top:0">' +
+    '<div style="text-align:center"><div>' + E(t('unavailableDesc')) + '</div><small>' + E(t('accountUnavailableInfo')) + '</small></div>' +
+    '</div></div></div>');
 }
 
 function ctx(e, m) {
@@ -1479,60 +1469,10 @@ async function send() {
   }
 }
 
-function mutedText() {
-  const s = Math.ceil((mutedUntil - Date.now()) / 1000);
-  if (s <= 0) return t('zeroSeconds');
-  if (s === 60) return t('minute');
-  return s + ' ' + t('seconds');
-}
-async function trim() {
-  const v = (await db.ref('messages').once('value')).val() || {};
-  const k = Object.keys(v).sort((a, b) => v[a].time - v[b].time);
-  k.slice(0, Math.max(0, k.length - MAX)).forEach(i => db.ref('messages/' + i).remove());
-}
-function expire() {
-  let ch = false;
-  const now = Date.now();
-  for (const p in C) C[p].forEach(m => { if (m.expireAt && m.expireAt <= now && !m._x) { m._x = 1; ch = true; if (m.username === me.u) db.ref(pathFor(p) + m.id).remove(); } });
-  if (ch) { render(); side(); }
-}
-async function cmd(x0) {
-  if (me.u !== 'admin11') return false;
-  const x = x0.match(/^\/@([a-z0-9_\-!]+)\.type:(checked|admin|off)$/);
-  if (!x) return false;
-  if (!(await db.ref('users/' + x[1]).once('value')).exists()) { toast(t('noUser')); return true; }
-  if (x[2] === 'off') await db.ref('userBadges/' + x[1]).remove();
-  else await db.ref('userBadges/' + x[1]).set({ type: x[2], by: me.u, at: Date.now() });
-  toast(t('done'));
-  return true;
-}
-$('send').onclick = send;
-$('inp').onkeydown = e => {
-  if (e.key !== 'Enter' || e.isComposing) return;
-  const ctrl = e.ctrlKey || e.metaKey;
-  if (sendMode() === 'enter') { if (!e.shiftKey && !ctrl) { e.preventDefault(); send(); } }
-  else if (ctrl) { e.preventDefault(); send(); }
-};
-$('inp').oninput = () => {
-  const i = $('inp');
-  if (autoRep()) {
-    const p = i.innerText;
-    const r = p.replace(/--$/, '–').replace(/<<$/, '«').replace(/>>$/, '»');
-    if (r !== p) { i.innerText = r; }
-  }
-  const html = i.innerHTML;
-  const replaced = html.replace(EMO, m => { const c = [...m].map(x => x.codePointAt(0).toString(16).padStart(4, '0')).join('-'); return '<img class="em" alt="' + m + '" draggable="false" data-c="' + c + '" data-n="0" src="' + eurl(c, 0) + '">'; });
-  if (replaced !== html) { i.innerHTML = replaced; const r = document.createRange(); r.selectNodeContents(i); r.collapse(false); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
-  fit();
-  if (chat === 'global' || !me || isG(chat)) return;
-  if (Date.now() - lastT > 2000) { lastT = Date.now(); db.ref('typing/' + room(chat) + '/' + me.u).set(Date.now()); }
-};
-
-/* ====== ОБРАБОТЧИК КНОПКИ ПРИКРЕПЛЕНИЯ ФОТО (п.3) ====== */
+/* ====== ОБРАБОТЧИК КНОПКИ ПРИКРЕПЛЕНИЯ ФОТО ====== */
 $('attach').onclick = () => {
   if (chat === 'global' || isG(chat)) {
-    // В общем чате или группах фото может быть запрещено (по желанию можно убрать проверку)
-    // return toast(t('photoNotAllowed'));
+    return toast(t('photoNotAllowed'));
   }
   pickImage(800, async (dataUrl) => {
     if (!me || banEl) return;
@@ -1875,7 +1815,6 @@ async function settings(pg) {
   const guard = go => {
     if (!dirty) return go();
     if (warningsDisabled()) { dirty = false; return go(); }
-    /* ИСПРАВЛЕНО (п.4): добавлены отступы и класс col для кнопок */
     const w = modal('<h3>' + E(t('unsavedChanges')) + '</h3><p>' + E(t('unsavedChangesText')) + '</p><div class="col"><button class="b" id="ws">' + E(t('save')) + '</button><button class="b g" id="wd">' + E(t('discard')) + '</button><button class="b g" id="wc">' + E(t('cancel')) + '</button></div>');
     w.style.zIndex = 99995;
     w.querySelector('#wc').onclick = () => w.remove();
@@ -2916,7 +2855,9 @@ setInterval(() => {
   box.addEventListener('click', e => { if (sw) { e.stopPropagation(); sw = false; } }, true);
 })();
 
-function chk() { return '<svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
+function chk() { 
+  return '<svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12.5l4.5 4.5L15 8.5"/><path d="M9 12.5l4.5 4.5L22 8.5"/></svg>'; 
+}
 
 const hav = document.createElement('div');
 hav.id = 'hav';
