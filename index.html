@@ -38,7 +38,6 @@
 :root[data-color-theme="purple"] { --mine: #7b1fa2; --btn: #7b1fa2; --btnt: #fff; --send-bg: #7b1fa2; --send-fg: #fff; --av: #7b1fa2; }
 :root[data-color-theme="monochrome"] { --mine: #555; --av: #555; }
 
-/* Material 3 Expressive: shape and motion tokens only, colors stay as chosen */
 :root[data-ui-style="material3"] { --r: 24px; --rt: 6px; --ease: cubic-bezier(.2,0,0,1); --spring: cubic-bezier(.34,1.56,.64,1); }
 :root:not([data-ui-style="material3"]) { --ease: cubic-bezier(.22,1,.36,1); --spring: cubic-bezier(.22,1,.36,1); }
 
@@ -60,7 +59,6 @@ svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width:
 .b:disabled { opacity: .4; cursor: default; }
 .b.g { background: var(--g); color: var(--t); }
 .b.d { background: var(--d); color: #fff; }
-/* Ensure contrast for white buttons */
 .b[style*="background:#fff"], .b[style*="background: #fff"], .b[style*="background:white"], .b[style*="background: white"] { color: #000 !important; }
 .fld { width: 100%; padding: 13px 15px; background: var(--fld); border: 1px solid var(--l); border-radius: 14px; transition: border-color .15s; }
 .fld:focus { border-color: var(--fb); }
@@ -130,7 +128,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .sn:hover { text-decoration: underline; }
 .rp { font-size: 12px; color: var(--rp); border-left: 2px solid var(--rpl); padding: 1px 0 1px 8px; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border-radius: var(--rt); }
 .rp b { display: block; color: var(--rpb); }
-.m img.att { display: block; max-width: 100%; max-height: 300px; border-radius: 12px; margin: 4px 0; cursor: pointer; }
+.m img.att { display: block; max-width: 100%; max-height: 300px; border-radius: 12px; margin: 4px 0; cursor: pointer; object-fit: cover; }
 #comp { position: absolute; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 5; display: flex; flex-direction: column; gap: 6px; }
 #rbar { border-radius: 16px; padding: 7px 6px 7px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--sn); animation: down .15s ease; }
 #rbar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -257,8 +255,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 .img-modal img { max-width: 95%; max-height: 95%; object-fit: contain; border-radius: 8px; }
 .img-modal .close-btn { position: absolute; top: 20px; right: 20px; color: #fff; }
 
-
-/* Material 3 Expressive (Pixel) */
 :root[data-ui-style="material3"] body { font-family: "Google Sans", "Google Sans Text", "Product Sans", Roboto, "Segoe UI", system-ui, sans-serif; letter-spacing: .1px; }
 :root[data-ui-style="material3"] .b { border-radius: 999px; padding: 12px 24px; font-weight: 500; font-size: 14px; letter-spacing: .1px; position: relative; overflow: hidden; transition: border-radius .35s var(--spring), transform .2s var(--ease), box-shadow .2s var(--ease), opacity .2s; }
 :root[data-ui-style="material3"] .b:hover { opacity: 1; box-shadow: 0 1px 3px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2); }
@@ -290,12 +286,10 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 :root[data-ui-style="material3"] .sh { font-weight: 500; color: var(--btn); margin-left: 8px; }
 :root[data-ui-style="material3"] .cnt { border-radius: 999px; }
 :root[data-ui-style="material3"] .preview-bubble { border-radius: 20px; }
-/* M3 switch */
 :root[data-ui-style="material3"] input[type=checkbox].sw2 { width: 52px; height: 32px; border-radius: 999px; border: 2px solid var(--fb); background: transparent; transition: background .25s var(--ease), border-color .25s var(--ease); }
 :root[data-ui-style="material3"] input[type=checkbox].sw2::after { content: ''; left: 6px; top: 50%; width: 16px; height: 16px; border: 0; border-radius: 50%; background: var(--fb); transform: translateY(-50%); transition: left .3s var(--spring), width .2s var(--ease), height .2s var(--ease), background .2s; }
 :root[data-ui-style="material3"] input[type=checkbox].sw2:checked { background: var(--btn); border-color: var(--btn); }
 :root[data-ui-style="material3"] input[type=checkbox].sw2:checked::after { left: 24px; width: 24px; height: 24px; background: var(--btnt); transform: translateY(-50%); }
-/* M3 radio */
 :root[data-ui-style="material3"] input[type=radio].sw2 { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--fb); background: transparent; }
 :root[data-ui-style="material3"] input[type=radio].sw2::after { content: ''; left: 50%; top: 50%; width: 10px; height: 10px; border: 0; border-radius: 50%; background: var(--btn); transform: translate(-50%,-50%) scale(0); transition: transform .25s var(--spring); }
 :root[data-ui-style="material3"] input[type=radio].sw2:checked { background: transparent; border-color: var(--btn); }
@@ -305,7 +299,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 :root[data-ui-style="material3"] input[type=range]::-moz-range-track { height: 16px; border-radius: 8px; }
 :root[data-ui-style="material3"] input[type=range]::-moz-range-thumb { width: 6px; height: 36px; border-radius: 3px; }
 
-/* Motion and performance */
 #msgs, #list, .sb, .md { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 #msgs { scroll-behavior: auto; }
 .m { contain: layout paint; }
@@ -320,7 +313,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 @keyframes pop { from { opacity: 0; transform: scale(.92); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(18px) scale(.97); } }
 
-/* Material 3 Expressive: structure */
 :root[data-ui-style="material3"] { --tone: color-mix(in srgb, var(--btn) 7%, var(--p)); --tone2: color-mix(in srgb, var(--btn) 13%, var(--p)); --tone3: color-mix(in srgb, var(--btn) 20%, var(--p)); }
 :root[data-ui-style="material3"] body, :root[data-ui-style="material3"] #main { background: var(--bg); }
 :root[data-ui-style="material3"] #side { background: var(--tone); padding: 16px 12px; }
@@ -358,7 +350,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 @keyframes rip { to { transform: scale(1); opacity: 0; } }
 @media (max-width: 768px) { :root[data-ui-style="material3"] #side { border-radius: 0 28px 28px 0; background: var(--tone); backdrop-filter: none; } }
 
-/* Material Web tokens: colors come from the chosen palette */
 :root[data-ui-style="material3"] {
   --md-sys-color-primary: var(--btn); --md-sys-color-on-primary: var(--btnt);
   --md-sys-color-primary-container: var(--tone3); --md-sys-color-on-primary-container: var(--t);
@@ -380,7 +371,6 @@ md-icon-button svg { width: 22px; height: 22px; }
 md-switch, md-radio { flex-shrink: 0; }
 .ban md-icon-button { --md-icon-button-icon-color: #fff; --md-icon-button-hover-icon-color: #fff; }
 
-/* Оформление */
 :root { --acc: var(--btn); --tint: color-mix(in srgb, var(--btn) 16%, transparent); }
 button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
 .fld:focus { box-shadow: 0 0 0 3px var(--tint); }
@@ -406,23 +396,46 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .me .lk { color: #fff; }
 #down { position: absolute; right: 16px; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 4; width: 42px; height: 42px; background: var(--gl2); border: 1px solid var(--gb); color: var(--t); box-shadow: 0 4px 14px #0003; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: pop .18s var(--ease) both; }
 #down i { position: absolute; top: -7px; right: -3px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--btn); color: var(--btnt); font: 600 11px/20px inherit; font-style: normal; text-align: center; }
-@media (max-width: 400px) { 
-/* Форма сообщений с хвостиком */
-.m { display: flow-root; }
+
+/* ====== ИСПРАВЛЕННЫЙ БЛОК СООБЩЕНИЙ (п.1) ====== */
+.m { 
+  display: flex; 
+  flex-direction: column; 
+  position: relative; 
+  isolation: isolate;
+}
+.m > span, .m > div, .m > small { position: relative; z-index: 2; }
 .m.tail { contain: layout; }
 .me.tail, .ot.tail { position: relative; }
 .me.tail { border-bottom-right-radius: 0; margin-right: 8px; }
 .ot.tail { border-bottom-left-radius: 0; margin-left: 8px; }
-.me.tail::before, .ot.tail::before { content: ''; position: absolute; bottom: 0; width: 20px; height: 20px; background: inherit; }
+
+.me.tail::before, .ot.tail::before { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0; 
+  width: 20px; 
+  height: 20px; 
+  background: inherit; 
+  z-index: 1; 
+}
 .me.tail::before { right: -8px; border-bottom-left-radius: 15px; }
 .ot.tail::before { left: -8px; border-bottom-right-radius: 15px; }
-.me.tail::after, .ot.tail::after { content: ''; position: absolute; bottom: 0; width: 26px; height: 20px; background: var(--bg); clear: none; }
+
+.me.tail::after, .ot.tail::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0; 
+  width: 26px; 
+  height: 20px; 
+  background: var(--bg); 
+  z-index: 0; 
+}
 .me.tail::after { right: -26px; border-bottom-left-radius: 10px; }
 .ot.tail::after { left: -26px; border-bottom-right-radius: 10px; }
 .m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
-/* Кнопка «вниз» с размытием фона */
+
 #down { background: color-mix(in srgb, var(--p) 45%, transparent); backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%); }
-/* Шапка чата */
 #hav { flex-shrink: 0; }
 #hav .av { width: 40px; height: 40px; font-size: 16px; }
 #hdr { background: none; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; padding: 0; gap: 8px; pointer-events: none; }
@@ -440,7 +453,6 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .sb .row .b { flex: 1; padding: 12px 10px; font-size: 13px; }
 .sb .row { gap: 8px; }
 
-/* Жидкое стекло */
 :root {
   --glass: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.03) 62%), color-mix(in srgb, var(--p) 46%, transparent);
   --glassS: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.02) 62%), color-mix(in srgb, var(--p) 80%, transparent);
@@ -485,16 +497,40 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .av { box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
 #login { background: radial-gradient(700px 420px at 15% -10%, color-mix(in srgb, var(--btn) 16%, transparent), transparent), radial-gradient(600px 400px at 100% 110%, color-mix(in srgb, var(--btn) 12%, transparent), transparent); }
 @media (max-width: 768px) { #side { background: var(--glassS); backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur); box-shadow: var(--gsh); border-right: 0; } }
-/* Меню сообщения */
 .ctx { min-width: 240px; border-radius: 28px; padding: 8px; }
 .ctx div { display: flex; align-items: center; gap: 16px; padding: 13px 16px; font-size: 16px; border-radius: 20px; }
 .ctx div:active { transform: scale(.97); }
 .ctx div svg { width: 22px; height: 22px; flex-shrink: 0; }
 .ctx .dd svg { color: var(--d); }
 .ctx .tm { display: block; padding: 8px 16px 10px; font-size: 12px; border-bottom: 0; }
+
+/* ====== ИСПРАВЛЕНИЕ МОДАЛКИ (п.4) ====== */
 .md .col { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-.md .col .b { width: 100%; padding: 14px; font-size: 14px; border-radius: 16px; }
+.md .col .b { width: 100%; padding: 14px; font-size: 14px; border-radius: 16px; justify-content: center; }
 .b.d { box-shadow: 0 4px 14px color-mix(in srgb, var(--d) 40%, transparent); }
+
+/* ====== УЛУЧШЕНИЕ ПОЛЯ ВВОДА (п.2, п.3) ====== */
+#pill {
+  background: var(--gl);
+  border: 1px solid var(--gb);
+  padding: 6px 8px 6px 16px;
+  align-items: center;
+}
+#inp { padding: 8px 4px; max-height: 140px; }
+#attach {
+  width: 40px; height: 40px; color: var(--m);
+  transition: color .2s, transform .2s;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: none; border: 0; cursor: pointer;
+}
+#attach:hover { color: var(--t); transform: rotate(15deg); }
+#send {
+  width: 40px; height: 40px; margin-left: 4px; border-radius: 50%;
+  background: var(--btn); color: var(--btnt);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+#send svg { width: 20px; height: 20px; stroke-width: 2.5; }
 </style>
 </head>
 <body>
@@ -548,6 +584,9 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
     <div id="comp">
       <div id="rbar" class="hide"><span></span><button class="ib" style="width:30px;height:30px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="pill" id="pill">
+        <button class="ib" id="attach" title="Прикрепить фото">
+          <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+        </button>
         <div id="inp" contenteditable="true" data-p="message"></div>
         <button class="ib" id="send"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
       </div>
@@ -872,17 +911,12 @@ const pathFor = p => p === 'global' ? 'messages/' : 'privateMessages/' + room(p)
 const K = k => 'mg_' + k + '_' + (me ? me.u : '');
 const save = () => { localStorage.setItem(K('lr'), JSON.stringify(lastRead)); localStorage.setItem(K('cl'), JSON.stringify(cleared)); };
 
-/* Deterministic hue from username */
 const hh = u => { let h = 7; for (const c of String(u)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
-
-/* Get controlled two-tone pair for a hue: darker + plain */
 function huePair(h) {
   return { dark: h, plain: (h + 35) % 360, sat: 42, light: 38 };
 }
-
 const hue = u => colors[u] != null ? colors[u] : hh(u);
 const avStyle = u => { const h = hue(u); return 'background:hsl(' + h + ' 42% 38%);color:#fff'; };
-
 function bannerColors(u) {
   const h = hh(u);
   const p = huePair(h);
@@ -1494,6 +1528,44 @@ $('inp').oninput = () => {
   if (Date.now() - lastT > 2000) { lastT = Date.now(); db.ref('typing/' + room(chat) + '/' + me.u).set(Date.now()); }
 };
 
+/* ====== ОБРАБОТЧИК КНОПКИ ПРИКРЕПЛЕНИЯ ФОТО (п.3) ====== */
+$('attach').onclick = () => {
+  if (chat === 'global' || isG(chat)) {
+    // В общем чате или группах фото может быть запрещено (по желанию можно убрать проверку)
+    // return toast(t('photoNotAllowed'));
+  }
+  pickImage(800, async (dataUrl) => {
+    if (!me || banEl) return;
+    if (chat !== 'global' && !isG(chat)) {
+      if (blocked.has(chat)) return toast(t('unblockFirst'));
+      if ((await db.ref('blocks/' + chat + '/' + me.u).once('value')).val()) return toast(t('restricted'));
+    }
+    if (isG(chat) && !canPost(chat)) return toast(t('onlyAdminsCanPost'));
+
+    const m = {
+      username: me.u,
+      displayName: me.n,
+      text: '',
+      att: dataUrl,
+      time: Date.now()
+    };
+    if (autoDel > 0 && chat !== 'global') m.expireAt = m.time + autoDel * 1000;
+
+    if (chat === 'global') {
+      await db.ref('messages').push(m);
+      trim();
+    } else {
+      await db.ref(pathFor(chat)).push(m);
+      const p = chat;
+      if (p !== me.u) {
+        locl.delete(p);
+        db.ref('userChats/' + me.u + '/' + p).set(true);
+        db.ref('userChats/' + p + '/' + me.u).set(true);
+      }
+    }
+  }, 0.8, false);
+};
+
 async function toggleBlock(u) {
   if (blocked.has(u)) { await db.ref('blocks/' + me.u + '/' + u).remove(); toast(t('userUnblocked')); }
   else if (await ask(t('blockQ') + esc(nm(u)) + '?', t('blockP'), t('block'), 1)) { await db.ref('blocks/' + me.u + '/' + u).set(true); toast(t('userBlocked')); }
@@ -1803,6 +1875,7 @@ async function settings(pg) {
   const guard = go => {
     if (!dirty) return go();
     if (warningsDisabled()) { dirty = false; return go(); }
+    /* ИСПРАВЛЕНО (п.4): добавлены отступы и класс col для кнопок */
     const w = modal('<h3>' + E(t('unsavedChanges')) + '</h3><p>' + E(t('unsavedChangesText')) + '</p><div class="col"><button class="b" id="ws">' + E(t('save')) + '</button><button class="b g" id="wd">' + E(t('discard')) + '</button><button class="b g" id="wc">' + E(t('cancel')) + '</button></div>');
     w.style.zIndex = 99995;
     w.querySelector('#wc').onclick = () => w.remove();
@@ -2231,7 +2304,7 @@ function watchG(p) {
       idx.delete(p);
       db.ref('userChats/' + me.u + '/' + p).remove();
       if (chat === p) open(globalDisabled ? me.u : 'global');
-      if (!leaving.has(g) && GR[g]) toast(t('youWereRemoved') + ' "' + GR[g].title + '"');
+      if (!leaving.has(g) && GR[g]) toast(t('youWereRemoved') + '"' + GR[g].title + '"');
     }
     side(); hdr(); comp();
   });
@@ -2557,7 +2630,6 @@ try {
   else autoLogin().then(ok => { if (!ok) hideLoader(); });
 } catch (e) { console.error(e); hideLoader(); }
 
-// Если устройство помнит аккаунт, входим сразу, без капчи и пароля
 async function autoLogin() {
   try {
     if (localStorage.getItem('mg_out')) return false;
@@ -2638,7 +2710,6 @@ document.addEventListener('pointerdown', e => {
   setTimeout(() => c.remove(), 600);
 }, { passive: true });
 
-/* Material Web: real md-* components while Material 3 is selected */
 const M3 = { loaded: false, obs: null };
 const m3On = () => document.documentElement.dataset.uiStyle === 'material3';
 function m3Load() {
@@ -2751,7 +2822,6 @@ function m3Sync() {
 }
 m3Sync();
 
-// Форматирование: **жирный**, __курсив__, ~~зачёркнутый~~, `код`, ссылки
 function fmt(s) {
   const keep = [];
   const hold = h => '\u0000' + (keep.push(h) - 1) + '\u0000';
@@ -2765,7 +2835,6 @@ function fmt(s) {
   return emo(x.replace(/\u0000(\d+)\u0000/g, (_, i) => keep[i]));
 }
 
-// Кнопка «вниз» со счётчиком новых сообщений
 const down = document.createElement('button');
 down.id = 'down'; down.className = 'ib hide'; down.title = 'Вниз';
 down.innerHTML = '<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg><i></i>';
@@ -2795,24 +2864,20 @@ side = function () {
   _sq = requestAnimationFrame(() => { _sq = 0; _side(); });
 };
 
-// Отбрасывать «залежавшиеся» клики, накопленные пока страница была занята
 document.addEventListener('click', e => {
   if (e.isTrusted && performance.now() - e.timeStamp > 400) { e.stopPropagation(); e.preventDefault(); }
 }, true);
 
-// Вставка только простого текста
 $('inp').addEventListener('paste', e => {
   e.preventDefault();
   document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
 });
 
-// Esc: закрыть панель или отменить ответ/правку
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (reply || editing) cancelReply();
 });
 
-// Черновики по чатам
 let _dc = null;
 setInterval(() => {
   const inp = $('inp');
@@ -2827,7 +2892,6 @@ setInterval(() => {
   try { const v = inp.innerText.trim(); v ? localStorage.setItem('mg_d_' + chat, inp.innerText) : localStorage.removeItem('mg_d_' + chat); } catch (e) {}
 }, 400);
 
-// Свайп влево по сообщению — ответить
 (() => {
   let sx = 0, sy = 0, dx = 0, el = null, sw = false;
   const box = $('msgs');
@@ -2854,7 +2918,6 @@ setInterval(() => {
 
 function chk() { return '<svg class="ck" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'; }
 
-// Шапка: аватар чата и стрелка назад
 const hav = document.createElement('div');
 hav.id = 'hav';
 $('hdr').insertBefore(hav, $('hdr').querySelector('.t'));
