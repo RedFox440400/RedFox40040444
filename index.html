@@ -114,9 +114,7 @@ textarea.fld { resize: none; display: block; line-height: 1.4; }
 .m:after { content: ''; display: block; clear: both; }
 .m small { float: right; margin: 5px 0 0 12px; font-size: 11px; color: var(--m); white-space: nowrap; }
 .me { align-self: flex-end; background: var(--mine); color: #fff; }
-.me.tail { border-bottom-right-radius: var(--rt); }
 .ot { align-self: flex-start; background: var(--oth); box-shadow: 0 1px 2px #0000000f; }
-.ot.tail { border-bottom-left-radius: var(--rt); }
 .m.first { margin-top: 7px; }
 .m.new { animation: slideUp .35s cubic-bezier(.22,1,.36,1); }
 .m.fl { background: var(--fl); }
@@ -277,8 +275,6 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 :root[data-ui-style="material3"] .it { border-radius: 999px; padding: 10px 16px 10px 12px; }
 :root[data-ui-style="material3"] .it.on { background: var(--g); }
 :root[data-ui-style="material3"] .m { border-radius: 20px; padding: 9px 14px 7px; }
-:root[data-ui-style="material3"] .m.me.tail { border-bottom-right-radius: 6px; }
-:root[data-ui-style="material3"] .m.ot.tail { border-bottom-left-radius: 6px; }
 :root[data-ui-style="material3"] .grp, :root[data-ui-style="material3"] .info, :root[data-ui-style="material3"] .ulist, :root[data-ui-style="material3"] .kbox { border: 0; border-radius: 24px; background: var(--g); }
 :root[data-ui-style="material3"] .grp .bl + .bl, :root[data-ui-style="material3"] .rd + .rd, :root[data-ui-style="material3"] .nav + .nav { border-top: 0; }
 :root[data-ui-style="material3"] .ctx, :root[data-ui-style="material3"] .ddl { border-radius: 20px; border: 0; padding: 6px 0; }
@@ -301,7 +297,7 @@ input.sw2:checked::after { transform: translate(-50%,-50%) rotate(45deg) scale(1
 
 #msgs, #list, .sb, .md { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 #msgs { scroll-behavior: auto; }
-.m { contain: none; }
+.m { contain: layout paint; }
 .m.new { animation: slideUp .35s var(--ease) both; will-change: transform, opacity; }
 .card, .md { animation: up .32s var(--ease) both; }
 .ov { animation: fade .2s var(--ease) both; }
@@ -397,22 +393,10 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 #down { position: absolute; right: 16px; bottom: calc(88px + env(safe-area-inset-bottom)); z-index: 4; width: 42px; height: 42px; background: var(--gl2); border: 1px solid var(--gb); color: var(--t); box-shadow: 0 4px 14px #0003; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); animation: pop .18s var(--ease) both; }
 #down i { position: absolute; top: -7px; right: -3px; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--btn); color: var(--btnt); font: 600 11px/20px inherit; font-style: normal; text-align: center; }
 
-/* ====== ИСПРАВЛЕННЫЙ БЛОК СООБЩЕНИЙ ====== */
+/* Убраны все хвостики и накладки пузырей */
 .m { display: flex; flex-direction: column; position: relative; isolation: isolate; }
 .m > span, .m > div, .m > small { position: relative; z-index: 2; }
-.m.tail { contain: none; }
-.me.tail, .ot.tail { position: relative; }
-.me.tail { border-bottom-right-radius: 0; margin-right: 8px; }
-.ot.tail { border-bottom-left-radius: 0; margin-left: 8px; }
-.me.tail::before, .ot.tail::before { content: ''; position: absolute; bottom: 0; width: 20px; height: 20px; background: inherit; z-index: 1; }
-.me.tail::before { right: -8px; border-bottom-left-radius: 15px; }
-.ot.tail::before { left: -8px; border-bottom-right-radius: 15px; }
-.me.tail::after, .ot.tail::after { content: ''; position: absolute; bottom: 0; width: 26px; height: 20px; background: var(--bg); z-index: 0; }
-.me.tail::after { right: -26px; border-bottom-left-radius: 10px; }
-.ot.tail::after { left: -26px; border-bottom-right-radius: 10px; }
 .m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
-
-/* Чёрный цвет времени и галочек */
 .me small { color: #000 !important; opacity: 0.7; }
 .m small .ck { stroke: #000 !important; opacity: 0.7; }
 
@@ -485,12 +469,10 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 .ctx .dd svg { color: var(--d); }
 .ctx .tm { display: block; padding: 8px 16px 10px; font-size: 12px; border-bottom: 0; }
 
-/* Модалка несохранённых изменений */
 .md .col { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
 .md .col .b { width: 100%; padding: 14px; font-size: 14px; border-radius: 16px; justify-content: center; }
 .b.d { box-shadow: 0 4px 14px color-mix(in srgb, var(--d) 40%, transparent); }
 
-/* Поле ввода */
 #pill { background: var(--gl); border: 1px solid var(--gb); padding: 6px 8px 6px 16px; align-items: center; }
 #inp { padding: 8px 4px; max-height: 140px; }
 #attach { width: 40px; height: 40px; color: var(--m); transition: color .2s, transform .2s; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; }
@@ -498,7 +480,6 @@ button:focus-visible, .it:focus-visible, .nav:focus-visible { outline: 2px solid
 #send { width: 40px; height: 40px; margin-left: 4px; border-radius: 50%; background: var(--btn); color: var(--btnt); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 #send svg { width: 20px; height: 20px; stroke-width: 2.5; }
 
-/* Плавные анимации */
 .av, .it, .nav, .bl, .rd, .ib, .b, .ddb, #hpill, #msgs .m {
   transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
   will-change: transform;
@@ -573,168 +554,6 @@ button, .it, .nav, .av { -webkit-tap-highlight-color: transparent; touch-action:
   </section>
 </div>
 
-<script>
-/* ====== BUBBLES.JS (декор в углах, 9-slice) ====== */
-let myBubble = 'def';
-
-const svgUrl = body => 'url("data:image/svg+xml,' + encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'>" + body + '</svg>') + '")';
-
-const zoom = (cx, cy, k, ox, oy, inner) =>
-  "<g transform='translate(" + cx + ' ' + cy + ') scale(' + k + ') translate(' + (-ox) + ' ' + (-oy) + ")'>" + inner + '</g>';
-
-const plate = (fill, stroke, w) =>
-  "<rect x='15' y='15' width='50' height='50' rx='14' fill='" + fill + "' stroke='" + stroke + "' stroke-width='" + (w || 2) + "'/>";
-
-const butterfly = (x, y, s, c) =>
-  "<g transform='translate(" + x + ' ' + y + ') scale(' + s + ")'>" +
-  "<g fill='" + c + "' stroke='#b0306a' stroke-width='.9'>" +
-  "<ellipse cx='-5' cy='-3' rx='5' ry='3.8' transform='rotate(-25 -5 -3)'/>" +
-  "<ellipse cx='5' cy='-3' rx='5' ry='3.8' transform='rotate(25 5 -3)'/>" +
-  "<ellipse cx='-4' cy='4' rx='3.4' ry='2.8'/><ellipse cx='4' cy='4' rx='3.4' ry='2.8'/></g>" +
-  "<path d='M0 -5V7M0 -5Q-2 -8 -4 -8M0 -5Q2 -8 4 -8' stroke='#5a1030' stroke-width='1.4' fill='none' stroke-linecap='round'/></g>";
-
-const flake = (x, y, s) =>
-  "<g transform='translate(" + x + ' ' + y + ') scale(' + s + ")' stroke='#4db3e6' stroke-width='1.7' stroke-linecap='round' fill='none'>" +
-  "<path d='M-7 0H7M-3.5 -6.06L3.5 6.06M-3.5 6.06L3.5 -6.06'/></g>";
-
-const star = (x, y, s) =>
-  "<path transform='translate(" + x + ' ' + y + ') scale(' + s + ")' d='M0-6L1.8-1.9L6-1.5L2.8 1.2L3.8 5.5L0 3.2L-3.8 5.5L-2.8 1.2L-6-1.5L-1.8-1.9Z' fill='#ffd84d' stroke='#e0a800' stroke-width='.8' stroke-linejoin='round'/>";
-
-const spider =
-  "<g stroke='#fff' stroke-width='1.3' fill='none' stroke-linecap='round'>" +
-  "<path d='M68 69L60 65M68 69L59 69M68 69L60 74M68 69L63 78M68 69L76 65M68 69L77 69M68 69L76 74M68 69L73 78'/></g>" +
-  "<circle cx='68' cy='70' r='3.6' fill='#fff'/><circle cx='68' cy='65.6' r='2.2' fill='#fff'/>";
-
-const web =
-  "<g stroke='#fff' stroke-width='1.1' fill='none' stroke-linecap='round'>" +
-  "<path d='M16 16L1 1M16 16L1 10M16 16L10 1M16 16L1 19M16 16L19 1'/>" +
-  "<path d='M7.75 17.65Q9.5 9.5 17.65 7.75M4 18.4Q5.5 5.5 18.4 4'/></g>";
-
-const ghostBody =
-  "<path d='M30 15H50Q65 15 65 30V46Q65 61 50 61Q45 67 40 61T30 61Q15 61 15 46V30Q15 15 30 15Z' fill='#fff' stroke='#c9ced6' stroke-width='1.6' stroke-linejoin='round'/>";
-const miniGhost =
-  "<path d='M60 19V10Q60 3 66 3Q72 3 72 10V19L69 16.5L66 19L63 16.5Z' fill='#fff' stroke='#9aa0a8' stroke-width='1.2' stroke-linejoin='round'/>" +
-  "<circle cx='64' cy='10' r='1.3' fill='#222'/><circle cx='68' cy='10' r='1.3' fill='#222'/>";
-
-const pumpkinStem =
-  "<path d='M21 17Q19 8 25 4L29 7Q25 9 26 17Z' fill='#5fa12f' stroke='#2f5a12' stroke-width='1.2' stroke-linejoin='round'/>" +
-  "<path d='M27 13Q29 9 28 3' fill='none' stroke='#5fa12f' stroke-width='1.6' stroke-linecap='round'/>";
-
-const frog =
-  "<ellipse cx='66' cy='15' rx='11' ry='7' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
-  "<circle cx='60' cy='8' r='4' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
-  "<circle cx='72' cy='8' r='4' fill='#6cc24a' stroke='#3b8a24' stroke-width='1.4'/>" +
-  "<circle cx='60' cy='8' r='2.6' fill='#fff'/><circle cx='72' cy='8' r='2.6' fill='#fff'/>" +
-  "<circle cx='60.4' cy='8.2' r='1.3' fill='#111'/><circle cx='71.6' cy='8.2' r='1.3' fill='#111'/>" +
-  "<path d='M60 17Q66 21 72 17' fill='none' stroke='#2f6e1c' stroke-width='1.3' stroke-linecap='round'/>";
-
-const BUBBLES = [
-  { id: 'def', name: 'По умолчанию' },
-  { id: 'web', name: 'Паутина', fg: '#fff', art: plate('#000', '#fff', 2.2) + web + zoom(65, 66, 1.25, 68, 69, spider) },
-  { id: 'pumpkin', name: 'Тыква', fg: '#3b1a00', art: plate('#ff8a1f', '#7a3b00') + zoom(24, 12, 1.2, 25, 12, pumpkinStem) },
-  { id: 'ghost', name: 'Призрак', fg: '#111', art: ghostBody + zoom(66, 11, 1.3, 66, 11, miniGhost) },
-  { id: 'butterfly', name: 'Бабочки', fg: '#5a1030', art: plate('#ffc9de', '#e45b94') + butterfly(65, 14, 1.3, '#ff6fa6') + butterfly(15, 66, 1.2, '#ff8fbb') },
-  { id: 'frog', name: 'Лягушка', fg: '#4a3d00', art: plate('#fff1a1', '#d6bf4e') + zoom(64, 14, 1.2, 66, 14, frog) },
-  { id: 'ice', name: 'Лёд', fg: '#0f2a35', art: plate('#c7efff', '#2f9bd6') + flake(13, 13, 1.3) + flake(66, 67, 1.3) + flake(68, 13, 0.9) },
-  { id: 'stars', name: 'Звёзды', fg: '#fff', art: plate('#6c4cf6', '#3b24b8') + star(65, 14, 1.6) + star(14, 66, 1.3) + star(13, 13, 0.8) }
-];
-
-const TAIL = 'url("data:image/svg+xml,' + encodeURIComponent(
-  "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14' preserveAspectRatio='none'><path d='M0 0V14H12C6 14 2 10 0 0Z'/></svg>") + '")';
-
-const bsAttr = id => id && id !== 'def' && BUBBLES.some(b => b.id === id) ? ' data-bs="' + id + '"' : '';
-
-(() => {
-  const css = `
-:root { --tail: ${TAIL}; }
-
-/* основа пузыря */
-.m { display: flex; flex-direction: column; position: relative; isolation: isolate; contain: none; min-width: 44px; }
-.m::after { content: none; }
-.m small { float: none; align-self: flex-end; margin: 3px 0 0 12px; }
-.me { margin-right: 10px; --bb: var(--mine); }
-.ot { margin-left: 10px; --bb: var(--oth); }
-.me small, .me small .ck { color: #000; stroke: #000; opacity: .7; }
-.m small .ck { display: inline-block; width: 15px; height: 15px; vertical-align: -3px; margin-left: 3px; stroke-width: 2.4; }
-.m img.att { width: min(260px, 64vw); max-width: none; height: auto; min-height: 80px; background: var(--hv2); align-self: stretch; }
-
-/* хвостик обычного пузыря */
-.m.tail:not([data-bs])::before { content: ''; position: absolute; bottom: 0; width: 12px; height: 14px; background: var(--bb); z-index: -1;
-  -webkit-mask: var(--tail) 0 0 / 100% 100% no-repeat; mask: var(--tail) 0 0 / 100% 100% no-repeat; }
-.me.tail:not([data-bs]) { border-bottom-right-radius: 3px; }
-.me.tail:not([data-bs])::before { right: -11px; }
-.ot.tail:not([data-bs]) { border-bottom-left-radius: 3px; }
-.ot.tail:not([data-bs])::before { left: -11px; transform: scaleX(-1); }
-
-/* оформленные пузыри */
-.m[data-bs] { background: none !important; box-shadow: none !important; border-radius: 0 !important; color: var(--fg);
-  margin: 16px 26px; padding: 8px 16px 6px; }
-.m[data-bs]::before { content: ''; position: absolute; inset: -18px; border: 36px solid transparent;
-  border-image: var(--bi) 30 fill / 36px round; z-index: -1; pointer-events: none; }
-.m[data-bs] small, .m[data-bs] small .ck { color: inherit; stroke: currentColor; opacity: .6; }
-.m[data-bs] .rp { color: inherit; border-color: currentColor; opacity: .8; }
-.m[data-bs] .rp b, .m[data-bs] .lk { color: inherit; }
-.m[data-bs] .bt { background: #0002; color: inherit; }
-${BUBBLES.filter(b => b.art).map(b => `.m[data-bs="${b.id}"] { --bi: ${svgUrl(b.art)}; --fg: ${b.fg}; }`).join('\n')}
-
-/* окно выбора */
-.bs-sheet { width: 100%; max-width: 420px; max-height: 90vh; display: flex; flex-direction: column; background: var(--glassS); box-shadow: var(--gsh);
-  backdrop-filter: var(--gblur); -webkit-backdrop-filter: var(--gblur); border-radius: 28px; overflow: hidden; animation: springIn .4s var(--spring) both; }
-.bs-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 14px; }
-.bs-top b { flex: 1; text-align: center; font-size: 15px; }
-.bs-pv { display: flex; flex-direction: column; gap: 12px; padding: 18px 12px; background: var(--bg); }
-.bs-pv .m { cursor: default; }
-.bs-h { padding: 12px 18px; }
-.bs-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 14px 16px; overflow-y: auto; }
-.bs-i { border: 0; background: var(--hv); border-radius: 20px; padding: 6px 6px 12px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; color: var(--t); font-size: 12px; }
-.bs-i.on { outline: 2px solid var(--t); }
-.bs-i .m { pointer-events: none; align-self: center; margin: 26px 22px 22px; min-width: 40px; }
-@media (max-width: 768px) { .bs-ov { align-items: flex-end; padding: 0; } .bs-sheet { max-width: none; border-radius: 28px 28px 0 0; } }
-`;
-  const s = document.createElement('style');
-  s.textContent = css;
-  document.head.appendChild(s);
-})();
-
-function bubbleStyle() {
-  let cur = myBubble;
-  const o = document.createElement('div');
-  o.className = 'ov bs-ov';
-  const time = () => hm(Date.now());
-  o.innerHTML =
-    '<div class="bs-sheet">' +
-      '<div class="bs-top"><button class="b g" id="bc">' + E(t('cancel')) + '</button><b>' + E(t('bubbleTitle')) + '</b><button class="b" id="bsv">' + E(t('save')) + '</button></div>' +
-      '<div class="bs-pv">' +
-        '<div class="m ot tail"><span>' + E(t('hi')) + '</span><small>' + time() + '</small></div>' +
-        '<div class="m me tail" id="bsp"><span>' + E(t('how')) + '</span><small>' + time() + chk() + '</small></div>' +
-      '</div>' +
-      '<div class="hint bs-h">' + E(t('bubbleHint')) + '</div>' +
-      '<div class="bs-g">' + BUBBLES.map(b => '<button class="bs-i" data-id="' + b.id + '"><span class="m me"' + bsAttr(b.id) + '>Aa</span>' + E(b.name) + '</button>').join('') + '</div>' +
-    '</div>';
-  document.body.appendChild(o);
-  const paint = () => {
-    const p = o.querySelector('#bsp');
-    cur === 'def' ? p.removeAttribute('data-bs') : p.setAttribute('data-bs', cur);
-    p.classList.toggle('tail', cur === 'def');
-    o.querySelectorAll('.bs-i').forEach(b => b.classList.toggle('on', b.dataset.id === cur));
-  };
-  paint();
-  o.onclick = e => {
-    if (e.target === o) return o.remove();
-    const b = e.target.closest('.bs-i');
-    if (b) { cur = b.dataset.id; paint(); }
-  };
-  o.querySelector('#bc').onclick = () => o.remove();
-  o.querySelector('#bsv').onclick = () => {
-    myBubble = cur;
-    localStorage.setItem(K('bs'), cur);
-    o.remove();
-    toast(t('done'));
-  };
-}
-/* ====== END BUBBLES.JS ====== */
-</script>
 <script>
 const APP_VERSION = '2.2';
 let newCnt = 0;
@@ -900,9 +719,7 @@ const L = {
     saveAndClose: 'Сохранить и закрыть', disableWarnings: 'Отключить предупреждения',
     disableWarningsS: 'Не показывать диалоги подтверждения перед закрытием',
     discard: 'Не сохранять', uploadAvatar: 'Загрузить фото', removeAvatar: 'Удалить фото', uploadBanner: 'Загрузить баннер', removeBanner: 'Удалить баннер',
-    createPassword: 'Создание пароля', createPasswordP: 'Придумайте пароль для нового аккаунта',
-    bubbleStyle: 'Стиль пузыря', bubbleTitle: 'Выберите стиль пузыря',
-    bubbleHint: 'Пузырь применяется ко всем чатам. Он затрагивает только сообщения, отправленные вами после сохранения.'
+    createPassword: 'Создание пароля', createPasswordP: 'Придумайте пароль для нового аккаунта'
   }
 };
 
@@ -1199,7 +1016,6 @@ function start(dn, u, uid, auto) {
     cleared = JSON.parse(localStorage.getItem(K('cl')) || '{}');
   } catch (e) {}
   autoDel = +localStorage.getItem(K('ad')) || 0;
-  myBubble = localStorage.getItem(K('bs')) || 'def';
   globalDisabled = localStorage.getItem(K('gd')) === '1';
   $('login').classList.add('hide');
   $('app').classList.remove('hide');
@@ -1414,7 +1230,6 @@ function comp() {
   $('blk').classList.toggle('hide', !b);
   $('unb').classList.remove('hide');
   $('blk').querySelector('span').innerHTML = E(t('youBlocked'));
-  // Скрываем кнопку прикрепления в глобальном чате
   const attachBtn = $('attach');
   if (attachBtn) attachBtn.classList.toggle('hide', chat === 'global' || isG(chat));
 }
@@ -1454,7 +1269,7 @@ function render(init) {
     if (m.att) {
       attHtml = '<img class="att" src="' + esc(m.att) + '" data-full="' + esc(m.att) + '" alt="">';
     }
-    h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '"' + bsAttr(m.bs) + '>' +
+    h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '">' +
       (!mine && first && chat === 'global' ? '<div class="sn" data-u="' + esc(m.username) + '">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
       rp + attHtml +
       (m.text ? '<span>' + fmt(m.text) + '</span>' : '') +
@@ -1614,7 +1429,6 @@ async function send() {
   }
   const m = { username: me.u, displayName: me.n, text: bp ? bp.msg : x, time: Date.now() };
   if (bp) { m.isButton = true; m.buttonText = bp.btn; m.buttonLink = bp.link; }
-  if (myBubble !== 'def') m.bs = myBubble;
   if (reply) { m.replyTo = reply.id; m.replyToSender = reply.name; }
   if (autoDel > 0 && chat !== 'global') m.expireAt = m.time + autoDel * 1000;
   clr();
@@ -1635,7 +1449,6 @@ async function send() {
   }
 }
 
-/* ====== ОБРАБОТЧИК КНОПКИ ПРИКРЕПЛЕНИЯ ФОТО ====== */
 $('attach').onclick = () => {
   if (chat === 'global' || isG(chat)) {
     return toast(t('photoNotAllowed'));
@@ -1653,8 +1466,7 @@ $('attach').onclick = () => {
       displayName: me.n,
       text: '',
       att: dataUrl,
-      time: Date.now(),
-      ...(myBubble !== 'def' ? { bs: myBubble } : {})
+      time: Date.now()
     };
     if (autoDel > 0 && chat !== 'global') m.expireAt = m.time + autoDel * 1000;
 
@@ -2006,7 +1818,7 @@ async function settings(pg) {
     if (p === 'main') {
       hd(t('settings'));
       B.innerHTML = '<div class="nav" data-pg="account" style="padding:6px 0">' + avatar(me.u) + '<span><b style="display:block">' + esc(me.n) + '</b><small class="hint">@' + esc(me.u) + '</small></span>' + CH + '</div>' +
-        '<div class="grp">' + nav('sec', t('securityTab'), '') + nav('look', t('appearance'), t(theme())) + nav('bubble', t('bubbleStyle'), '') + nav('funcs', t('funcs'), '') + '</div>';
+        '<div class="grp">' + nav('sec', t('securityTab'), '') + nav('look', t('appearance'), t(theme())) + nav('funcs', t('funcs'), '') + '</div>';
     } else if (p === 'account') {
       hd(t('account'), 1);
       const bd = X.birthday || { d: 1, m: 1, y: 2000 };
@@ -2161,7 +1973,7 @@ async function settings(pg) {
   }
   B.onclick = e => {
     const n = e.target.closest('[data-pg]');
-    if (n) return n.dataset.pg === 'bubble' ? bubbleStyle() : show(n.dataset.pg);
+    if (n) return show(n.dataset.pg);
   };
   B.oninput = e => {
     if (e.target.id === 'an') prev();
