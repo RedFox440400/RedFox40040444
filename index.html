@@ -1050,6 +1050,22 @@ function start(dn, u, uid, auto) {
   boot(dn, u);
   whenReady(u);
 }
+
+function expire() {
+  const now = Date.now();
+  let changed = false;
+  for (const p in C) {
+    const a = C[p];
+    if (!a) continue;
+    const f = a.filter(m => m.expireAt && m.expireAt <= now);
+    if (f.length) {
+      changed = true;
+      f.forEach(m => db.ref(pathFor(p) + m.id).remove().catch(() => {}));
+    }
+  }
+  if (changed) render();
+}
+
 function whenReady(u) {
   const data = Promise.all([
     db.ref('messages').orderByChild('time').limitToLast(MAX).once('value'),
