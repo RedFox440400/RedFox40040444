@@ -1366,6 +1366,200 @@ function showWarn() {
 
 function hdr() {
   if (!me) return;
+  $('ht').innerHTML = chat === 'global' ? E(t('global')) : E(nm(chat)) + badge(chat);
+  $('hs').innerHTML = chat === 'global'
+    ? online.size + ' ' + E(t('online'))
+    : isG(chat)
+      ? (GR[gid_(chat)] ? TN[GR[gid_(chat)].type] + ' · ' + Object.keys(MB[gid_(chat)] || {}).length + '/' + groupLimit(gid_(chat)) + ' ' + (lang() === 'ru' ? 'участников' : 'members') : '')
+      : typing
+        ? E(t('typing'))
+        : online.has(chat)
+          ? E(t('online'))
+          : (() => { const i = lsInfo[chat]; return i && i.show !== false && i.ts ? E(lastSeenText(i.ts)) : E(t('lastSeen')); })();
+  $('mb').classList.toggle('hide', chat === 'global');
+}
+
+function comp() {
+  if (isG(chat)) {
+    const ok = canPost(chat);
+    $('pill').classList.toggle('hide', !ok);
+    $('blk').classList.toggle('hide', ok);
+    $('unb').classList.add('hide');
+    $('blk').querySelector('span').innerHTML = E(myRole(gid_(chat)) ? t('onlyAdminsCanPost') : t('youAreNotMember'));
+    return;
+  }
+  const b = chat !== 'global' && blocked.has(chat);
+  $('pill').classList.toggle('hide', b);
+  $('blk').classList.toggle('hide', !b);
+  $('unb').classList.remove('hide');
+  $('blk').querySelector('span').innerHTML = E(t('youBlocked'));
+  const attachBtn = $('attach');
+  if (attachBtn) attachBtn.classList.toggle('hide', chat === 'global' || isG(chat));
+}
+
+function render(init) {
+  const box = $('msgs');
+  const top = box.scrollTop;
+  const near = box.scrollHeight - top - box.clientHeight < 140;
+  const all = C[chat] || [];
+  const list = visible(all, chat);
+  let h = '', day = '', scroll = !!init || near;
+  list.forEach((m, i) => {
+    const g = (a, b) => a && b && a.username === b.username && Math.abs(a.time - b.time) < 3e5 && dayLabel(a.time) === dayLabel(b.time);
+    const tail = !g(m, list[i + 1]);
+    const first = !g(list[i - 1], m);
+    const d = dayLabel(m.time);
+    if (d !== day) { day = d; h += '<div class="day"><span>' + E(d) + '</span></div>'; }
+    const mine = m.username === me.u;
+    const isNew = !init && !seen.has(m.id);
+    seen.add(m.id);
+    if (isNew && !mine) newCnt++;
+    if (isNew && mine && mineNew) { scroll = true; mineNew = false; }
+    const banned = bans[m.username] && (bans[m.username].until === 0 || bans[m.username].until > Date.now());
+    let rp = '';
+    if (m.replyTo && !banned) {
+      const o = all.find(x => x.id === m.replyTo);
+      rp = '<div class="rp" data-go="' + m.replyTo + '"><b>' + esc(o ? o.displayName : m.replyToSender || '') + '</b>' + (o ? E([...(o.text || '📷')].slice(0, 70).join('')) : '…') + '</div>';
+    }
+    if (banned) {
+      h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + ' banned-msg" data-id="' + m.id + '" data-banned="1">' +
+        (!mine && first && chat === 'global' ? '<div class="sn">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
+        '<span>' + E(t('bannedMsg')) + ' <span class="banned-link" data-banned-info="' + esc(m.username) + '">' + E(t('moreDetails')) + '</span></span>' +
+        '<small>' + hm(m.time) + '</small></div>';
+      return;
+    }
+    let attHtml = '';
+    if (m.att) {
+      attHtml = '<img class="att" src="' + esc(m.att) + '" data-full="' + esc(m.att) + '" alt="">';
+    }
+    h += '<div class="m ' + (mine ? 'me' : 'ot') + (tail ? ' tail' : '') + (first ? ' first' : '') + (isNew ? ' new' : '') + '" data-id="' + m.id + '">' +
+      (!mine && first && chat === 'global' ? '<div class="sn" data-u="' + esc(m.username) + '">' + E(m.displayName || m.username) + badge(m.username) + '</div>' : '') +
+      rp + attHtml +
+      (m.text ? '<span>' + fmt(m.text) + '</span>' : '') +
+      (m.isButton && okLink(m.buttonLink) ? '<div class="bt" data-link="' + esc(m.buttonLink) + '">' + esc(m.buttonText) + '</div>' : '') +
+      '<small>' + (m.edited ? '✎ ' : '') + hm(m.time) + (mine ? chk() : '') + '</small></div>';
+  });
+  box.innerHTML = h || '<div class="empty">' + E(t('empty')) + '</div>';
+  if (scroll) {
+    newCnt = 0;
+    requestAnimationFrame(() => {
+      box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+    });
+  } else {
+    box.scrollTop = top;
+  }
+  if (chat !== 'global') renderPin();
+}
+
+function go(id) {
+  const e = document.querySelector('.m[data-id="' + id + '"]');
+  if (!e) return toast(t('notFound'));
+  e.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  e.classList.add('fl');
+  setTimeout(() => e.classList.remove('fl'), 1200);
+}
+
+function renderPin() {
+  const m = pin && chat !== 'global' ? visible(C[chat], chat).find(x => x.id === pin) : null;
+  const b = $('pinbar');
+  b.classList.toggle('hide', !m);
+  if (m) b.querySelector('span').innerHTML = E(t('pinned') + (m.text || '📷'));
+}
+$('pinbar').onclick = e => { if (e.target.closest('button')) unpin(); else if (pin) go(pin); };
+async function unpin() { await db.ref('privatePins/' + room(chat)).remove(); toast(t('unpinnedT')); }
+async function pinMsg(m) {
+  if (m.username !== me.u) {
+    const v = (await db.ref('users/' + m.username + '/noPin').once('value')).val();
+    if (v) return toast(t('noPinUser'));
+  }
+  await db.ref('privatePins/' + room(chat)).set({ messageId: m.id, by: me.u, at: Date.now() });
+  toast(t('pinnedT'));
+}
+
+$('msgs').onclick = e => {
+  const bi = e.target.closest('[data-banned-info]');
+  if (bi) return bannedInfo(bi.dataset.bannedInfo);
+  const att = e.target.closest('.att');
+  if (att) return viewImg(att.dataset.full);
+  const lk = e.target.closest('.lk');
+  if (lk) return linkAsk(lk.dataset.link);
+  const bt = e.target.closest('.bt');
+  if (bt) return linkAsk(bt.dataset.link);
+  const n = e.target.closest('.sn');
+  if (n) return profile(n.dataset.u);
+  const g = e.target.closest('[data-go]');
+  if (g) return go(g.dataset.go);
+  const el = e.target.closest('.m');
+  if (!el || el.dataset.banned) return;
+  const m = (C[chat] || []).find(x => x.id === el.dataset.id);
+  if (m) ctx(e, m);
+};
+
+function bannedInfo(u) {
+  modal('<div class="pb" style="padding:0"><div class="info" style="border-radius:18px">' +
+    '<div style="display:flex;justify-content:center;padding:20px 0 10px"><div class="av big" style="width:92px;height:92px;font-size:38px;background:#555;color:#aaa;box-shadow:0 0 0 4px #ffffff40">?</div></div>' +
+    '<div style="text-align:center;margin-bottom:12px"><b style="font-size:18px">' + E(t('accountUnavailable')) + '</b><div class="hint">@' + esc(u) + '</div></div>' +
+    '<div class="ir" style="justify-content:center;border-top:0;padding-top:0">' +
+    '<div style="text-align:center"><div>' + E(t('unavailableDesc')) + '</div><small>' + E(t('accountUnavailableInfo')) + '</small></div>' +
+    '</div></div></div>');
+}
+
+function ctx(e, m) {
+  document.querySelectorAll('.ctx').forEach(x => x.remove());
+  if (bans[m.username] && (bans[m.username].until === 0 || bans[m.username].until > Date.now())) return;
+  const mine = m.username === me.u;
+  const menu = document.createElement('div');
+  menu.className = 'ctx';
+  const add = (x, f, c) => { const d = document.createElement('div'); d.innerHTML = micon(x) + '<span>' + E(x) + '</span>'; if (c) d.className = c; d.onclick = () => { menu.remove(); f(); }; menu.appendChild(d); };
+  menu.innerHTML = '<div class="tm">' + new Date(m.time).toLocaleString(loc(), { hour12: h12() }) + '</div>';
+  add(t('reply'), () => setBar('reply', m));
+  add(t('copy'), () => { if (!m.text) return; navigator.clipboard && navigator.clipboard.writeText(m.text).then(() => toast(t('copied'))); });
+  if (chat !== 'global') add(pin === m.id ? t('unpin') : t('pin'), () => pin === m.id ? unpin() : pinMsg(m));
+  add(t('forward'), () => fwd(m));
+  if (isG(chat) && canDel(chat) && m.username !== me.u) add(t('deleteForAll'), async () => { if (await ask(t('deleteForAllQ'), t('deleteForAllP'), t('del'), 1)) { await db.ref(pathFor(chat) + m.id).remove(); logEv(gid_(chat), 'del', m.username); } }, 'dd');
+  if (mine) {
+    add(t('edit'), () => setBar('edit', m));
+    add(t('del'), async () => { if (await ask(t('delQ'), t('noUndo'), t('del'), 1)) db.ref(pathFor(chat) + m.id).remove().then(() => toast(t('deleted'))); }, 'dd');
+  }
+  document.body.appendChild(menu);
+  const r = menu.getBoundingClientRect();
+  menu.style.left = Math.max(8, Math.min(e.clientX, innerWidth - r.width - 8)) + 'px';
+  menu.style.top = Math.max(8, Math.min(e.clientY, innerHeight - r.height - 8)) + 'px';
+  menu.style.transformOrigin = Math.max(0, e.clientX - parseFloat(menu.style.left)) + 'px ' + Math.max(0, e.clientY - parseFloat(menu.style.top)) + 'px';
+  setTimeout(() => document.addEventListener('click', function f() { menu.remove(); document.removeEventListener('click', f); }), 0);
+}
+
+function fit() { const i = $('inp'); i.style.height = '38px'; i.style.height = Math.min(i.scrollHeight, 120) + 'px'; }
+function setBar(kind, m) {
+  cancelReply();
+  if (kind === 'reply') reply = { id: m.id, name: m.displayName || m.username };
+  else { editing = m; $('inp').innerText = m.text || ''; fit(); }
+  $('rbar').classList.remove('hide');
+  $('rbar').querySelector('span').innerHTML = E((kind === 'edit' ? t('editing') : m.displayName + ': ') + (m.text || '📷'));
+  $('inp').focus();
+}
+function cancelReply() { if (editing) { $('inp').innerText = ''; fit(); } reply = null; editing = null; $('rbar').classList.add('hide'); }
+$('rbar').querySelector('button').onclick = cancelReply;
+
+const okLink = l => /^https?:\/\/\S+$/i.test(l || '');
+function parseBtn(x) {
+  const p = x.replace(/^\.Buttons\s*/, '').split(',');
+  if (p.length < 3) return null;
+  const c = y => y.trim().replace(/^\(|\)$/g, '').trim();
+  const btn = c(p[0]), msg = c(p[1]), link = c(p.slice(2).join(','));
+  return btn && msg && okLink(link) ? { btn, msg, link } : null;
+}
+function linkAsk(l) {
+  const o = modal('<h3>' + E(t('openLink')) + '</h3><p style="word-break:break-all">' + esc(l) + '</p><div class="row"><button class="b g" id="n">' + E(t('cancel')) + '</button><button class="b" id="y">' + E(t('open')) + '</button></div>');
+  o.querySelector('#n').onclick = () => o.remove();
+  o.querySelector('#y').onclick = () => { o.remove(); window.open(l, '_blank', 'noopener'); };
+}
+
+async function send() {
+  const inp = $('inp');
+  const x = inp.innerText.trim();
+  if (!x || !me || banEl) return;
+
   const clr = () => { inp.innerText = ''; fit(); };
   if (x[0] === '/' && await cmd(x)) { clr(); return; }
   if (editing) {
